@@ -1,0 +1,60 @@
+package uninabiogarden;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class ControllerManager {
+
+  Stage stage;
+  MainController mainController;
+  Controller loginController;
+  Controller registrationController;
+  Controller proprietarioHomeController;
+
+  public ControllerManager() {
+    loadControllers();
+    openLoginView();
+  }
+
+  public void show(Stage stage) {
+    this.stage = stage;
+    Scene scene = new Scene(mainController.getRoot());
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  void loadControllers() {
+    mainController = (MainController) loadController("Main");
+    loginController = loadController("Login");
+    registrationController = loadController("Registration");
+    proprietarioHomeController = loadController("ProprietarioHome");
+  }
+
+  private Controller loadController(String viewName) {
+    String fxmlFileName = viewName + "View.fxml";
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
+      loader.load();
+      Controller c = loader.getController();
+      c.setControllerManager(this);
+      return c;
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+      throw new RuntimeException("Failed to load " + fxmlFileName);
+    }
+  }
+
+  void openLoginView() {
+    mainController.setActiveContent(loginController.getRoot());
+  }
+
+  void openRegistrationView() {
+    mainController.setActiveContent(registrationController.getRoot());
+  }
+
+  void openProprietarioHomeView() {
+    mainController.setActiveContent(proprietarioHomeController.getRoot());
+  }
+
+}
