@@ -1,4 +1,4 @@
-package uninabiogarden;
+package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

@@ -4,4 +4,6 @@ module uninabiogarden {
 
     opens uninabiogarden to javafx.fxml;
     exports uninabiogarden;
+    exports uninabiogarden.ui;
+    opens uninabiogarden.ui to javafx.fxml;
 }
