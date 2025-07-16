@@ -7,10 +7,15 @@ import javafx.stage.Stage;
 public class ControllerManager {
 
   Stage stage;
-  MainController mainController;
+  ContentController mainController;
   Controller loginController;
   Controller registrationController;
   Controller proprietarioHomeController;
+
+  ContentController lottiController;
+  Controller lottiListController;
+  Controller addingLottoController;
+
 
   public ControllerManager() {
     loadControllers();
@@ -25,10 +30,14 @@ public class ControllerManager {
   }
 
   void loadControllers() {
-    mainController = (MainController) loadController("Main");
+    mainController = (ContentController) loadController("Home");
     loginController = loadController("Login");
     registrationController = loadController("Registration");
     proprietarioHomeController = loadController("ProprietarioHome");
+    lottiListController = loadController("LottiList");
+    addingLottoController = loadController("AddingLotto");
+    lottiController = (ContentController) loadController("Lotti");
+    lottiController.setActiveContent(lottiListController.getRoot());
   }
 
   private Controller loadController(String viewName) {
@@ -55,6 +64,10 @@ public class ControllerManager {
 
   void openProprietarioHomeView() {
     mainController.setActiveContent(proprietarioHomeController.getRoot());
+  }
+
+  void openLottiView() {
+    mainController.setActiveContent(lottiController.getRoot());
   }
 
 }

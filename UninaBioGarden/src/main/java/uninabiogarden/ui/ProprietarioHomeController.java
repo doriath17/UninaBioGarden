@@ -15,4 +15,8 @@ public class ProprietarioHomeController extends Controller {
     @FXML private void openLoginView() {
         controllerManager.openLoginView();
     }
+
+    @FXML private void openLottiView() {
+        controllerManager.openLottiView();
+    }
 }

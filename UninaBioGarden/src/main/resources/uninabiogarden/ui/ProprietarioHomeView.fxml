@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.ProprietarioHomeController">
    <children>
       <HBox alignment="CENTER" prefHeight="57.0" prefWidth="839.0">
@@ -43,7 +42,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="256.0" prefWidth="406.0" text="Lotti" GridPane.columnIndex="1">
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#openLottiView" prefHeight="256.0" prefWidth="406.0" text="Lotti" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>

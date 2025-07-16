@@ -19,4 +19,6 @@ public class RegistrationController extends Controller {
     @FXML private void openHomeView() {
         controllerManager.openProprietarioHomeView();
     }
+
+
 }
