@@ -1,5 +1,6 @@
 package uninabiogarden.ui;
 
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
@@ -13,4 +14,5 @@ public abstract class ContentController extends Controller {
         getContentRoot().getChildren().add(newContent);
         this.activeContent = newContent;
     }
+
 }

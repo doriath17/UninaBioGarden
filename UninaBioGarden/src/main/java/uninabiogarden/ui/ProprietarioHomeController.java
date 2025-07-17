@@ -12,11 +12,15 @@ public class ProprietarioHomeController extends Controller {
         return root;
     }
 
-    @FXML private void openLoginView() {
+    @FXML void openLoginView() {
         controllerManager.openLoginView();
     }
 
-    @FXML private void openLottiView() {
+    @FXML void openLottiView() {
         controllerManager.openLottiView();
+    }
+
+    @FXML void openProgettiView() {
+        controllerManager.openProgettiView();
     }
 }

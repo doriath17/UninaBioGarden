@@ -16,6 +16,9 @@ public class ControllerManager {
   Controller lottiListController;
   Controller addingLottoController;
 
+  ContentController progettiController;
+  Controller progettiListController;
+  Controller dettagliProgettoController;
 
   public ControllerManager() {
     loadControllers();
@@ -34,10 +37,16 @@ public class ControllerManager {
     loginController = loadController("Login");
     registrationController = loadController("Registration");
     proprietarioHomeController = loadController("ProprietarioHome");
+
     lottiListController = loadController("LottiList");
     addingLottoController = loadController("AddingLotto");
     lottiController = (ContentController) loadController("Lotti");
     lottiController.setActiveContent(lottiListController.getRoot());
+
+    progettiController = (ContentController) loadController("Progetti");
+    progettiListController = loadController("ProgettiList");
+    progettiController.setActiveContent(progettiListController.getRoot());
+    dettagliProgettoController = loadController("DettagliProgetto");
   }
 
   private Controller loadController(String viewName) {
@@ -68,6 +77,10 @@ public class ControllerManager {
 
   void openLottiView() {
     mainController.setActiveContent(lottiController.getRoot());
+  }
+
+  void openProgettiView() {
+    mainController.setActiveContent(progettiController.getRoot());
   }
 
 }

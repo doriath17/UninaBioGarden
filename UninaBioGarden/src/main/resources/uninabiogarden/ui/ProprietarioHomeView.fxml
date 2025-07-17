@@ -37,7 +37,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="256.0" prefWidth="406.0" text="Progetti">
+                  <Button mnemonicParsing="false" onAction="#openProgettiView" prefHeight="256.0" prefWidth="406.0" text="Progetti">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
