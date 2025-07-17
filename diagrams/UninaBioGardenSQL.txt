@@ -1,5 +1,5 @@
 CREATE TYPE TipoColtura AS ENUM ('FIORI','FRUTTA','COLTURA'); 
-CREATE TYPE TipoAttivita AS ENUM ('RACCOLTA','SEMINA','IRRIGAZIONE','PREPARAZIONE TERRENO','POTATURA','FERTILIZZAZIONE'); 
+CREATE TYPE TipoAttivita AS ENUM ('RACCOLTA','SEMINA','IRRIGAZIONE','PREPARAZIONE TERRENO','POTATURA','FERTILIZZAZIONE','PERSONALIZZATA'); 
 CREATE TYPE StatoAttivita AS ENUM ('PIANIFICATO','IN CORSO','COMPLETATO'); 
 
 
@@ -43,114 +43,78 @@ CREATE TABLE Lotto(
 
 
 CREATE TABLE Coltura(
+	id_coltura SERIAL NOT NULL,
+	indirizzo VARCHAR(64) NOT NULL,
+	codice_lotto VARCHAR(5) NOT NULL,
 	tipo TipoColtura NOT NULL,
+	nome VARCHAR(64) NOT NULL,
+	data_semina TIMESTAMP NOT NULL,
 	descrizione VARCHAR(512),
 	tempo_maturazione VARCHAR(64) NOT NULL,
-	PRIMARY KEY (tipo)
+	PRIMARY KEY (id_coltura),
+	UNIQUE (indirizzo,codice_lotto,tipo,nome,data_semina)
 );
 
 
 CREATE TABLE Progetto_Stagionale(
 	id_progetto SERIAL NOT NULL,
 	nome VARCHAR(64) NOT NULL,
-	descrizione VARCHAR(512),
 	data_inizio DATE NOT NULL,
-	data_fine DATE,
+	data_fine DATE NOT NULL,
+	descrizione VARCHAR(512),
 	username VARCHAR(64) NOT NULL,
+	indirizzo VARCHAR(64) NOT NULL,
+	codice_lotto VARCHAR(5) NOT NULL,
 	PRIMARY KEY (id_progetto),
-	FOREIGN KEY (username) REFERENCES Proprietario(username)
+	FOREIGN KEY (username) REFERENCES Proprietario(username),
+	FOREIGN KEY (indirizzo,codice_lotto) REFERENCES Lotto(indirizzo,codice_lotto),
+	UNIQUE (nome,data_inizio,data_fine)
 );
 
 
 CREATE TABLE Attivita(
-	id_progetto SERIAL NOT NULL,
+	id_attivita SERIAL NOT NULL,
+	id_progetto INT NOT NULL,
 	tipo TipoAttivita NOT NULL,
-	nome VARCHAR(64),
-	descrizione VARCHAR(512),
+	nome VARCHAR(64) NOT NULL,
 	data_inizio DATE NOT NULL,
-	data_fine DATE,
+	data_fine DATE NOT NULL,
+	descrizione VARCHAR(512),
 	stato StatoAttivita NOT NULL,
-	quantita REAL,
+	quantita REAL, --quantita/quantita_effettiva
 	quantita_prevista REAL,
-	PRIMARY KEY (id_progetto, tipo),
+	id_coltura INT NOT NULL,
+	PRIMARY KEY (id_attivita),
 	FOREIGN KEY (id_progetto) REFERENCES Progetto_Stagionale(id_progetto),
-    --vincolo 1
-	CONSTRAINT both_quantities
+	FOREIGN KEY (id_coltura) REFERENCES Coltura(id_coltura),
+	
+    CONSTRAINT check_quantities_by_type
     CHECK (
         (tipo = 'RACCOLTA' AND quantita IS NOT NULL AND quantita_prevista IS NOT NULL)
         OR
-        (tipo <> 'RACCOLTA')
-    ),
-	--vincolo 2
-	CONSTRAINT one_quantity
-    CHECK (
         (tipo = 'SEMINA' AND quantita IS NOT NULL AND quantita_prevista IS NULL)
         OR
-        (tipo <> 'SEMINA')
-    ),
-	--vincolo 3
-	CONSTRAINT no_quantities
-    CHECK (
-        (tipo = 'RACCOLTA')
-        OR
-        (tipo IN ('SEMINA', 'IRRIGAZIONE', 'PREPARAZIONE TERRENO', 'POTATURA', 'FERTILIZZAZIONE')
-         AND quantita IS NULL AND quantita_prevista IS NULL)
+        (tipo NOT IN ('RACCOLTA', 'SEMINA') AND quantita IS NULL AND quantita_prevista IS NULL)
     )
-);
-
-
-CREATE TABLE Assegnazione_Stagionale (
-    username VARCHAR(64) NOT NULL,
-    id_progetto SERIAL NOT NULL,
-    indirizzo VARCHAR(64) NOT NULL,
-    codice_lotto VARCHAR(5) NOT NULL,
-    PRIMARY KEY (username, id_progetto, indirizzo, codice_lotto),
-    FOREIGN KEY (username) REFERENCES Coltivatore(username),
-    FOREIGN KEY (id_progetto) REFERENCES Progetto_Stagionale(id_progetto),
-    FOREIGN KEY (indirizzo, codice_lotto) REFERENCES Lotto(indirizzo, codice_lotto)
-);
-
-
-CREATE TABLE ospita (
-    indirizzo VARCHAR(64) NOT NULL,
-    codice_lotto VARCHAR(5) NOT NULL,
-    tipo TipoColtura NOT NULL,
-    PRIMARY KEY (indirizzo, codice_lotto, tipo),
-    FOREIGN KEY (indirizzo, codice_lotto) REFERENCES Lotto(indirizzo, codice_lotto),
-    FOREIGN KEY (tipo) REFERENCES Coltura(tipo)
-);
-
-
-CREATE TABLE si_svolge_su (
-    id_progetto SERIAL NOT NULL,
-    indirizzo VARCHAR(64) NOT NULL,
-    codice_lotto VARCHAR(5) NOT NULL,
-    PRIMARY KEY (id_progetto, indirizzo, codice_lotto),
-    FOREIGN KEY (id_progetto) REFERENCES Progetto_Stagionale(id_progetto),
-    FOREIGN KEY (indirizzo, codice_lotto) REFERENCES Lotto(indirizzo, codice_lotto)
 );
 
 
 CREATE TABLE svolta_da (
     username VARCHAR(64) NOT NULL,
-    tipo tipoAttivita NOT NULL,
-    id_progetto SERIAL NOT NULL,
-    PRIMARY KEY (username, tipo, id_progetto),
+    id_attivita INT NOT NULL,
+    PRIMARY KEY (username, id_attivita),
     FOREIGN KEY (username) REFERENCES Coltivatore(username),
-    FOREIGN KEY (tipo, id_progetto) REFERENCES Attivita(tipo, id_progetto)
+    FOREIGN KEY (id_attivita) REFERENCES Attivita(id_attivita)
+);
+
+CREATE TABLE associato (
+    username VARCHAR(64) NOT NULL,
+    indirizzo VARCHAR(64) NOT NULL,
+	codice_lotto VARCHAR(5) NOT NULL,
+    PRIMARY KEY (username, indirizzo, codice_lotto),
+    FOREIGN KEY (username) REFERENCES Coltivatore(username),
+    FOREIGN KEY (indirizzo,codice_lotto) REFERENCES Lotto(indirizzo,codice_lotto)
 );
 
 
 
-INSERT INTO proprietario 
-VALUES ('Kaimanus','danielekaimano@gmail.com','0000','Daniele','Caimano','2002-05-11','Sessa Aurunca','Italia','3804965691');
-INSERT INTO coltivatore
-VALUES ('doriath17','alessandrofusco@gmail.com','0001','Alessandro','Fusco','2002-03-25','Mondragone','Italia','3925660682');
-INSERT INTO lotto 
-VALUES ('Via Roma','045',1033.2, null,'Kaimanus');
-INSERT INTO progetto_stagionale (nome, descrizione, data_inizio, data_fine, username)
-VALUES ('Primo progetto','test primo progetto','2025-07-15', null,'Kaimanus');
-INSERT INTO si_svolge_su
-VALUES (1,'Via Roma','045');
-INSERT INTO coltura
-VALUES ('FRUTTA','Pomodori','30 secondi');
