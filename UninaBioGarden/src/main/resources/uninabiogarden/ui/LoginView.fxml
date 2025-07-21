@@ -21,7 +21,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="368.0">
          <children>
-            <Label alignment="CENTER" prefHeight="100.0" prefWidth="155.0" text="Username" />
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="155.0" text="Email" />
             <TextField prefHeight="43.0" prefWidth="261.0" />
          </children>
       </HBox>
