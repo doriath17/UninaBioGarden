@@ -16,7 +16,7 @@ public class LoginController extends Controller {
   @FXML VBox root;
   @FXML Button btnRegistration;
   @FXML TextField emailField;
-  @FXML PasswordField passwordField;
+  @FXML TextField passwordField;
 
   public Parent getRoot() {
       return root;
@@ -37,7 +37,7 @@ public class LoginController extends Controller {
     // System.out.println(DatabaseManager.proprietarioDAO.checkProprietarioExists(email, password));
 
     if( email.isEmpty() || password.isEmpty()) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("Login Error");
         alert.setHeaderText("Missing Credentials");
         alert.setContentText("Please enter both email and password.");
