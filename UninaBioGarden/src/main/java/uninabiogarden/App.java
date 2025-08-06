@@ -2,7 +2,7 @@ package uninabiogarden;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import uninabiogarden.dao.DatabaseManager;
+import uninabiogarden.controllers.ControllerDAO;
 import uninabiogarden.ui.ControllerManager;
 
 /**
@@ -10,22 +10,22 @@ import uninabiogarden.ui.ControllerManager;
  */
 public class App extends Application {
 
-    ControllerManager viewManager;
-    DatabaseManager databaseManager;
+  ControllerManager viewManager;
+  ControllerDAO controllerDAO;
 
-    @Override
-    public void init() {
-        viewManager = new ControllerManager();
-        databaseManager = DatabaseManager.getInstance();
-    }
+  @Override
+  public void init() {
+    controllerDAO = new ControllerDAO();
+    viewManager = new ControllerManager(controllerDAO);
+  }
 
-    @Override
-    public void start(Stage stage) {
-        viewManager.show(stage);
-    }
+  @Override
+  public void start(Stage stage) {
+    viewManager.show(stage);
+  }
 
-    public static void main(String[] args) {
-        launch();
-    }
+  public static void main(String[] args) {
+    launch();
+  }
 
 }

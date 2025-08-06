@@ -1,22 +1,69 @@
 package uninabiogarden.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Utente {
+public abstract class Utente {
+
     private String username;
     private String password;
     private String nome;
     private String cognome;
-    private Date bday;
+    private LocalDate bday;
     private String nationality;
     private String email;
     private String numTel;
+    private String residenza;
 
-    public Utente(String password, String username, String nome, String cognome) {
-        this.password = password;
+    public static class Builder {
+        final String username;
+        final String password;
+        final String nome;
+        final String cognome;
+        final LocalDate bday;
+        final String nationality;
+        final String email;
+        String numTel;
+        String residenza;
+
+        public Builder(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email) {
+            this.username = username;
+            this.password = password;
+            this.nome = nome;
+            this.cognome = cognome;
+            this.bday = bday;
+            this.nationality = nationality;
+            this.email = email;
+        }
+
+        public Builder numTel(String numTel) {
+            this.numTel = numTel;
+            return this;
+        }
+
+        public Builder residenza(String residenza) {
+            this.residenza = residenza;
+            return this;
+        }
+
+        public Proprietario buildProprietario() {
+            return new Proprietario(username, password, nome, cognome, bday, nationality, email, numTel, residenza);
+        }
+
+        public Coltivatore buildColtivatore() {
+            return new Coltivatore(username, password, nome, cognome, bday, nationality, email, numTel, residenza);
+        }
+    }
+
+    public Utente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
         this.username = username;
+        this.password = password;
         this.nome = nome;
         this.cognome = cognome;
+        this.bday = bday;
+        this.nationality = nationality;
+        this.email = email;
+        this.numTel = numTel;
+        this.residenza = residenza;
     }
 
     public String getUsername() {
@@ -51,11 +98,11 @@ public class Utente {
         this.cognome = cognome;
     }
 
-    public Date getBday() {
+    public LocalDate getBday() {
         return bday;
     }
 
-    public void setBday(Date bday) {
+    public void setBday(LocalDate bday) {
         this.bday = bday;
     }
 
@@ -81,6 +128,14 @@ public class Utente {
 
     public void setNumTel(String numTel) {
         this.numTel = numTel;
+    }
+
+    public String getResidenza() {
+        return residenza;
+    }
+
+    public void setResidenza(String residenza) {
+        this.residenza = residenza;
     }
 
 }

@@ -3,16 +3,20 @@ package uninabiogarden.ui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import uninabiogarden.controllers.ControllerDAO;
 
 public class ControllerManager {
 
+  ControllerDAO controllerDAO;
   Stage stage;
+
   MainController mainController;
   Controller loginController;
   Controller registrationController;
   Controller proprietarioHomeController;
 
-  public ControllerManager() {
+  public ControllerManager(ControllerDAO controllerDAO) {
+    this.controllerDAO = controllerDAO;
     loadControllers();
     openLoginView();
   }
