@@ -9,24 +9,21 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Utente;
-
-import java.sql.Date;
 import java.time.LocalDate;
-//import uninabiogarden.dao.DatabaseManager;
 
 public class RegistrationController extends Controller {
 
 @FXML VBox root;
-@FXML private DatePicker birthField;
-@FXML private TextField capField;
-@FXML private TextField numPhoneField;
-@FXML private TextField emailField;
-@FXML private TextField nameField;
-@FXML private ChoiceBox<String> nationalityField;
-@FXML private TextField passwordField;
-@FXML private TextField residenceField;
-@FXML private TextField surnameField;
-@FXML private TextField usernameField;
+// @FXML private DatePicker birthField;
+// @FXML private TextField capField;
+// @FXML private TextField numPhoneField;
+// @FXML private TextField emailField;
+// @FXML private TextField nameField;
+// @FXML private ChoiceBox<String> nationalityField;
+// @FXML private TextField passwordField;
+// @FXML private TextField residenceField;
+// @FXML private TextField surnameField;
+// @FXML private TextField usernameField;
 
 public static class RawUtente {
     public final String username;
@@ -61,7 +58,7 @@ public Parent getRoot() {
 
 @FXML private void initialize() {
     fillNationalityField();
-    nationalityField.setValue("Italian");
+    // nationalityField.setValue("Italian");
 }
 
 @FXML private void openLoginView() {
@@ -70,20 +67,20 @@ public Parent getRoot() {
 
 @FXML private void openHomeView() {
 
-    var utenteBuilder = new Utente.Builder(
-      usernameField.getText(),
-      passwordField.getText(),
-      nameField.getText(),
-      surnameField.getText(),
-      birthField.getValue(),
-      nationalityField.getValue(),
-      emailField.getText()
-    );
-    utenteBuilder
-        .numTel(numPhoneField.getText())
-        .residenza(residenceField.getText());
+    // var utenteBuilder = new Utente.Builder(
+    //   usernameField.getText(),
+    //   passwordField.getText(),
+    //   nameField.getText(),
+    //   surnameField.getText(),
+    //   birthField.getValue(),
+    //   nationalityField.getValue(),
+    //   emailField.getText()
+    // );
+    // utenteBuilder
+    //     .numTel(numPhoneField.getText())
+    //     .residenza(residenceField.getText());
 
-    controllerManager.controllerDAO.addProprietario(utenteBuilder);
+    // controllerManager.controllerDAO.addProprietario(utenteBuilder);
 
     controllerManager.openProprietarioHomeView();
 
@@ -101,33 +98,33 @@ public Parent getRoot() {
 }
 
 private void sanitizeFields() {
-    usernameField.setText(usernameField.getText().trim());
-    emailField.setText(emailField.getText().trim());
-    passwordField.setText(passwordField.getText().trim());
-    nameField.setText(nameField.getText().trim());
-    surnameField.setText(surnameField.getText().trim());
-    residenceField.setText(residenceField.getText().trim());
-    capField.setText(capField.getText().trim());
-    numPhoneField.setText(numPhoneField.getText().trim());
-    // birthField
+    // usernameField.setText(usernameField.getText().trim());
+    // emailField.setText(emailField.getText().trim());
+    // passwordField.setText(passwordField.getText().trim());
+    // nameField.setText(nameField.getText().trim());
+    // surnameField.setText(surnameField.getText().trim());
+    // residenceField.setText(residenceField.getText().trim());
+    // capField.setText(capField.getText().trim());
+    // numPhoneField.setText(numPhoneField.getText().trim());
+    // // birthField
 }
 
-private boolean checkFields() {
-    if (usernameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty() || nameField.getText().isEmpty() || surnameField.getText().isEmpty() || birthField.getValue() == null || capField.getText().isEmpty() || nationalityField.getValue() == null) {
-        Alert alert = new Alert(AlertType.WARNING);
-        alert.setTitle("Registration Error");
-        alert.setHeaderText("Missing Credentials");
-        alert.setContentText("One of the field you entered is empty.");
-        alert.showAndWait();
-        return false;
-    } else{
-        return true;
-    }
-}
+// private boolean checkFields() {
+    // if (usernameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty() || nameField.getText().isEmpty() || surnameField.getText().isEmpty() || birthField.getValue() == null || capField.getText().isEmpty() || nationalityField.getValue() == null) {
+    //     Alert alert = new Alert(AlertType.WARNING);
+    //     alert.setTitle("Registration Error");
+    //     alert.setHeaderText("Missing Credentials");
+    //     alert.setContentText("One of the field you entered is empty.");
+    //     alert.showAndWait();
+    //     return false;
+    // } else{
+    //     return true;
+    // }
+// }
 
 void fillNationalityField() {
     String[] nationalities = {"Italian", "American", "French", "Spanish", "German", "Chinese", "Japanese", "Indian", "Brazilian", "Russian", "Other"};
-    nationalityField.getItems().addAll(nationalities);
+    // nationalityField.getItems().addAll(nationalities);
 }
 
 }

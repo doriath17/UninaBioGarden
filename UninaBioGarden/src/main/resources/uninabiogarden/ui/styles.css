@@ -54,6 +54,16 @@
   -fx-padding: 10px 20px;
 }
 
+.login--hbox {
+  -fx-alignment: center;
+}
+
 .login--label {
   -fx-padding: 5px 10px;
+}
+
+.login--label--error {
+  -fx-padding: 5px 10px;
+  -fx-alignment: center;
+  -fx-text-fill: rgb(245, 65, 65);
 }

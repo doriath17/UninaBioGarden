@@ -2,16 +2,29 @@ package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import uninabiogarden.controllers.LoginException;
 
 public class LoginController extends Controller {
   @FXML VBox root;
-  @FXML TextField emailField;
-  @FXML TextField passwordField;
+  @FXML TextField usernameField;
+  @FXML PasswordField passwordField;
+  @FXML Label errorLabel;
 
   public Parent getRoot() {
       return root;
+  }
+
+  @FXML private void login() {
+    try {
+      controllerManager.controllerDAO.login(usernameField.getText(), passwordField.getText());
+      controllerManager.openProprietarioHomeView();
+    } catch(LoginException e) {
+      errorLabel.setText("Wrong username or password");
+    }
   }
 
   @FXML private void openRegistrationView() {
@@ -19,7 +32,7 @@ public class LoginController extends Controller {
   }
 
   @FXML private void openHomeView(){
-    String email = emailField.getText();
+    String email = usernameField.getText();
     String password = passwordField.getText();
 
     controllerManager.openProprietarioHomeView();

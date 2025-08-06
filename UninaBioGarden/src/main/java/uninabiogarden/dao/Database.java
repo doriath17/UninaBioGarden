@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private static final String dbUrl = "jdbc:postgresql://localhost:5432/UninaBioGarden";
+    private static final String dbUrl = "jdbc:postgresql://localhost:5432/uninabiogarden";
     private static final String dbUser = "ubg_user";
     private static final String dbPassword = "101010";
 
