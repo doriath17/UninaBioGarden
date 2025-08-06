@@ -5,7 +5,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="794.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.MainController">
+<VBox fx:id="root" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="794.0" prefWidth="1150.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.MainController">
    <children>
       <MenuBar>
         <menus>
@@ -26,6 +26,6 @@
           </Menu>
         </menus>
       </MenuBar>
-      <VBox fx:id="contentRoot" alignment="CENTER" prefHeight="802.0" prefWidth="1150.0" />
+      <VBox fx:id="contentRoot" alignment="CENTER" prefHeight="802.0" prefWidth="1150.0" styleClass="root" />
    </children>
 </VBox>

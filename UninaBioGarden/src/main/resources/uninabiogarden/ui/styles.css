@@ -1,0 +1,59 @@
+.root {
+  /* -fx-background-color: rgb(45, 150, 45); */
+  -fx-background-color: linear-gradient(to top left, #1a9107, #24cc1f);
+  /* -fx-font-family: sans-serif; */
+  -fx-font-family: monospace;
+  -fx-font-size: 14px;
+}
+
+.view {
+  -fx-background-color: aliceblue;
+  -fx-background-radius: 5;
+}
+
+.button {
+  -fx-cursor: pointer;
+  -fx-font-size: 14px;
+  -fx-border-radius: 500px;
+  -fx-background-radius: 500px;
+  -fx-letter-spacing: 2px;
+  -fx-font-weight: 700;
+  -fx-background-color: #8dffb5;
+  -fx-text-fill: #5f5f5f;
+}
+
+.button:hover {
+  /* -fx-transform: scale(1.04); */
+  -fx-background-color: #14ff66;
+}
+
+.text-field {
+  -fx-border-color: -fx-text-box-border, rgb(192, 192, 192);
+  -fx-border-width: 2px;
+  -fx-border-radius: 10px;
+  -fx-background-radius: 10px;
+  -fx-font-family: monospace;
+}
+.text-field:focused {
+  -fx-background-color: -fx-text-box-border, -fx-focus-color, -fx-background;
+  -fx-highlight-fill: none;
+}
+
+/**********************************************/
+
+/* login view */
+
+/**********************************************/
+
+.loginlabel {
+  -fx-graphic: url("login.png");
+}
+
+.login--vbox {
+  -fx-alignment: center;
+  -fx-padding: 10px 20px;
+}
+
+.login--label {
+  -fx-padding: 5px 10px;
+}
