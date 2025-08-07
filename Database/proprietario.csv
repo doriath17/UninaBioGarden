@@ -1,0 +1,4 @@
+username,password,nome,cognome,bday,email,nazionalita,num_tel,residenza
+proprietario1,pass123,Mario,Rossi,1980-05-15,mario.rossi@example.com,Italiana,3331234567,Via Roma 10, Napoli
+proprietario2,securepass,Giulia,Bianchi,1975-11-20,giulia.bianchi@example.com,Italiana,3398765432,Piazza Garibaldi 5, Milano
+proprietario3,mysecret,Luca,Verdi,1990-03-01,luca.verdi@example.com,Italiana,3471122334,Corso Umberto I 20, Roma

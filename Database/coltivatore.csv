@@ -1,0 +1,4 @@
+username,password,nome,cognome,bday,email,nazionalita,num_tel,residenza
+coltivatore1,cultpass,Anna,Neri,1992-07-22,anna.neri@example.com,Italiana,3389988776,Via Toledo 100, Napoli
+coltivatore2,farm_pwd,Marco,Gialli,1988-01-30,marco.gialli@example.com,Italiana,3201122334,Via Chiaia 50, Napoli
+coltivatore3,greenlife,Elena,Blu,1995-09-10,elena.blu@example.com,Italiana,3405566778,Via dei Tribunali 1, Napoli
