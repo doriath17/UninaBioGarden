@@ -4,6 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import uninabiogarden.controllers.ControllerDAO;
+import uninabiogarden.controllers.WrongPasswordException;
+import uninabiogarden.controllers.WrongUsernameException;
 
 public class ControllerManager {
 
@@ -11,14 +13,15 @@ public class ControllerManager {
   Stage stage;
 
   MainController mainController;
-  Controller loginController;
+  LoginController loginController;
   Controller registrationController;
-  Controller proprietarioHomeController;
+  Controller propHomeController;
+  Controller coltHomeController;
 
   public ControllerManager(ControllerDAO controllerDAO) {
     this.controllerDAO = controllerDAO;
     loadControllers();
-    openLoginView();
+    mainController.setActiveContent(loginController.getRoot());
   }
 
   public void show(Stage stage) {
@@ -31,9 +34,10 @@ public class ControllerManager {
 
   void loadControllers() {
     mainController = (MainController) loadController("Main");
-    loginController = loadController("Login");
+    loginController = (LoginController) loadController("Login");
     registrationController = loadController("Registration");
-    proprietarioHomeController = loadController("ProprietarioHome");
+    propHomeController = loadController("ProprietarioHome");
+    coltHomeController = loadController("ColtivatoreHome");
   }
 
   private Controller loadController(String viewName) {
@@ -50,8 +54,20 @@ public class ControllerManager {
     }
   }
 
-  void openLoginView() {
+  void logout() {
+    controllerDAO.logout();
+    loginController.clear();
     mainController.setActiveContent(loginController.getRoot());
+  }
+
+  void loginProprietario(String username, String password) throws WrongPasswordException, WrongUsernameException {
+    controllerDAO.loginProprietario(username, password);
+    openProprietarioHomeView();
+  }
+
+  void loginColtivatore(String username, String password) throws WrongPasswordException, WrongUsernameException {
+    controllerDAO.loginColtivatore(username, password);
+    openColtivatoreHomeView();
   }
 
   void openRegistrationView() {
@@ -59,7 +75,12 @@ public class ControllerManager {
   }
 
   void openProprietarioHomeView() {
-    mainController.setActiveContent(proprietarioHomeController.getRoot());
+    mainController.setActiveContent(propHomeController.getRoot());
   }
+
+  void openColtivatoreHomeView() {
+    mainController.setActiveContent(coltHomeController.getRoot());
+  }
+
 
 }

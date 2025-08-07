@@ -20,7 +20,7 @@
       <VBox prefHeight="479.0" prefWidth="678.0" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#openLoginView" prefHeight="42.0" prefWidth="219.0" text="Torna al Login" />
+            <Button mnemonicParsing="false" onAction="#returnToLogin" prefHeight="42.0" prefWidth="219.0" text="Torna al Login" />
             <Button layoutX="272.0" layoutY="27.0" mnemonicParsing="false" onAction="#openHomeView" prefHeight="42.0" prefWidth="219.0" text="Registrati">
                <HBox.margin>
                   <Insets left="50.0" />

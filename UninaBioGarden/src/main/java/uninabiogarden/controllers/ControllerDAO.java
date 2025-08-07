@@ -1,5 +1,8 @@
 package uninabiogarden.controllers;
 
+import java.sql.SQLException;
+
+import uninabiogarden.dao.ColtivatoreDAO;
 import uninabiogarden.dao.ProprietarioDAO;
 import uninabiogarden.entities.Utente;
 
@@ -12,13 +15,24 @@ public class ControllerDAO {
     ProprietarioDAO.add(proprietario);
   }
 
-  public void login(String username, String password) throws LoginException {
-    var p = ProprietarioDAO.exists(username, password);
-    if (p == null) {
-      throw new LoginException();
+  private void login(String username, String password, boolean userType) throws WrongPasswordException, WrongUsernameException {
+    if (userType) {
+      user = ProprietarioDAO.exists(username, password);
     } else {
-      user = p;
+      user = ColtivatoreDAO.exists(username, password);
     }
+  }
+
+  public void loginProprietario(String username, String password) throws WrongPasswordException, WrongUsernameException {
+    login(username, password, true);
+  }
+
+  public void loginColtivatore(String username, String password) throws WrongPasswordException, WrongUsernameException {
+    login(username, password, false);
+  }
+
+  public void logout() {
+    user = null;
   }
 
 }

@@ -2,39 +2,14 @@ package uninabiogarden.dao;
 
 import java.sql.*;
 
+import uninabiogarden.controllers.WrongPasswordException;
+import uninabiogarden.controllers.WrongUsernameException;
 import uninabiogarden.entities.Proprietario;
-import uninabiogarden.entities.Utente;
 
 public class ProprietarioDAO {
 
-  public static Proprietario exists(String username, String password) {
-    var sql = "SELECT * FROM Proprietario WHERE username='" + username + "' AND password='" + password + "'";
-    Proprietario p = null;
-
-    try (var conn = Database.connect();
-      var stmt = conn.createStatement()){
-
-      var result = stmt.executeQuery(sql);
-      result.next();
-      if (result.getString(1) != null) {
-        p = new Proprietario(
-          result.getString(1),
-          result.getString(2),
-          result.getString(3),
-          result.getString(4),
-          result.getDate(5).toLocalDate(),
-          result.getString(6),
-          result.getString(7),
-          result.getString(8),
-          result.getString(9)
-        );
-      }
-
-    } catch (SQLException e) {
-      return null;
-    }
-
-    return p;
+  public static Proprietario exists(String username, String password) throws WrongUsernameException, WrongPasswordException {
+    return UtenteDAO.exists(username, password, "proprietario").buildProprietario();
   }
 
   public static boolean add(Proprietario proprietario) {

@@ -4,7 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 
-public class ProprietarioHomeController extends Controller {
+public class ColtivatoreHomeController extends Controller {
+
   @FXML VBox root;
 
   @Override
@@ -15,4 +16,5 @@ public class ProprietarioHomeController extends Controller {
   @FXML private void logout() {
     controllerManager.logout();
   }
+  
 }

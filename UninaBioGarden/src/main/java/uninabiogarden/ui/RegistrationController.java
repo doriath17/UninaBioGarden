@@ -26,27 +26,27 @@ public class RegistrationController extends Controller {
 // @FXML private TextField usernameField;
 
 public static class RawUtente {
-    public final String username;
-    public final String password;
-    public final String nome;
-    public final String cognome;
-    public final LocalDate bday;
-    public final String nationality;
-    public final String email;
-    public final String numTel;
-    public final String residenza;
+  public final String username;
+  public final String password;
+  public final String nome;
+  public final String cognome;
+  public final LocalDate bday;
+  public final String nationality;
+  public final String email;
+  public final String numTel;
+  public final String residenza;
 
-    private RawUtente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
-        this.username = username;
-        this.password = password;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.bday = bday;
-        this.nationality = nationality;
-        this.email = email;
-        this.numTel = numTel;
-        this.residenza = residenza;
-    }
+  private RawUtente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
+    this.username = username;
+    this.password = password;
+    this.nome = nome;
+    this.cognome = cognome;
+    this.bday = bday;
+    this.nationality = nationality;
+    this.email = email;
+    this.numTel = numTel;
+    this.residenza = residenza;
+  }
 
 
 }
@@ -57,12 +57,12 @@ public Parent getRoot() {
 }
 
 @FXML private void initialize() {
-    fillNationalityField();
-    // nationalityField.setValue("Italian");
+  fillNationalityField();
+  // nationalityField.setValue("Italian");
 }
 
-@FXML private void openLoginView() {
-   controllerManager.openLoginView();
+@FXML private void returnToLogin() {
+  controllerManager.logout();
 }
 
 @FXML private void openHomeView() {

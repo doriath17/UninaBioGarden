@@ -67,3 +67,17 @@
   -fx-alignment: center;
   -fx-text-fill: rgb(245, 65, 65);
 }
+
+.check-box .box {
+  -fx-background-color: white;
+  -fx-border-color: grey;
+  -fx-border-radius: 3px;
+}
+
+.check-box:selected .mark {
+  -fx-background-color: white;
+}
+
+.check-box:selected .box {
+  -fx-background-color: #28a3f4;
+}
