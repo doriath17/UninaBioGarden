@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import uninabiogarden.controllers.ControllerDAO;
 import uninabiogarden.controllers.WrongPasswordException;
 import uninabiogarden.controllers.WrongUsernameException;
+import uninabiogarden.entities.Coltivatore;
+import uninabiogarden.entities.Proprietario;
 
 public class ControllerManager {
 
@@ -15,8 +17,10 @@ public class ControllerManager {
   MainController mainController;
   LoginController loginController;
   Controller registrationController;
+  HomeController homeController;
   Controller propHomeController;
   Controller coltHomeController;
+  Controller lottiController;
 
   public ControllerManager(ControllerDAO controllerDAO) {
     this.controllerDAO = controllerDAO;
@@ -35,9 +39,11 @@ public class ControllerManager {
   void loadControllers() {
     mainController = (MainController) loadController("Main");
     loginController = (LoginController) loadController("Login");
-    registrationController = loadController("Registration");
+    // registrationController = loadController("Registration");
+    homeController = (HomeController)  loadController("Home");
     propHomeController = loadController("ProprietarioHome");
     coltHomeController = loadController("ColtivatoreHome");
+    // lottiController = loadController("Lotti");
   }
 
   private Controller loadController(String viewName) {
@@ -60,18 +66,27 @@ public class ControllerManager {
     mainController.setActiveContent(loginController.getRoot());
   }
 
-  void loginProprietario(String username, String password) throws WrongPasswordException, WrongUsernameException {
+  public void loginProprietario(String username, String password) throws WrongPasswordException, WrongUsernameException {
     controllerDAO.loginProprietario(username, password);
-    openProprietarioHomeView();
+    openHomeView();
   }
 
   void loginColtivatore(String username, String password) throws WrongPasswordException, WrongUsernameException {
     controllerDAO.loginColtivatore(username, password);
-    openColtivatoreHomeView();
+    openHomeView();
   }
 
   void openRegistrationView() {
     mainController.setActiveContent(registrationController.getRoot());
+  }
+
+  public void openHomeView() {
+    mainController.setActiveContent(homeController.getRoot());
+    if (controllerDAO.getUser() instanceof Proprietario) {
+      homeController.setActiveContent(propHomeController.getRoot());
+    } else if (controllerDAO.getUser() instanceof Coltivatore) {
+      homeController.setActiveContent(coltHomeController.getRoot());
+    }
   }
 
   void openProprietarioHomeView() {
@@ -82,5 +97,8 @@ public class ControllerManager {
     mainController.setActiveContent(coltHomeController.getRoot());
   }
 
+  public void openLottiView() {
+    mainController.setActiveContent(lottiController.getRoot());
+  }
 
 }

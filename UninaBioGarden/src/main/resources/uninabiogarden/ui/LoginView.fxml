@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="393.0" prefWidth="533.0" styleClass="view" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.LoginController">
+<VBox fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="393.0" prefWidth="551.0" styleClass="view" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.LoginController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="69.0" prefWidth="81.0" styleClass="loginlabel">
          <font>
@@ -52,12 +52,12 @@
       <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" styleClass="login--label--error" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#openRegistrationView" prefHeight="45.0" prefWidth="129.0" text="Nuovo Utente">
+            <Button mnemonicParsing="false" onAction="#openRegistrationView" prefHeight="45.0" prefWidth="175.0" text="Nuovo Utente">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
             </Button>
-            <Button layoutX="99.0" layoutY="38.0" mnemonicParsing="false" onAction="#login" prefHeight="45.0" prefWidth="129.0" text="Log In" />
+            <Button layoutX="99.0" layoutY="38.0" mnemonicParsing="false" onAction="#login" prefHeight="45.0" prefWidth="175.0" text="Log In" />
          </children>
       </HBox>
    </children>

@@ -2,6 +2,7 @@ module uninabiogarden {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.graphics;
 
     opens uninabiogarden to javafx.fxml;
     opens uninabiogarden.ui to javafx.fxml;

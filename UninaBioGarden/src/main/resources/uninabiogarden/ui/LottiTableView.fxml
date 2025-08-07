@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox fx:id="root" prefHeight="458.0" prefWidth="943.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView prefHeight="458.0" prefWidth="982.0">
+        <columns>
+          <TableColumn prefWidth="438.0" text="Indirizzo" />
+          <TableColumn minWidth="0.0" prefWidth="102.0" text="Codice" />
+            <TableColumn prefWidth="93.0" text="Estensione" />
+            <TableColumn prefWidth="373.0" text="Orto" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

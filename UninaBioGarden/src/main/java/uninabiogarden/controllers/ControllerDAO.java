@@ -10,6 +10,10 @@ public class ControllerDAO {
 
   Utente user = null;
 
+  public Utente getUser() {
+    return user;
+  }
+
   public void addProprietario(Utente.Builder proprietarioBuilder) {
     var proprietario = proprietarioBuilder.buildProprietario();
     ProprietarioDAO.add(proprietario);
@@ -29,6 +33,14 @@ public class ControllerDAO {
 
   public void loginColtivatore(String username, String password) throws WrongPasswordException, WrongUsernameException {
     login(username, password, false);
+  }
+
+  public void autoLogin() {
+    try {
+      loginProprietario("proprietario1", "pass123");
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
   }
 
   public void logout() {

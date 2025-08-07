@@ -13,10 +13,20 @@ public class App extends Application {
   ControllerManager viewManager;
   ControllerDAO controllerDAO;
 
+  void simulate() {
+    try {
+      viewManager.loginProprietario("proprietario1", "pass123");
+      viewManager.openHomeView();
+    } catch (Exception e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
   @Override
   public void init() {
     controllerDAO = new ControllerDAO();
     viewManager = new ControllerManager(controllerDAO);
+    simulate();
   }
 
   @Override

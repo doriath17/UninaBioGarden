@@ -2,10 +2,10 @@ package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 public class ProprietarioHomeController extends Controller {
-  @FXML VBox root;
+  @FXML HBox root;
 
   @Override
   Parent getRoot() {

@@ -1,7 +1,5 @@
 package uninabiogarden.ui;
 
-import java.sql.SQLException;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -48,7 +46,8 @@ public class LoginController extends Controller {
   }
 
   @FXML private void login() {
-
+    System.out.println(propCheckBox.isSelected());
+    System.out.println(coltCheckBox.isSelected());
     try {
       if (propCheckBox.isSelected()) {
         controllerManager.loginProprietario(usernameField.getText(), passwordField.getText());

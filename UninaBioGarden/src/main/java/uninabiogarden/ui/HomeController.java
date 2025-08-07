@@ -2,12 +2,13 @@ package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class MainController extends Controller {
+public class HomeController extends Controller {
 
   @FXML VBox root;
-  @FXML VBox contentRoot;
+  @FXML HBox contentRoot;
 
   Parent activeView;
 
@@ -20,6 +21,10 @@ public class MainController extends Controller {
     contentRoot.getChildren().remove(activeView);
     contentRoot.getChildren().add(newContent);
     this.activeView = newContent;
+  }
+
+  @FXML private void logout(){
+    controllerManager.logout();
   }
 
 }
