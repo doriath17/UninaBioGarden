@@ -29,13 +29,13 @@ CREATE TABLE Coltivatore (
   residenza   VARCHAR(50)
 );
 
-CREATE TABLE Lotto (
+CREATE TABLE lotto (
   id_lotto    INT           GENERATED ALWAYS AS IDENTITY,
-  indirizzo   VARCHAR(50)   NOT NULL,
+  indirizzo   VARCHAR(80)   NOT NULL,
   codice_lotto INT          NOT NULL,
   UNIQUE (indirizzo, codice_lotto),
   estensione  FLOAT         NOT NULL,
-  nome_orto   VARCHAR(30)   NOT NULL,
+  nome_orto   VARCHAR(80)   NOT NULL,
   username_prop type_username NOT NULL REFERENCES Proprietario, 
 
   PRIMARY KEY (id_lotto),

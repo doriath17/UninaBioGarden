@@ -1,5 +1,12 @@
-import csv 
+import csv
 import psycopg
+from faker import Faker
+import random
+
+fake = Faker("it_IT")
+faker_seed = random.randint(0, 1000)
+print("faker seed: ", faker_seed)
+Faker.seed(faker_seed)
 
 def load_proprietari():
   with open('proprietario.csv') as csv_file: 
