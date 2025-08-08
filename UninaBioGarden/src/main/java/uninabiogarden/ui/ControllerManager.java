@@ -43,10 +43,10 @@ public class ControllerManager {
     homeController = (HomeController)  loadController("Home");
     propHomeController = loadController("ProprietarioHome");
     coltHomeController = loadController("ColtivatoreHome");
-    // lottiController = loadController("Lotti");
+    lottiController = loadController("Lotti");
   }
 
-  private Controller loadController(String viewName) {
+  Controller loadController(String viewName) {
     String fxmlFileName = viewName + "View.fxml";
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));

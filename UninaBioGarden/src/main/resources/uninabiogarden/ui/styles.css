@@ -4,6 +4,22 @@
   /* -fx-font-family: sans-serif; */
   -fx-font-family: monospace;
   -fx-font-size: 14px;
+  -fx-alignment: center;
+}
+
+.main-view {
+  -fx-pref-width: 1200px;
+  -fx-pref-height: 800px;
+}
+
+.home-view {
+  -fx-pref-width: 1100px;
+  -fx-pref-height: 700px;
+}
+
+.home-content-view {
+  -fx-pref-width: 1050px;
+  -fx-pref-height: 650px;
 }
 
 .view {

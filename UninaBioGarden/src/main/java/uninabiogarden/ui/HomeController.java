@@ -11,6 +11,7 @@ public class HomeController extends Controller {
   @FXML HBox contentRoot;
 
   Parent activeView;
+  LottiController lottiController;
 
   @Override
   public Parent getRoot(){
@@ -25,6 +26,13 @@ public class HomeController extends Controller {
 
   @FXML private void logout(){
     controllerManager.logout();
+  }
+
+  void openLottiView() {
+    if (lottiController == null) {
+      lottiController = (LottiController) controllerManager.loadController("Lotti");
+    }
+    setActiveContent(lottiController.getRoot());
   }
 
 }
