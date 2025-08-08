@@ -19,6 +19,7 @@ public class HomeController extends Controller {
   ProprietarioHomeController  propHomeController;
   ColtivatoreHomeController   coltHomeController;
   LottiController             lottiController;
+  ProgettiViewController       progettiViewController;
 
   @Override
   public Parent getRoot(){
@@ -59,6 +60,13 @@ public class HomeController extends Controller {
     }
     lottiController.loadLotti();
     setActiveContent(lottiController.getRoot());
+  }
+
+  void openProgettiView() {
+    if (progettiViewController == null) {
+      progettiViewController = (ProgettiViewController) controllerManager.loadController("Progetti");
+    }
+    setActiveContent(progettiViewController.getRoot());
   }
 
 }
