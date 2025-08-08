@@ -1,14 +1,17 @@
 package uninabiogarden.controllers;
 
-import java.sql.SQLException;
+import java.util.List;
 
 import uninabiogarden.dao.ColtivatoreDAO;
+import uninabiogarden.dao.LottoDAO;
 import uninabiogarden.dao.ProprietarioDAO;
+import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Utente;
 
 public class ControllerDAO {
 
-  Utente user = null;
+  Utente user;
+  List<Lotto> lotti;
 
   public Utente getUser() {
     return user;
@@ -45,6 +48,14 @@ public class ControllerDAO {
 
   public void logout() {
     user = null;
+    lotti = null;
+  }
+
+  public List<Lotto> loadLotti(){
+    if (lotti == null) {
+      lotti = LottoDAO.findAll(user.getUsername());
+    }
+    return lotti;
   }
 
 }

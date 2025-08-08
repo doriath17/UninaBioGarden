@@ -81,12 +81,8 @@ public class ControllerManager {
   }
 
   public void openHomeView() {
+    homeController.openHomeContent();
     mainController.setActiveContent(homeController.getRoot());
-    if (controllerDAO.getUser() instanceof Proprietario) {
-      homeController.setActiveContent(propHomeController.getRoot());
-    } else if (controllerDAO.getUser() instanceof Coltivatore) {
-      homeController.setActiveContent(coltHomeController.getRoot());
-    }
   }
 
   void openProprietarioHomeView() {

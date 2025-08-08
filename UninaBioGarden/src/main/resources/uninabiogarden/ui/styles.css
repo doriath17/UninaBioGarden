@@ -7,7 +7,7 @@
   -fx-alignment: center;
 }
 
-.main-view {
+/* .main-view {
   -fx-pref-width: 1200px;
   -fx-pref-height: 800px;
 }
@@ -20,6 +20,21 @@
 .home-content-view {
   -fx-pref-width: 1050px;
   -fx-pref-height: 650px;
+} */
+
+.main-view {
+  -fx-pref-width: 1920px;
+  -fx-pref-height: 1080px;
+}
+
+.home-view {
+  -fx-pref-width: 1480px;
+  -fx-pref-height: 900px;
+}
+
+.home-content-view {
+  -fx-pref-width: 1380px;
+  -fx-pref-height: 800px;
 }
 
 .view {
@@ -60,6 +75,22 @@
 .text-field:focused {
   -fx-background-color: -fx-text-box-border, -fx-focus-color, -fx-background;
   -fx-highlight-fill: none;
+}
+
+.text-field-1 {
+  -fx-pref-height: 45px;
+}
+
+.label-1 {
+  -fx-alignment: center;
+  -fx-padding: 15px 30px;
+  -fx-font-size: 16px;
+}
+
+.label-2 {
+  -fx-alignment: center-left;
+  -fx-padding: 10px 20px;
+  -fx-font-size: 16px;
 }
 
 /**********************************************/
@@ -103,4 +134,15 @@
 
 .check-box:selected .box {
   -fx-background-color: #28a3f4;
+}
+
+/**********************************************/
+
+/* login view */
+
+/**********************************************/
+
+.btn-delete-lotto {
+  -fx-pref-width: 110px;
+  -fx-pref-height: 45px;
 }

@@ -1,16 +1,27 @@
 CREATE SCHEMA UninaBioGarden;
 
 CREATE DOMAIN type_username AS VARCHAR(30);
+-- the username should not be empty 
+-- consider enforcing a min length
+
 CREATE DOMAIN type_password AS VARCHAR(30);
+-- the username should not be empty 
+-- consider enforcing a min length
+
 CREATE DOMAIN type_name AS VARCHAR(30);
+-- the username should not be empty 
+-- consider enforcing a min length
+
 CREATE DOMAIN type_email AS VARCHAR(50);
+-- the username should not be empty 
+-- consider enforcing a min length
 
 CREATE TABLE Proprietario (
   username    type_username   PRIMARY KEY, 
   password    type_password   NOT NULL,
   nome        type_name       NOT NULL, 
   cognome     type_name       NOT NULL,
-  bday        DATE            NOT NULL,
+  bday        DATE            NOT NULL, -- consider enforcing a minimum age
   email       type_email      NOT NULL UNIQUE,
   nazionalita VARCHAR(30)     NOT NULL,
   num_tel     VARCHAR(10),
@@ -90,8 +101,8 @@ CREATE TABLE Attivita (
 CREATE TABLE Progetto (
   id_progetto     INT               GENERATED ALWAYS AS IDENTITY,
   nome            type_name         NOT NULL,
-  data_inizio     DATE              NOT NULL,
-  data_fine       DATE,
+  data_inizio     DATE              NOT NULL, 
+  data_fine       DATE,             -- must be later than data_inizio
   descrizione     VARCHAR(200),
   username_prop   type_username     NOT NULL,
 
