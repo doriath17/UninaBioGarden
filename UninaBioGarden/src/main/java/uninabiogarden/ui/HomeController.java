@@ -66,6 +66,7 @@ public class HomeController extends Controller {
     if (progettiViewController == null) {
       progettiViewController = (ProgettiViewController) controllerManager.loadController("Progetti");
     }
+    progettiViewController.loadProgetti();
     setActiveContent(progettiViewController.getRoot());
   }
 

@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class Progetto {
   int id;
   String nome;
-  LocalDate data_inizio;
-  LocalDate data_fine;
+  LocalDate dataInizio;
+  LocalDate dataFine;
   String descrizione;
   String username_prop;
   int id_lotto;
@@ -36,12 +36,12 @@ public class Progetto {
     }
   }
 
-  public Progetto(int id, String nome, LocalDate data_inizio, LocalDate data_fine, String descrizione,
+  public Progetto(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,
       String username_prop, int id_lotto) {
     this.id = id;
     this.nome = nome;
-    this.data_inizio = data_inizio;
-    this.data_fine = data_fine;
+    this.dataInizio = dataInizio;
+    this.dataFine = dataFine;
     this.descrizione = descrizione;
     this.username_prop = username_prop;
     this.id_lotto = id_lotto;
@@ -63,20 +63,20 @@ public class Progetto {
     this.nome = nome;
   }
 
-  public LocalDate getData_inizio() {
-    return data_inizio;
+  public LocalDate getDataInizio() {
+    return dataInizio;
   }
 
-  public void setData_inizio(LocalDate data_inizio) {
-    this.data_inizio = data_inizio;
+  public void setDataInizio(LocalDate data_inizio) {
+    this.dataInizio = data_inizio;
   }
 
-  public LocalDate getData_fine() {
-    return data_fine;
+  public LocalDate getDataFine() {
+    return dataFine;
   }
 
-  public void setData_fine(LocalDate data_fine) {
-    this.data_fine = data_fine;
+  public void setDataFine(LocalDate dataFine) {
+    this.dataFine = dataFine;
   }
 
   public String getDescrizione() {

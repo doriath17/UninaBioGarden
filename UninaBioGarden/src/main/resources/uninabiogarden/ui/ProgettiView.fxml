@@ -34,11 +34,11 @@
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label maxWidth="1.7976931348623157E308" styleClass="label-1" text="TabelView Progetti" />
-                  <TableView prefHeight="663.0" prefWidth="513.0">
+                  <TableView fx:id="tableView" prefHeight="663.0" prefWidth="513.0">
                     <columns>
-                      <TableColumn prefWidth="274.0" text="Nome" />
-                      <TableColumn minWidth="0.0" prefWidth="105.0" text="Data Inizio" />
-                        <TableColumn minWidth="0.0" prefWidth="113.0" text="Data Fine" />
+                      <TableColumn fx:id="nomeCol" prefWidth="274.0" text="Nome" />
+                      <TableColumn fx:id="dataInizioCol" minWidth="0.0" prefWidth="105.0" text="Data Inizio" />
+                        <TableColumn fx:id="dataFineCol" minWidth="0.0" prefWidth="113.0" text="Data Fine" />
                     </columns>
                   </TableView>
                </children>
@@ -154,7 +154,7 @@
       </GridPane>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" styleClass="button-43" text="Button" />
+            <Button mnemonicParsing="false" onAction="#back" styleClass="button-43" text="Back" />
          </children>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />

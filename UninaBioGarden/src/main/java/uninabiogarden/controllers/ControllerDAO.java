@@ -4,14 +4,17 @@ import java.util.List;
 
 import uninabiogarden.dao.ColtivatoreDAO;
 import uninabiogarden.dao.LottoDAO;
+import uninabiogarden.dao.ProgettoDAO;
 import uninabiogarden.dao.ProprietarioDAO;
 import uninabiogarden.entities.Lotto;
+import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Utente;
 
 public class ControllerDAO {
 
   Utente user;
   List<Lotto> lotti;
+  List<Progetto> progetti;
 
   public Utente getUser() {
     return user;
@@ -56,6 +59,13 @@ public class ControllerDAO {
       lotti = LottoDAO.findAll(user.getUsername());
     }
     return lotti;
+  }
+
+  public List<Progetto> loadProgetti(){
+    if (progetti == null) {
+      progetti = ProgettoDAO.findAll(user.getUsername());
+    }
+    return progetti;
   }
 
 }
