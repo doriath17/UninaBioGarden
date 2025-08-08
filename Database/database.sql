@@ -16,7 +16,7 @@ CREATE DOMAIN type_email AS VARCHAR(50);
 -- the username should not be empty 
 -- consider enforcing a min length
 
-CREATE TABLE Proprietario (
+CREATE TABLE proprietario (
   username    type_username   PRIMARY KEY, 
   password    type_password   NOT NULL,
   nome        type_name       NOT NULL, 
@@ -28,7 +28,7 @@ CREATE TABLE Proprietario (
   residenza   VARCHAR(50)
 );
 
-CREATE TABLE Coltivatore (
+CREATE TABLE coltivatore (
   username    type_username   PRIMARY KEY, 
   password    type_password   NOT NULL,
   nome        type_name       NOT NULL, 
@@ -55,7 +55,7 @@ CREATE TABLE lotto (
 CREATE TABLE Coltura (
   id_coltura        INT             GENERATED ALWAYS AS IDENTITY,
   nome              type_name       NOT NULL,
-  data_semina       DATE            NOT NULL,
+  data_semina       DATE            NOT NULL, -- deve essere posteriore al progetto relativo all'orto
   descrizione       VARCHAR(200),
   tempo_maturazione INT             NOT NULL, -- numero giorni per la maturazione?
   id_lotto          INT             NOT NULL REFERENCES Lotto,
@@ -98,16 +98,19 @@ CREATE TABLE Attivita (
   FOREIGN KEY (id_coltura)  REFERENCES Coltura(id_coltura)
 );
 
-CREATE TABLE Progetto (
+CREATE TABLE progetto (
   id_progetto     INT               GENERATED ALWAYS AS IDENTITY,
   nome            type_name         NOT NULL,
-  data_inizio     DATE              NOT NULL, 
+  data_inizio     DATE              NOT NULL,
+  -- un proprietario non puo avere progetti con lo stesso nome che iniziano nella stessa data 
   data_fine       DATE,             -- must be later than data_inizio
   descrizione     VARCHAR(200),
-  username_prop   type_username     NOT NULL,
+  username_prop   type_username     NOT NULL REFERENCES proprietario(username),
+  id_lotto        INT               NOT NULL REFERENCES lotto(id_lotto),
+  -- puo esserci un solo progetto su un lotto 
+  -- se un progetto referenzia un lotto deve essere l'unico
 
-  PRIMARY KEY (id_progetto),
-  FOREIGN KEY (username_prop) REFERENCES Proprietario(username)
+  PRIMARY KEY (id_progetto)
 );
 
 CREATE TABLE SvoltaDa (
