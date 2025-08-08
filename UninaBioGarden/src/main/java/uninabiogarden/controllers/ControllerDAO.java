@@ -8,6 +8,7 @@ import uninabiogarden.dao.ProgettoDAO;
 import uninabiogarden.dao.ProprietarioDAO;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;
 
 public class ControllerDAO {
@@ -52,6 +53,7 @@ public class ControllerDAO {
   public void logout() {
     user = null;
     lotti = null;
+    progetti = null;
   }
 
   public List<Lotto> loadLotti(){
@@ -63,7 +65,7 @@ public class ControllerDAO {
 
   public List<Progetto> loadProgetti(){
     if (progetti == null) {
-      progetti = ProgettoDAO.findAll(user.getUsername());
+      progetti = ProgettoDAO.findAll((Proprietario) user);
     }
     return progetti;
   }

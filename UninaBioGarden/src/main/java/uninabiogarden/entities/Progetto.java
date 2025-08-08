@@ -8,8 +8,8 @@ public class Progetto {
   LocalDate dataInizio;
   LocalDate dataFine;
   String descrizione;
-  String username_prop;
-  int id_lotto;
+  Proprietario proprietario;
+  Lotto lotto;
 
   public static class Builder {
     int id;
@@ -17,34 +17,34 @@ public class Progetto {
     LocalDate data_inizio;
     LocalDate data_fine;
     String descrizione;
-    String username_prop;
-    int id_lotto;
+    Proprietario proprietario;
+    Lotto lotto;
 
     public Builder(int id, String nome, LocalDate data_inizio, LocalDate data_fine, String descrizione,
-        String username_prop, int id_lotto) {
+        Proprietario proprietario, Lotto lotto) {
       this.id = id;
       this.nome = nome;
       this.data_inizio = data_inizio;
       this.data_fine = data_fine;
       this.descrizione = descrizione;
-      this.username_prop = username_prop;
-      this.id_lotto = id_lotto;
+      this.proprietario = proprietario;
+      this.lotto = lotto;
     }
 
     public Progetto build(){
-      return new Progetto(id, nome, data_inizio, data_fine, descrizione, username_prop, id_lotto);
+      return new Progetto(id, nome, data_inizio, data_fine, descrizione, proprietario, lotto);
     }
   }
 
   public Progetto(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,
-      String username_prop, int id_lotto) {
+      Proprietario proprietario, Lotto lotto) {
     this.id = id;
     this.nome = nome;
     this.dataInizio = dataInizio;
     this.dataFine = dataFine;
     this.descrizione = descrizione;
-    this.username_prop = username_prop;
-    this.id_lotto = id_lotto;
+    this.proprietario = proprietario;
+    this.lotto = lotto;
   }
 
   public int getId() {
@@ -87,19 +87,19 @@ public class Progetto {
     this.descrizione = descrizione;
   }
 
-  public String getUsername_prop() {
-    return username_prop;
+  public Proprietario getProprietario() {
+    return proprietario;
   }
 
-  public void setUsername_prop(String username_prop) {
-    this.username_prop = username_prop;
+  public void setProprietario(Proprietario prop) {
+    this.proprietario = prop;
   }
 
-  public int getId_lotto() {
-    return id_lotto;
+  public Lotto getLotto() {
+    return lotto;
   }
 
-  public void setId_lotto(int id_lotto) {
-    this.id_lotto = id_lotto;
+  public void setLotto(Lotto lotto) {
+    this.lotto = lotto;
   }
 }

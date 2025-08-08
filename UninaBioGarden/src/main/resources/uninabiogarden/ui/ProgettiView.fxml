@@ -66,7 +66,7 @@
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Nome" />
-                              <TextField maxWidth="-Infinity" prefWidth="500.0" styleClass="text-field-1" />
+                              <TextField fx:id="nomeField" maxWidth="-Infinity" prefWidth="500.0" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <GridPane GridPane.rowIndex="1">
@@ -81,7 +81,7 @@
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Data Inizio" />
-                                    <DatePicker maxWidth="1.7976931348623157E308" />
+                                    <DatePicker fx:id="dataInizioField" maxWidth="1.7976931348623157E308" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets right="40.0" top="10.0" />
@@ -90,7 +90,7 @@
                               <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Data Fine" />
-                                    <DatePicker maxWidth="1.7976931348623157E308" />
+                                    <DatePicker fx:id="dataFineField" maxWidth="1.7976931348623157E308" />
                                  </children>
                                  <padding>
                                     <Insets right="40.0" />
@@ -104,15 +104,15 @@
                         <VBox prefHeight="195.0" prefWidth="586.0" GridPane.rowIndex="2">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Descrizione" />
-                              <TextArea prefHeight="200.0" prefWidth="200.0" styleClass="textarea" />
+                              <TextArea fx:id="descrizioneField" prefHeight="200.0" prefWidth="200.0" styleClass="textarea" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Indirizzo Lotto" />
-                              <TextField styleClass="text-field-1" />
+                              <TextField fx:id="indirizzoLottoField" styleClass="text-field-1" />
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Codice Lotto" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="219.0" styleClass="text-field-1" />
+                              <TextField fx:id="codiceLottoField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="219.0" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
