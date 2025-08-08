@@ -10,4 +10,8 @@ public abstract class Controller {
     }
 
     abstract Parent getRoot();
+
+    void close() {
+      
+    }
 }

@@ -16,6 +16,7 @@ public class HomeController extends Controller {
   @FXML Label usernameLabel;
 
   Parent activeView;
+  Controller activeController;
   ProprietarioHomeController  propHomeController;
   ColtivatoreHomeController   coltHomeController;
   LottiController             lottiController;
@@ -32,6 +33,12 @@ public class HomeController extends Controller {
     this.activeView = newContent;
   }
 
+  public void setActiveContent(Controller controller) {
+    activeController = controller;
+    activeController.close();
+    setActiveContent(activeController.getRoot());
+  }
+
   @FXML private void logout(){
     usernameLabel.setText("");
     controllerManager.logout();
@@ -45,12 +52,12 @@ public class HomeController extends Controller {
       if (propHomeController == null) {
         propHomeController = (ProprietarioHomeController) controllerManager.loadController("ProprietarioHome");
       }
-      setActiveContent(propHomeController.getRoot());
+      setActiveContent(propHomeController);
     } else if (controllerManager.controllerDAO.getUser() instanceof Coltivatore) {
       if (coltHomeController == null) {
         coltHomeController = (ColtivatoreHomeController) controllerManager.loadController("ColtivatoreHome");
       }
-      setActiveContent(coltHomeController.getRoot());
+      setActiveContent(coltHomeController);
     }
   }
 
@@ -59,7 +66,7 @@ public class HomeController extends Controller {
       lottiController = (LottiController) controllerManager.loadController("Lotti");
     }
     lottiController.loadLotti();
-    setActiveContent(lottiController.getRoot());
+    setActiveContent(lottiController);
   }
 
   void openProgettiView() {
@@ -67,7 +74,7 @@ public class HomeController extends Controller {
       progettiViewController = (ProgettiViewController) controllerManager.loadController("Progetti");
     }
     progettiViewController.loadProgetti();
-    setActiveContent(progettiViewController.getRoot());
+    setActiveContent(progettiViewController);
   }
 
 }

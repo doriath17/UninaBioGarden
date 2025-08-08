@@ -52,10 +52,6 @@ public class ProgettoDAO {
       System.err.println(e.getMessage());
     }
 
-    for (var p : progetti) {
-      System.out.println(p.getId() + "," + p.getNome()+","+p.getLotto().getIndirizzo()+"'"+p.getLotto().getCodice());
-    }
-
     return progetti;
   }
 }
