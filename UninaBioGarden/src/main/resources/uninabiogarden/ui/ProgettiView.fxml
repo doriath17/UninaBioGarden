@@ -132,7 +132,7 @@
                                     <Insets left="40.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button layoutX="323.0" layoutY="28.0" mnemonicParsing="false" text="Add">
+                              <Button layoutX="323.0" layoutY="28.0" mnemonicParsing="false" onAction="#add" text="Add">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />

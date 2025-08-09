@@ -31,13 +31,19 @@ public class Progetto {
       this.lotto = lotto;
     }
 
-    public Progetto build(){
+    public Progetto build() throws WrongDataFineException, EmptyValueException{
       return new Progetto(id, nome, data_inizio, data_fine, descrizione, proprietario, lotto);
     }
   }
 
   public Progetto(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,
-      Proprietario proprietario, Lotto lotto) {
+      Proprietario proprietario, Lotto lotto) throws WrongDataFineException, EmptyValueException {
+    Constraint.checkNotEmptyValue(nome);
+    Constraint.checkNotEmptyValue(dataInizio);
+    Constraint.checkDataFine(dataInizio, dataFine);
+    Constraint.checkNotEmptyValue(proprietario);
+    Constraint.checkNotEmptyValue(lotto);
+
     this.id = id;
     this.nome = nome;
     this.dataInizio = dataInizio;

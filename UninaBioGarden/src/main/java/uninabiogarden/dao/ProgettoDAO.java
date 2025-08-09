@@ -4,9 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import uninabiogarden.entities.EmptyValueException;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
+import uninabiogarden.entities.WrongDataFineException;
 
 public class ProgettoDAO {
   public static List<Progetto> findAll(Proprietario user) {
@@ -50,6 +52,9 @@ public class ProgettoDAO {
 
     } catch (SQLException e) {
       System.err.println(e.getMessage());
+    } catch (WrongDataFineException | EmptyValueException e) {
+      System.err.println(e.getMessage());
+      System.exit(1); // error in the database
     }
 
     return progetti;

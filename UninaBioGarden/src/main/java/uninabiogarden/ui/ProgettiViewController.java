@@ -1,6 +1,7 @@
 package uninabiogarden.ui;
 
 import java.time.LocalDate;
+import java.util.function.UnaryOperator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,6 +14,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Progetto;
@@ -62,8 +66,37 @@ public class ProgettiViewController extends Controller {
           fillForm(newValue);
         }
       }
-      
     });
+
+    addTextLimiter(nomeField, 50);
+    addTextLimiter(descrizioneField, 200);
+    addTextLimiter(indirizzoLottoField, 80);
+    UnaryOperator<Change> positiveIntegerFilter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.matches("0|[1-9][0-9]*")) { 
+        return change;
+      }
+      return null;
+    };
+    codiceLottoField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
+
+  }
+
+  public static void addTextLimiter(TextInputControl textInputControl, int maxLength) {
+    UnaryOperator<Change> maxLengthFilter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.length() <= maxLength) {
+        return change;
+      }
+      return null;
+    };
+    textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
   }
 
   void fillForm(Progetto value) {
@@ -92,6 +125,14 @@ public class ProgettiViewController extends Controller {
   void loadProgetti(){
     var list = controllerManager.controllerDAO.loadProgetti();
     progettiObsList.setAll(list);
+  }
+
+  @FXML private void update() {
+    
+  }
+
+  @FXML private void add() {
+    
   }
   
 }
