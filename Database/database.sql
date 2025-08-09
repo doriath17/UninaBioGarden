@@ -1,18 +1,22 @@
 CREATE SCHEMA UninaBioGarden;
 
 CREATE DOMAIN type_username AS VARCHAR(30);
+-- max 50
 -- the username should not be empty 
 -- consider enforcing a min length
 
 CREATE DOMAIN type_password AS VARCHAR(30);
+--max 50
 -- the username should not be empty 
 -- consider enforcing a min length
 
 CREATE DOMAIN type_name AS VARCHAR(30);
+-- change to max 50 chars
 -- the username should not be empty 
 -- consider enforcing a min length
 
 CREATE DOMAIN type_email AS VARCHAR(50);
+-- max 80 chars
 -- the username should not be empty 
 -- consider enforcing a min length
 
@@ -49,7 +53,7 @@ CREATE TABLE lotto (
   nome_orto   VARCHAR(80)   NOT NULL,
   username_prop type_username NOT NULL REFERENCES Proprietario, 
 
-  PRIMARY KEY (id_lotto),
+  PRIMARY KEY (id_lotto)
 );
 
 CREATE TABLE Coltura (
@@ -103,7 +107,7 @@ CREATE TABLE progetto (
   nome            type_name         NOT NULL,
   data_inizio     DATE              NOT NULL,
   -- un proprietario non puo avere progetti con lo stesso nome che iniziano nella stessa data 
-  data_fine       DATE,             -- must be later than data_inizio
+  data_fine       DATE,             -- must be later than data_inizio use a check
   descrizione     VARCHAR(200),
   username_prop   type_username     NOT NULL REFERENCES proprietario(username),
   id_lotto        INT               NOT NULL REFERENCES lotto(id_lotto),
