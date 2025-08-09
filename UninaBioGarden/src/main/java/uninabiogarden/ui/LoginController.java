@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import uninabiogarden.controllers.WrongPasswordException;
-import uninabiogarden.controllers.WrongUsernameException;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
 
 public class LoginController extends Controller {
   @FXML VBox root;

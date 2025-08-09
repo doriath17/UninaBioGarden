@@ -46,14 +46,14 @@ public class HomeController extends Controller {
 
   void openHomeContent() {
     if (usernameLabel.getText().equals("") || usernameLabel.getText() == null){
-      usernameLabel.setText(controllerManager.controllerDAO.getUser().getUsername());
+      usernameLabel.setText(controllerManager.userService.getUser().getUsername());
     }
-    if (controllerManager.controllerDAO.getUser() instanceof Proprietario) {
+    if (controllerManager.userService.getUser() instanceof Proprietario) {
       if (propHomeController == null) {
         propHomeController = (ProprietarioHomeController) controllerManager.loadController("ProprietarioHome");
       }
       setActiveContent(propHomeController);
-    } else if (controllerManager.controllerDAO.getUser() instanceof Coltivatore) {
+    } else if (controllerManager.userService.getUser() instanceof Coltivatore) {
       if (coltHomeController == null) {
         coltHomeController = (ColtivatoreHomeController) controllerManager.loadController("ColtivatoreHome");
       }

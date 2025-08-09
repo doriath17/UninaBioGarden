@@ -44,7 +44,7 @@ public class LottiController extends Controller {
   }
 
   void loadLotti(){
-    var list = controllerManager.controllerDAO.loadLotti();
+    var list = controllerManager.userService.loadLotti();
     lottoObservableList.setAll(list);
   }
 

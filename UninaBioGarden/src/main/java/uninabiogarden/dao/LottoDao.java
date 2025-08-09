@@ -6,7 +6,7 @@ import java.util.List;
 
 import uninabiogarden.entities.Lotto;
 
-public class LottoDAO {
+public class LottoDao {
 
   public static List<Lotto> findAll(String username) {
     var sql = "SELECT * FROM lotto WHERE username_prop='" + username + "'";

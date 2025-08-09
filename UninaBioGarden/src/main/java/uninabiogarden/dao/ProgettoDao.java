@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import uninabiogarden.entities.EmptyValueException;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
-import uninabiogarden.entities.WrongDataFineException;
+import uninabiogarden.exceptions.EmptyValueException;
+import uninabiogarden.exceptions.WrongDataFineException;
 
-public class ProgettoDAO {
+public class ProgettoDao {
   public static List<Progetto> findAll(Proprietario user) {
 
     var sql = "SELECT * " + 

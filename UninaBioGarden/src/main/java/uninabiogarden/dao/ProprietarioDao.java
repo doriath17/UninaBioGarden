@@ -2,14 +2,14 @@ package uninabiogarden.dao;
 
 import java.sql.*;
 
-import uninabiogarden.controllers.WrongPasswordException;
-import uninabiogarden.controllers.WrongUsernameException;
 import uninabiogarden.entities.Proprietario;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ProprietarioDAO {
+public class ProprietarioDao {
 
   public static Proprietario exists(String username, String password) throws WrongUsernameException, WrongPasswordException {
-    return UtenteDAO.exists(username, password, "proprietario").buildProprietario();
+    return (Proprietario) UtenteDao.exists(username, password, "proprietario");
   }
 
   public static boolean add(Proprietario proprietario) {

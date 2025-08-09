@@ -8,27 +8,6 @@ public class Lotto {
   Double estensione;
   String orto;
 
-  public static class Builder {
-    final int id;
-    final String indirizzo;
-    final int codice;
-    final Double estensione;
-    final String orto;
-
-    public Builder(int id, String indirizzo, int codice, Double estensione, String orto) {
-      this.id = id;
-      this.indirizzo = indirizzo;
-      this.codice = codice;
-      this.estensione = estensione;
-      this.orto = orto;
-    }
-
-    public Lotto build() {
-      return new Lotto(id, indirizzo, codice, estensione, orto);
-    }
-
-  }
-
   public Lotto(int id, String indirizzo, int codice, Double estensione, String orto) {
     this.id = id;
     this.indirizzo = indirizzo;

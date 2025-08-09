@@ -2,14 +2,14 @@ package uninabiogarden.dao;
 
 import java.sql.*;
 
-import uninabiogarden.controllers.WrongPasswordException;
-import uninabiogarden.controllers.WrongUsernameException;
 import uninabiogarden.entities.Coltivatore;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ColtivatoreDAO {
+public class ColtivatoreDao {
 
   public static Coltivatore exists(String username, String password) throws WrongUsernameException, WrongPasswordException {
-    return UtenteDAO.exists(username, password, "coltivatore").buildColtivatore();
+    return (Coltivatore) UtenteDao.exists(username, password, "coltivatore");
   }
 
   public static boolean add(Coltivatore coltivatore) {

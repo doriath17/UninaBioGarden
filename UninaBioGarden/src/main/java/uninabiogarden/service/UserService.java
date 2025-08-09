@@ -1,17 +1,19 @@
-package uninabiogarden.controllers;
+package uninabiogarden.service;
 
 import java.util.List;
 
-import uninabiogarden.dao.ColtivatoreDAO;
-import uninabiogarden.dao.LottoDAO;
-import uninabiogarden.dao.ProgettoDAO;
-import uninabiogarden.dao.ProprietarioDAO;
+import uninabiogarden.dao.ColtivatoreDao;
+import uninabiogarden.dao.LottoDao;
+import uninabiogarden.dao.ProgettoDao;
+import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ControllerDAO {
+public class UserService {
 
   Utente user;
   List<Lotto> lotti;
@@ -21,16 +23,17 @@ public class ControllerDAO {
     return user;
   }
 
-  public void addProprietario(Utente.Builder proprietarioBuilder) {
-    var proprietario = proprietarioBuilder.buildProprietario();
-    ProprietarioDAO.add(proprietario);
+  public void logout() {
+    user = null;
+    lotti = null;
+    progetti = null;
   }
 
   private void login(String username, String password, boolean userType) throws WrongPasswordException, WrongUsernameException {
     if (userType) {
-      user = ProprietarioDAO.exists(username, password);
+      user = ProprietarioDao.exists(username, password);
     } else {
-      user = ColtivatoreDAO.exists(username, password);
+      user = ColtivatoreDao.exists(username, password);
     }
   }
 
@@ -50,22 +53,16 @@ public class ControllerDAO {
     }
   }
 
-  public void logout() {
-    user = null;
-    lotti = null;
-    progetti = null;
-  }
-
   public List<Lotto> loadLotti(){
     if (lotti == null) {
-      lotti = LottoDAO.findAll(user.getUsername());
+      lotti = LottoDao.findAll(user.getUsername());
     }
     return lotti;
   }
 
   public List<Progetto> loadProgetti(){
     if (progetti == null) {
-      progetti = ProgettoDAO.findAll((Proprietario) user);
+      progetti = ProgettoDao.findAll((Proprietario) user);
     }
     return progetti;
   }

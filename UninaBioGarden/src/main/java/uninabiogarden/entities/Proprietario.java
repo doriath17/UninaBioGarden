@@ -1,7 +1,6 @@
 package uninabiogarden.entities;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class Proprietario extends Utente {
 
@@ -9,8 +8,4 @@ public class Proprietario extends Utente {
     super(username, password, nome, cognome, bday, nationality, email, numTel, residenza);
   }
 
-  @Override 
-  public String toString() {
-    return "{username: " + this.getUsername() + "}";
-  }
 }

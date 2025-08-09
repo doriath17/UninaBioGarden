@@ -10,6 +10,7 @@ public class Database {
     private static final String dbUser = "ubg_user";
     private static final String dbPassword = "101010";
 
+    @SuppressWarnings("exports")
     public static Connection connect() {
         try {
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);

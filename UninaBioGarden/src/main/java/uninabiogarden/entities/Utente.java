@@ -14,46 +14,6 @@ public abstract class Utente {
   private String numTel;
   private String residenza;
 
-  public static class Builder {
-    final String username;
-    final String password;
-    final String nome;
-    final String cognome;
-    final LocalDate bday;
-    final String nationality;
-    final String email;
-    String numTel;
-    String residenza;
-
-    public Builder(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email) {
-      this.username = username;
-      this.password = password;
-      this.nome = nome;
-      this.cognome = cognome;
-      this.bday = bday;
-      this.nationality = nationality;
-      this.email = email;
-    }
-
-    public Builder numTel(String numTel) {
-      this.numTel = numTel;
-      return this;
-    }
-
-    public Builder residenza(String residenza) {
-      this.residenza = residenza;
-      return this;
-    }
-
-    public Proprietario buildProprietario() {
-      return new Proprietario(username, password, nome, cognome, bday, nationality, email, numTel, residenza);
-    }
-
-    public Coltivatore buildColtivatore() {
-      return new Coltivatore(username, password, nome, cognome, bday, nationality, email, numTel, residenza);
-    }
-  }
-
   public Utente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
     this.username = username;
     this.password = password;

@@ -2,6 +2,9 @@ package uninabiogarden.entities;
 
 import java.time.LocalDate;
 
+import uninabiogarden.exceptions.EmptyValueException;
+import uninabiogarden.exceptions.WrongDataFineException;
+
 public class Progetto {
   int id;
   String nome;
@@ -10,31 +13,6 @@ public class Progetto {
   String descrizione;
   Proprietario proprietario;
   Lotto lotto;
-
-  public static class Builder {
-    int id;
-    String nome;
-    LocalDate data_inizio;
-    LocalDate data_fine;
-    String descrizione;
-    Proprietario proprietario;
-    Lotto lotto;
-
-    public Builder(int id, String nome, LocalDate data_inizio, LocalDate data_fine, String descrizione,
-        Proprietario proprietario, Lotto lotto) {
-      this.id = id;
-      this.nome = nome;
-      this.data_inizio = data_inizio;
-      this.data_fine = data_fine;
-      this.descrizione = descrizione;
-      this.proprietario = proprietario;
-      this.lotto = lotto;
-    }
-
-    public Progetto build() throws WrongDataFineException, EmptyValueException{
-      return new Progetto(id, nome, data_inizio, data_fine, descrizione, proprietario, lotto);
-    }
-  }
 
   public Progetto(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,
       Proprietario proprietario, Lotto lotto) throws WrongDataFineException, EmptyValueException {

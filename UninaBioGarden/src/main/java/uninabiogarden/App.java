@@ -2,7 +2,7 @@ package uninabiogarden;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import uninabiogarden.controllers.ControllerDAO;
+import uninabiogarden.service.UserService;
 import uninabiogarden.ui.ControllerManager;
 
 /**
@@ -11,7 +11,7 @@ import uninabiogarden.ui.ControllerManager;
 public class App extends Application {
 
   ControllerManager viewManager;
-  ControllerDAO controllerDAO;
+  UserService controllerDAO;
 
   void simulate() {
     try {
@@ -24,7 +24,7 @@ public class App extends Application {
 
   @Override
   public void init() {
-    controllerDAO = new ControllerDAO();
+    controllerDAO = new UserService();
     viewManager = new ControllerManager(controllerDAO);
     simulate();
   }

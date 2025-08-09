@@ -1,4 +1,4 @@
-package uninabiogarden.entities;
+package uninabiogarden.exceptions;
 
 public class EmptyValueException extends Exception {
   

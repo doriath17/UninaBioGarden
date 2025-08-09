@@ -110,12 +110,12 @@ public class ProgettiViewController extends Controller {
   }
 
   void clearForm() {
-    nomeField.setText(null);
+    nomeField.setText("");
     dataInizioField.setValue(null);
     dataFineField.setValue(null);
-    descrizioneField.setText(null);
-    indirizzoLottoField.setText(null);
-    codiceLottoField.setText(null);
+    descrizioneField.setText("");
+    indirizzoLottoField.setText("");
+    codiceLottoField.setText("");
   }
 
   @FXML private void back() {
@@ -123,7 +123,7 @@ public class ProgettiViewController extends Controller {
   }
 
   void loadProgetti(){
-    var list = controllerManager.controllerDAO.loadProgetti();
+    var list = controllerManager.userService.loadProgetti();
     progettiObsList.setAll(list);
   }
 

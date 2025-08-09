@@ -2,6 +2,9 @@ package uninabiogarden.entities;
 
 import java.time.LocalDate;
 
+import uninabiogarden.exceptions.EmptyValueException;
+import uninabiogarden.exceptions.WrongDataFineException;
+
 public class Constraint {
   public static void checkDataFine(LocalDate dataInizio, LocalDate dataFine) throws WrongDataFineException {
     if (dataFine != null && dataFine.isBefore(dataFine)) {

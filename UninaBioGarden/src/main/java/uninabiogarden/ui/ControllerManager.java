@@ -3,15 +3,13 @@ package uninabiogarden.ui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import uninabiogarden.controllers.ControllerDAO;
-import uninabiogarden.controllers.WrongPasswordException;
-import uninabiogarden.controllers.WrongUsernameException;
-import uninabiogarden.entities.Coltivatore;
-import uninabiogarden.entities.Proprietario;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
+import uninabiogarden.service.UserService;
 
 public class ControllerManager {
 
-  ControllerDAO controllerDAO;
+  UserService userService;
   Stage stage;
 
   MainController mainController;
@@ -22,8 +20,8 @@ public class ControllerManager {
   Controller coltHomeController;
   Controller lottiController;
 
-  public ControllerManager(ControllerDAO controllerDAO) {
-    this.controllerDAO = controllerDAO;
+  public ControllerManager(UserService controllerDAO) {
+    this.userService = controllerDAO;
     loadControllers();
     mainController.setActiveContent(loginController.getRoot());
   }
@@ -61,18 +59,18 @@ public class ControllerManager {
   }
 
   void logout() {
-    controllerDAO.logout();
+    userService.logout();
     loginController.clear();
     mainController.setActiveContent(loginController.getRoot());
   }
 
   public void loginProprietario(String username, String password) throws WrongPasswordException, WrongUsernameException {
-    controllerDAO.loginProprietario(username, password);
+    userService.loginProprietario(username, password);
     openHomeView();
   }
 
   void loginColtivatore(String username, String password) throws WrongPasswordException, WrongUsernameException {
-    controllerDAO.loginColtivatore(username, password);
+    userService.loginColtivatore(username, password);
     openHomeView();
   }
 
