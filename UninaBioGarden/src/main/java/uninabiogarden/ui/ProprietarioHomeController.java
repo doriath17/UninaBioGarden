@@ -1,27 +1,26 @@
 package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
-public class ProprietarioHomeController extends Controller {
-  @FXML HBox root;
+public class ProprietarioHomeController extends ProprietarioController {
+  @FXML VBox root;
 
   @Override
-  Parent getRoot() {
+  VBox getRoot() {
     return root;
   }
 
   @FXML private void logout() {
-    controllerManager.logout();
+    // controllerManager.logout();
   }
 
   @FXML private void openLottiView() {
-    controllerManager.homeController.openLottiView();
+    ((HomeController)parent).openLottiView();
   }
 
   @FXML private void openProgettiView() {
-    controllerManager.homeController.openProgettiView();
+    ((HomeController)parent).openProgettiView();
   }
 
 }

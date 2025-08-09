@@ -3,7 +3,6 @@ package uninabiogarden.ui;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -11,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
+import uninabiogarden.service.LoginService;
+import uninabiogarden.service.UtenteService;
 
 public class LoginController extends Controller {
   @FXML VBox root;
@@ -21,7 +22,7 @@ public class LoginController extends Controller {
   @FXML CheckBox coltCheckBox;
 
   @SuppressWarnings("exports")
-  public Parent getRoot() {
+  public VBox getRoot() {
     return root;
   }
 
@@ -46,13 +47,13 @@ public class LoginController extends Controller {
   }
 
   @FXML private void login() {
-    System.out.println(propCheckBox.isSelected());
-    System.out.println(coltCheckBox.isSelected());
+    System.out.println("Login pressed");
+    UtenteService service = null;
     try {
       if (propCheckBox.isSelected()) {
-        controllerManager.loginProprietario(usernameField.getText(), passwordField.getText());
+        service = LoginService.loginProprietario(usernameField.getText(), passwordField.getText());
       } else if (coltCheckBox.isSelected()) {
-        controllerManager.loginColtivatore(usernameField.getText(), passwordField.getText());
+        service = LoginService.loginColtivatore(usernameField.getText(), passwordField.getText());
       } else {
         errorLabel.setText("Must select either Proprietario or Coltivatore");
       }
@@ -62,10 +63,11 @@ public class LoginController extends Controller {
       errorLabel.setText(WrongPasswordException.msg);
     }
 
+    ((MainController)parent).openHomeView(service);
   }
 
   @FXML private void openRegistrationView() {
-      controllerManager.openRegistrationView();
+    ((MainController)parent).openRegistrationView();
   }
 
   void clear() {

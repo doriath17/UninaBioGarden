@@ -3,15 +3,17 @@ package uninabiogarden.ui;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import uninabiogarden.entities.Coltivatore;
-import uninabiogarden.entities.Proprietario;
+import uninabiogarden.service.ColtivatoreService;
+import uninabiogarden.service.ProprietarioService;
 
-public class HomeController extends Controller {
+public class HomeController extends ContentController {
+
+  ProprietarioService propService;
+  ColtivatoreService coltService;
 
   @FXML VBox root;
-  @FXML HBox contentRoot;
+  @FXML VBox contentRoot;
 
   @FXML Label usernameLabel;
 
@@ -20,42 +22,48 @@ public class HomeController extends Controller {
   ProprietarioHomeController  propHomeController;
   ColtivatoreHomeController   coltHomeController;
   LottiController             lottiController;
-  ProgettiViewController       progettiViewController;
+  ProgettiViewController      progettiViewController;
 
+  @SuppressWarnings("exports")
   @Override
-  public Parent getRoot(){
+  public VBox getRoot(){
     return root;
   }
 
-  public void setActiveContent(Parent newContent) {
-    contentRoot.getChildren().remove(activeView);
-    contentRoot.getChildren().add(newContent);
-    this.activeView = newContent;
-  }
-
-  public void setActiveContent(Controller controller) {
-    activeController = controller;
-    activeController.close();
-    setActiveContent(activeController.getRoot());
+  @SuppressWarnings("exports")
+  @Override
+  public VBox getContentRoot(){
+    return contentRoot;
   }
 
   @FXML private void logout(){
     usernameLabel.setText("");
-    controllerManager.logout();
+    // controllerManager.logout();
+  }
+
+  String getUsername() {
+    if (propService != null){
+      return propService.getUtente().getUsername();
+    } else {
+      return coltService.getUtente().getUsername();
+    }
   }
 
   void openHomeContent() {
+    System.out.println("openHomeContent");
     if (usernameLabel.getText().equals("") || usernameLabel.getText() == null){
-      usernameLabel.setText(controllerManager.userService.getUser().getUsername());
+      usernameLabel.setText(getUsername());
     }
-    if (controllerManager.userService.getUser() instanceof Proprietario) {
+    if (propService != null) {
       if (propHomeController == null) {
-        propHomeController = (ProprietarioHomeController) controllerManager.loadController("ProprietarioHome");
+        propHomeController = (ProprietarioHomeController) loadContent("ProprietarioHomeView.fxml");
+        propHomeController.propService = propService;
       }
       setActiveContent(propHomeController);
-    } else if (controllerManager.userService.getUser() instanceof Coltivatore) {
+    } else {
       if (coltHomeController == null) {
-        coltHomeController = (ColtivatoreHomeController) controllerManager.loadController("ColtivatoreHome");
+        coltHomeController = (ColtivatoreHomeController) loadContent("ColtivatoreHomeView.fxml");
+        coltHomeController.coltService = coltService;
       }
       setActiveContent(coltHomeController);
     }
@@ -63,7 +71,8 @@ public class HomeController extends Controller {
 
   void openLottiView() {
     if (lottiController == null) {
-      lottiController = (LottiController) controllerManager.loadController("Lotti");
+      lottiController = (LottiController) loadContent("LottiView.fxml");
+      lottiController.propService = propService;
     }
     lottiController.loadLotti();
     setActiveContent(lottiController);
@@ -71,7 +80,8 @@ public class HomeController extends Controller {
 
   void openProgettiView() {
     if (progettiViewController == null) {
-      progettiViewController = (ProgettiViewController) controllerManager.loadController("Progetti");
+      progettiViewController = (ProgettiViewController) loadContent("ProgettiView.fxml");
+      progettiViewController.propService = propService;
     }
     progettiViewController.loadProgetti();
     setActiveContent(progettiViewController);

@@ -25,35 +25,11 @@ public class RegistrationController extends Controller {
 // @FXML private TextField surnameField;
 // @FXML private TextField usernameField;
 
-public static class RawUtente {
-  public final String username;
-  public final String password;
-  public final String nome;
-  public final String cognome;
-  public final LocalDate bday;
-  public final String nationality;
-  public final String email;
-  public final String numTel;
-  public final String residenza;
 
-  private RawUtente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
-    this.username = username;
-    this.password = password;
-    this.nome = nome;
-    this.cognome = cognome;
-    this.bday = bday;
-    this.nationality = nationality;
-    this.email = email;
-    this.numTel = numTel;
-    this.residenza = residenza;
-  }
-
-
-}
-
+@SuppressWarnings("exports")
 @Override
-public Parent getRoot() {
-    return root;
+public VBox getRoot() {
+  return root;
 }
 
 @FXML private void initialize() {
@@ -62,7 +38,7 @@ public Parent getRoot() {
 }
 
 @FXML private void returnToLogin() {
-  controllerManager.logout();
+  ((MainController)parent).openLoginView();
 }
 
 @FXML private void openHomeView() {
@@ -82,7 +58,7 @@ public Parent getRoot() {
 
     // controllerManager.controllerDAO.addProprietario(utenteBuilder);
 
-    controllerManager.openProprietarioHomeView();
+    // controllerManager.openProprietarioHomeView();
 
 //        if (checkFields()){
 //            sanitizeFields();

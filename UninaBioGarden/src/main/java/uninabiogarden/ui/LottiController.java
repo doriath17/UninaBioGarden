@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
 
-public class LottiController extends Controller {
+public class LottiController extends ProprietarioController {
   @FXML VBox root;
   @FXML VBox contentRoot;
 
@@ -24,15 +24,10 @@ public class LottiController extends Controller {
 
   ObservableList<Lotto> lottoObservableList = FXCollections.observableArrayList();
   
+  @SuppressWarnings("exports")
   @Override
-  public Parent getRoot() {
+  public VBox getRoot() {
     return root;
-  }
-
-  public void setActiveContent(Parent newContent) {
-    contentRoot.getChildren().remove(activeView);
-    contentRoot.getChildren().add(newContent);
-    this.activeView = newContent;
   }
 
   @FXML private void initialize() {
@@ -44,12 +39,12 @@ public class LottiController extends Controller {
   }
 
   void loadLotti(){
-    var list = controllerManager.userService.loadLotti();
+    var list = propService.loadLotti();
     lottoObservableList.setAll(list);
   }
 
   @FXML private void back(){
-    controllerManager.homeController.openHomeContent();    
+    ((HomeController)parent).openHomeContent();
   }
   
 }

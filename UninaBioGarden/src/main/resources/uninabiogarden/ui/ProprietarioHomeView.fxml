@@ -5,10 +5,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="root" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.ProprietarioHomeController">
+
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.ProprietarioHomeController">
+   <styleClass>
+      <String fx:value="home-content-view" />
+      <String fx:value="view" />
+   </styleClass>
    <children>
       <GridPane prefHeight="700.0" prefWidth="1033.0" stylesheets="@styles.css">
          <columnConstraints>
@@ -43,8 +48,4 @@
          </children>
       </GridPane>
    </children>
-   <styleClass>
-      <String fx:value="home-content-view" />
-      <String fx:value="view" />
-   </styleClass>
-</HBox>
+</VBox>

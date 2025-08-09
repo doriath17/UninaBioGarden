@@ -8,7 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,7 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Progetto;
 
-public class ProgettiViewController extends Controller {
+public class ProgettiViewController extends ProprietarioController {
 
   @FXML VBox root;
   
@@ -44,11 +43,10 @@ public class ProgettiViewController extends Controller {
   ObservableList<Progetto> progettiObsList = FXCollections.observableArrayList();
 
   @Override
-  Parent getRoot() {
+  VBox getRoot() {
     return root;
   }
 
-  @Override
   void close() {
     clearForm();
   }
@@ -85,6 +83,7 @@ public class ProgettiViewController extends Controller {
 
   }
 
+  @SuppressWarnings("exports")
   public static void addTextLimiter(TextInputControl textInputControl, int maxLength) {
     UnaryOperator<Change> maxLengthFilter = change -> {
       String newText = change.getControlNewText();
@@ -119,11 +118,11 @@ public class ProgettiViewController extends Controller {
   }
 
   @FXML private void back() {
-    controllerManager.homeController.openHomeContent();
+    ((HomeController)parent).openHomeContent();
   }
 
   void loadProgetti(){
-    var list = controllerManager.userService.loadProgetti();
+    var list = propService.loadProgetti();
     progettiObsList.setAll(list);
   }
 
