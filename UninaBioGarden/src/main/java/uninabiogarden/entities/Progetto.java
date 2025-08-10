@@ -2,6 +2,7 @@ package uninabiogarden.entities;
 
 import java.time.LocalDate;
 
+import uninabiogarden.dto.ProgettoDto;
 import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.WrongDataFineException;
 
@@ -14,21 +15,34 @@ public class Progetto {
   Proprietario proprietario;
   Lotto lotto;
 
-  public Progetto(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,
-      Proprietario proprietario, Lotto lotto) throws WrongDataFineException, EmptyValueException {
-    Constraint.checkNotEmptyValue(nome);
-    Constraint.checkNotEmptyValue(dataInizio);
-    Constraint.checkDataFine(dataInizio, dataFine);
-    Constraint.checkNotEmptyValue(proprietario);
-    Constraint.checkNotEmptyValue(lotto);
-
-    this.id = id;
+  private Progetto(String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione, Proprietario proprietario, Lotto lotto)  {
     this.nome = nome;
     this.dataInizio = dataInizio;
     this.dataFine = dataFine;
     this.descrizione = descrizione;
     this.proprietario = proprietario;
     this.lotto = lotto;
+  }
+
+  public static Progetto createFromDB(int id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,  Proprietario proprietario, Lotto lotto) {
+    var p = new Progetto(nome, dataInizio, dataFine, descrizione, proprietario, lotto);
+    p.setId(id);
+    return p;
+  }
+
+  public static Progetto createFromDto(ProgettoDto dto, Proprietario proprietario, Lotto lotto) throws WrongDataFineException, EmptyValueException {
+    Constraint.checkNotEmptyValue(dto.nome());
+    Constraint.checkNotEmptyValue(dto.dataInizio());
+    Constraint.checkDataFine(dto.dataInizio(), dto.dataFine());
+
+    return new Progetto(
+      dto.nome(),
+      dto.dataInizio(),
+      dto.dataFine(),
+      dto.descrizione(),
+      proprietario,
+      lotto
+    );
   }
 
   public int getId() {

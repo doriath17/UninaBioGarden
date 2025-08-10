@@ -1,5 +1,7 @@
 package uninabiogarden.entities;
 
+import uninabiogarden.dto.LottoDto;
+
 public class Lotto {
   
   int id;
@@ -8,12 +10,26 @@ public class Lotto {
   Double estensione;
   String orto;
 
-  public Lotto(int id, String indirizzo, int codice, Double estensione, String orto) {
+  private Lotto(int id, String indirizzo, int codice, Double estensione, String orto) {
     this.id = id;
     this.indirizzo = indirizzo;
     this.codice = codice;
     this.estensione = estensione;
     this.orto = orto;
+  }
+
+  public static Lotto createFromDB(int id, String indirizzo, int codice, Double estensione, String orto) {
+    return new Lotto(id, indirizzo, codice, estensione, orto);
+  }
+
+  public static Lotto createFromDto(LottoDto dto) {
+    return new Lotto(
+      dto.id(),
+      dto.indirizzo(),
+      dto.codice(),
+      dto.estensione(),
+      dto.orto()
+    );
   }
 
   public int getId() {

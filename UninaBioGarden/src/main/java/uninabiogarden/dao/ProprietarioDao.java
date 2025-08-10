@@ -10,9 +10,7 @@ import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
-import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.NoDataFoundException;
-import uninabiogarden.exceptions.WrongDataFineException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
@@ -36,7 +34,7 @@ public class ProprietarioDao extends DaoBase {
       var result = stmt.executeQuery(sql);
 
       while (result.next()) {
-        list.add(new Lotto(
+        list.add(Lotto.createFromDB(
           result.getInt(1),
           result.getString(2),
           result.getInt(3),
@@ -97,7 +95,7 @@ public class ProprietarioDao extends DaoBase {
       while (result.next()) {
         var dataFine = result.getDate(4);
 
-        var lotto = new Lotto(
+        var lotto = Lotto.createFromDB(
           result.getInt(17),
           result.getString(18),
           result.getInt(19),
@@ -105,7 +103,7 @@ public class ProprietarioDao extends DaoBase {
           result.getString(21)
         );
 
-        var prog = new Progetto(
+        var prog = Progetto.createFromDB(
           result.getInt(1),
           result.getString(2),
           result.getDate(3).toLocalDate(),
@@ -124,9 +122,6 @@ public class ProprietarioDao extends DaoBase {
 
     } catch (SQLException e) {
       System.err.println(e.getMessage());
-    } catch (WrongDataFineException | EmptyValueException e) {
-      System.err.println(e.getMessage());
-      System.exit(1); // error in the database
     }
 
     return progetti;

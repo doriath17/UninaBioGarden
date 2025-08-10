@@ -26,7 +26,7 @@ public class UtenteDao {
         throw new WrongPasswordException();
       } else {
         if (table.equals("proprietario")) {
-          return new Proprietario(
+          return Proprietario.createFromDB(
             result.getString(1),
             result.getString(2),
             result.getString(3),
@@ -38,7 +38,7 @@ public class UtenteDao {
             result.getString(9)
           );
         } else {
-          return new Coltivatore(
+          return Coltivatore.createFromDB(
             result.getString(1),
             result.getString(2),
             result.getString(3),

@@ -14,7 +14,7 @@ public abstract class Utente {
   private String numTel;
   private String residenza;
 
-  public Utente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
+  protected Utente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
     this.username = username;
     this.password = password;
     this.nome = nome;
