@@ -1,6 +1,10 @@
 package uninabiogarden.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import uninabiogarden.entities.Coltivatore;
+import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 
 /**
@@ -23,8 +27,17 @@ import uninabiogarden.entities.Proprietario;
  */
 
 public class ApplicationState {
+
+  public enum ChangeType {
+    INSERT,
+    UPDATE,
+    DELETE
+  }
+
   private Proprietario loggedInProprietario;
   private Coltivatore loggedInColtivatore;
+
+  private Map<Progetto, ChangeType> pendingChanges = new HashMap<>();
 
   public ApplicationState() {
     
@@ -49,5 +62,9 @@ public class ApplicationState {
 
   public void setLoggedInColtivatore(Coltivatore loggedInColtivatore) {
     this.loggedInColtivatore = loggedInColtivatore;
+  }
+
+  public Map<Progetto, ChangeType> getPendingChanges() {
+    return pendingChanges;
   }
 }

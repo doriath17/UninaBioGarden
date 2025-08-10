@@ -34,6 +34,8 @@ public class Progetto {
     Constraint.checkNotEmptyValue(dto.nome());
     Constraint.checkNotEmptyValue(dto.dataInizio());
     Constraint.checkDataFine(dto.dataInizio(), dto.dataFine());
+    // Constraint.checkNotEmptyValue(proprietario);
+    // Constraint.checkNotEmptyValue(lotto);
 
     return new Progetto(
       dto.nome(),

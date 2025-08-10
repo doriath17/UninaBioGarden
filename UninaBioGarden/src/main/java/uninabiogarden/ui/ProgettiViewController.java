@@ -18,10 +18,14 @@ import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import uninabiogarden.core.ApplicationState.ChangeType;
+import uninabiogarden.dto.ProgettoDto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.NoDataFoundException;
+import uninabiogarden.exceptions.WrongDataFineException;
 
 public class ProgettiViewController extends ControllerBase {
 
@@ -54,7 +58,9 @@ public class ProgettiViewController extends ControllerBase {
     clearForm();
   }
 
-  @FXML private void initialize() {
+  int selectedIndex;
+
+  @FXML void initialize() {
     tableView.setItems(progettiObsList);
     nomeCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
     dataInizioCol.setCellValueFactory(new PropertyValueFactory<>("dataInizio"));
@@ -64,6 +70,7 @@ public class ProgettiViewController extends ControllerBase {
       @Override
       public void changed(ObservableValue<? extends Progetto> observable, Progetto oldValue, Progetto newValue) {
         if (newValue != null) {
+          selectedIndex = tableView.getSelectionModel().getSelectedIndex();
           fillForm(newValue);
         }
       }
@@ -119,7 +126,7 @@ public class ProgettiViewController extends ControllerBase {
     codiceLottoField.setText("");
   }
 
-  @FXML private void back() {
+  @FXML void back() {
     ((HomeController)parent).openHomeContent();
   }
 
@@ -133,12 +140,55 @@ public class ProgettiViewController extends ControllerBase {
     progettiObsList.setAll(p.getProgetti());
   }
 
-  @FXML private void update() {
-    
+  @FXML void update() {
+    Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
+    if (p != null) {
+      System.out.println("update");
+      p.setNome(nomeField.getText());
+      p.setDataInizio(dataInizioField.getValue());
+      p.setDataFine(dataFineField.getValue());
+      p.setDescrizione(descrizioneField.getText());
+      progettiObsList.set(selectedIndex, p);
+      context.getAppState().getPendingChanges().put(p, ChangeType.UPDATE);
+    }
   }
 
-  @FXML private void add() {
-    
+  @FXML void delete() {
+    Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
+    if (p != null) {
+      System.out.println("delete");
+      progettiObsList.remove(selectedIndex);
+      context.getAppState().getPendingChanges().put(p, ChangeType.DELETE);
+    }
+  }
+
+  @FXML void newProgetto() {
+    clearForm();
+  }
+
+  @FXML void selectLotto() {
+
+  }
+ 
+  @FXML void add() {
+    var pDto = new ProgettoDto(
+      nomeField.getText(),
+      dataInizioField.getValue(),
+      dataFineField.getValue(),
+      descrizioneField.getText(),
+      null
+    );
+    Progetto p = null;
+    try {
+      p = Progetto.createFromDto(pDto, null, null);
+      progettiObsList.add(p);
+
+      context.getAppState().getPendingChanges().put(p, ChangeType.INSERT);
+    } catch (WrongDataFineException e) {
+      e.printStackTrace();
+    } catch (EmptyValueException e) {
+      e.printStackTrace();
+    }
   }
 
   void clear() {

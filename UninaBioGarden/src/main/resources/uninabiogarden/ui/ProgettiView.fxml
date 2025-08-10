@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox fx:id="root" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uninabiogarden.ui.ProgettiViewController">
    <styleClass>
       <String fx:value="view" />
@@ -48,7 +47,7 @@
                   <VBox alignment="CENTER" prefHeight="108.0" prefWidth="586.0">
                      <children>
                         <Label maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="183.0" styleClass="label-1" text="Progetto" />
-                        <Button mnemonicParsing="false" prefHeight="19.0" prefWidth="92.0" text="New" />
+                        <Button mnemonicParsing="false" onAction="#newProgetto" prefHeight="19.0" prefWidth="92.0" text="New" />
                      </children>
                   </VBox>
                   <GridPane prefHeight="617.0" prefWidth="586.0">
@@ -110,20 +109,36 @@
                         <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Indirizzo Lotto" />
-                              <TextField fx:id="indirizzoLottoField" styleClass="text-field-1" />
-                              <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Codice Lotto" />
-                              <TextField fx:id="codiceLottoField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="219.0" styleClass="text-field-1" />
+                              <TextField fx:id="indirizzoLottoField" editable="false" styleClass="text-field-1" />
+                              <GridPane prefHeight="89.0" prefWidth="586.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Codice Lotto" />
+                                          <TextField fx:id="codiceLottoField" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="219.0" styleClass="text-field-1" />
+                                       </children>
+                                    </VBox>
+                                    <Button mnemonicParsing="false" onAction="#selectLotto" prefHeight="42.0" prefWidth="174.0" text="Seleziona Lotto" GridPane.columnIndex="1" />
+                                 </children>
+                              </GridPane>
                            </children>
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                            <children>
-                              <Button mnemonicParsing="false" text="Delete">
+                              <Button mnemonicParsing="false" onAction="#delete" text="Delete">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
                                  </styleClass>
                               </Button>
-                              <Button layoutX="248.0" layoutY="28.0" mnemonicParsing="false" text="Update">
+                              <Button layoutX="248.0" layoutY="28.0" mnemonicParsing="false" onAction="#update" text="Update">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />

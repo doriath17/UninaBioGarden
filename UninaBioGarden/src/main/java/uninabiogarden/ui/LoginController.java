@@ -70,7 +70,7 @@ public class LoginController extends ControllerBase {
     context.getAppState().setLoggedInColtivatore(c);
   }
 
-  @FXML private void login() {
+  @FXML void login() {
     try {
       if (propCheckBox.isSelected()) {
         loginProprietario();
@@ -78,6 +78,7 @@ public class LoginController extends ControllerBase {
         loginColtivatore();
       } else {
         errorLabel.setText("Must select either Proprietario or Coltivatore");
+        return;
       }
       mainController.openHomeView();
     } catch(WrongUsernameException e) {

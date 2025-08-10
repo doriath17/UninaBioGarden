@@ -28,6 +28,7 @@ public class App extends Application {
   @Override
   public void start(Stage stage) {
     mainController.show(stage);
+    mainController.simulate();
   }
 
   public static void main(String[] args) {

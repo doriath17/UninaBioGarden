@@ -8,6 +8,14 @@ import javafx.stage.Stage;
 
 public class MainController extends ContentController {
 
+  public void simulate() {
+    getLoginController().usernameField.setText("proprietario1");
+    getLoginController().passwordField.setText("pass123");
+    getLoginController().propCheckBox.setSelected(true);
+    getLoginController().login();
+    getHomeController().openProgettiView();
+  }
+
   @FXML VBox root;
   @FXML VBox contentRoot;
 
