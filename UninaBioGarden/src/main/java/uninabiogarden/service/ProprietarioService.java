@@ -18,16 +18,27 @@ public class ProprietarioService {
     this.proprietarioDao = proprietarioDao;
   }
 
-  public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
-    return proprietarioDao.authenticate(username, password);
+  public Proprietario authenticate(String username, String password) 
+    throws ConnectionFailedException,
+    WrongUsernameException,
+    WrongPasswordException
+  {
+    var p = proprietarioDao.authenticate(username, password);
+    try {
+      p.setLotti(this.requestLottiFor(p.getUsername()));
+      p.setProgetti(this.requestProgettiFor(p));
+    } catch (NoDataFoundException e) {
+      System.err.println("when trying to authenticate proprietario: " + e.getMessage());
+    }
+    return p;
   }
 
   public List<Lotto> requestLottiFor(String username) throws ConnectionFailedException, NoDataFoundException{
     return proprietarioDao.findAllLotti(username);
   }
 
-  public List<Progetto> requestProgettiFor(String username) throws ConnectionFailedException, NoDataFoundException {
-    return proprietarioDao.findAllProgetti(username);
+  public List<Progetto> requestProgettiFor(Proprietario proprietario) throws ConnectionFailedException, NoDataFoundException {
+    return proprietarioDao.findAllProgetti(proprietario);
   }
 
 }

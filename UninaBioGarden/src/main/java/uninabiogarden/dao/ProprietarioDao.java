@@ -77,13 +77,32 @@ public class ProprietarioDao extends DaoBase {
     return true;
   }
 
-  public List<Progetto> findAllProgetti(String username) throws ConnectionFailedException, NoDataFoundException {
+  /// Questo metodo è necessario per evitare duplicazione
+  /// di dati. 
+  /// Se sia il Proprietario che un Progetto mantengono un 
+  /// oggetto Lotto che rappresenta lo stesso lotto hai duplicazione
+  /// e questo è un problema ed è difficile da gestire la consistenza
+  /// dei dati successivamente.
+  /// 
+  /// In questo modo si rispecchia il fatto che nel db (e quindi
+  /// nel minimondo) ci sia soltanto un lotto (attualmente caricato
+  /// nella lista di lotti del proprietario loggato).
+  private Lotto findLottoById(List<Lotto> lotti, int id) {
+    for (var lotto : lotti) {
+      if (lotto.getId() == id) {
+        return lotto;
+      }
+    }
+    return null;
+  }
+
+  public List<Progetto> findAllProgetti(Proprietario proprietario) throws ConnectionFailedException, NoDataFoundException {
 
     var sql = "SELECT * " + 
       "FROM progetto AS prog " + 
       "JOIN proprietario AS prop ON prog.username_prop=prop.username " +
       "JOIN lotto ON prog.id_lotto=lotto.id_lotto " +
-      "WHERE prop.username='"+username+"'";
+      "WHERE prop.username='"+proprietario.getUsername()+"'";
 
     var progetti = new ArrayList<Progetto>();
 
@@ -93,15 +112,13 @@ public class ProprietarioDao extends DaoBase {
       var result = stmt.executeQuery(sql);
       
       while (result.next()) {
+        // index of id_lotto is 17
+        var lotto = findLottoById(proprietario.getLotti(), result.getInt("id_lotto"));
+        if (lotto == null) {
+          System.err.println("Problems in findAllLotti of ProprietarioDao class: not all lotti were found");
+          System.exit(1);
+        }
         var dataFine = result.getDate(4);
-
-        var lotto = Lotto.createFromDB(
-          result.getInt(17),
-          result.getString(18),
-          result.getInt(19),
-          result.getDouble(20),
-          result.getString(21)
-        );
 
         var prog = Progetto.createFromDB(
           result.getInt(1),
@@ -109,7 +126,7 @@ public class ProprietarioDao extends DaoBase {
           result.getDate(3).toLocalDate(),
           (dataFine != null ? dataFine.toLocalDate() : null),
           result.getString(5),
-          context.getAppState().getLoggedInProprietario(),
+          proprietario,
           lotto
         );
         

@@ -127,7 +127,7 @@ public class ProgettiViewController extends ControllerBase {
     Proprietario p = context.getAppState().getLoggedInProprietario();
     if (p.getProgetti() == null) {
       p.setProgetti(
-        context.getProprietarioService().requestProgettiFor(p.getUsername())
+        context.getProprietarioService().requestProgettiFor(p)
       );
     }
     progettiObsList.setAll(p.getProgetti());
