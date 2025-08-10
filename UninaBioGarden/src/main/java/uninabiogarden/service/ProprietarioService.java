@@ -2,37 +2,32 @@ package uninabiogarden.service;
 
 import java.util.List;
 
-import uninabiogarden.dao.LottoDao;
-import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
-import uninabiogarden.entities.Utente;
+import uninabiogarden.exceptions.WrongUsernameException;
+import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.NoDataFoundException;
+import uninabiogarden.exceptions.WrongPasswordException;
 
-public class ProprietarioService implements UtenteService {
-  Proprietario user;
+public class ProprietarioService {
+  ProprietarioDao proprietarioDao;
 
-  @Override
-  public Utente getUtente() {
-    return user;
+  public ProprietarioService(ProprietarioDao  proprietarioDao) {
+    this.proprietarioDao = proprietarioDao;
   }
 
-  public ProprietarioService(Proprietario user) {
-    this.user = user;
+  public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+    return proprietarioDao.authenticate(username, password);
   }
 
-  public List<Lotto> loadLotti(){
-    if (user.getLotti() == null) {
-      user.setLotti(LottoDao.findAll(user.getUsername()));
-    }
-    return user.getLotti();
+  public List<Lotto> requestLottiFor(String username) throws ConnectionFailedException, NoDataFoundException{
+    return proprietarioDao.findAllLotti(username);
   }
 
-  public List<Progetto> loadProgetti(){
-    if (user.getProgetti() == null) {
-      user.setProgetti(ProgettoDao.findAll((Proprietario) user));
-    }
-    return user.getProgetti();
+  public List<Progetto> requestProgettiFor(String username) throws ConnectionFailedException, NoDataFoundException {
+    return proprietarioDao.findAllProgetti(username);
   }
+
 }

@@ -3,8 +3,9 @@ package uninabiogarden.ui;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-public class ProprietarioHomeController extends ProprietarioController {
+public class ProprietarioHomeController extends ControllerBase {
   @FXML VBox root;
+  HomeController homeController;
 
   @Override
   VBox getRoot() {
@@ -12,15 +13,14 @@ public class ProprietarioHomeController extends ProprietarioController {
   }
 
   @FXML private void logout() {
-    // controllerManager.logout();
   }
 
   @FXML private void openLottiView() {
-    ((HomeController)parent).openLottiView();
+    homeController.openLottiView();
   }
 
   @FXML private void openProgettiView() {
-    ((HomeController)parent).openProgettiView();
+    homeController.openProgettiView();
   }
 
 }

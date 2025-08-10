@@ -2,17 +2,20 @@ package uninabiogarden.dao;
 
 import java.sql.SQLException;
 
+import uninabiogarden.core.ApplicationContext;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;
+import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
 public class UtenteDao {
-  static Utente exists(String username, String password, String table) throws WrongUsernameException, WrongPasswordException {
+
+  static Utente authenticate(ApplicationContext context, String username, String password, String table) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
     var sql = "SELECT * FROM "+table+" WHERE username='"+username+"'";
 
-    try (var conn = Database.connect();
+    try (var conn = context.getConnection();
       var stmt = conn.createStatement()){
 
       var result = stmt.executeQuery(sql);
@@ -22,7 +25,7 @@ public class UtenteDao {
       } else if (!result.getString(2).equals(password)) {
         throw new WrongPasswordException();
       } else {
-        if (table.equals("proprietario")){
+        if (table.equals("proprietario")) {
           return new Proprietario(
             result.getString(1),
             result.getString(2),

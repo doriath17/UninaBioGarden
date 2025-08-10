@@ -2,13 +2,13 @@ package uninabiogarden.ui;
 
 import javafx.scene.layout.VBox;
 
-public abstract class ContentController extends Controller {
+public abstract class ContentController extends ControllerBase {
 
-  Controller activeContent;
+  ControllerBase activeContent;
 
   abstract VBox getContentRoot();
 
-  void setActiveContent(Controller controller) {
+  void setActiveContent(ControllerBase controller) {
     activeContent = controller;
     getContentRoot().getChildren().clear();
     getContentRoot().getChildren().add(controller.getRoot());

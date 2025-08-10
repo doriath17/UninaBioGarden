@@ -1,5 +1,6 @@
 package uninabiogarden.ui;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,10 +10,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
+import uninabiogarden.entities.Proprietario;
+import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.NoDataFoundException;
 
-public class LottiController extends ProprietarioController {
+public class LottiController extends ControllerBase {
   @FXML VBox root;
   @FXML VBox contentRoot;
+
+  HomeController homeController;
 
   Parent activeView;
   
@@ -38,13 +44,23 @@ public class LottiController extends ProprietarioController {
     ortoCol.setCellValueFactory(new PropertyValueFactory<>("orto"));
   }
 
-  void loadLotti(){
-    var list = propService.loadLotti();
-    lottoObservableList.setAll(list);
+  void loadLotti() 
+  throws ConnectionFailedException, NoDataFoundException {
+    Proprietario prop = context.getAppState().getLoggedInProprietario();
+    if (prop.getLotti() == null) {
+      prop.setLotti(
+        context.getProprietarioService().requestLottiFor(prop.getUsername())
+      );
+    }
+    lottoObservableList.setAll(prop.getLotti());
   }
 
   @FXML private void back(){
-    ((HomeController)parent).openHomeContent();
+    homeController.openHomeContent();
+  }
+
+  void clear() {
+    lottoObservableList.clear();
   }
   
 }

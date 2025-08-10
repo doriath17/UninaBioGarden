@@ -2,8 +2,8 @@ package uninabiogarden;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import uninabiogarden.service.LoginService;
-import uninabiogarden.ui.Controller;
+import uninabiogarden.core.ApplicationContext;
+import uninabiogarden.ui.ControllerBase;
 import uninabiogarden.ui.MainController;
 
 /**
@@ -11,21 +11,18 @@ import uninabiogarden.ui.MainController;
  */
 public class App extends Application {
 
-  MainController mainController;
-
-  void simulate() {
-    try {
-      // mainController.loginProprietario("proprietario1", "pass123");
-      // viewManager.openHomeView();
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-    }
-  }
+  private ApplicationContext context;
+  private MainController mainController;
 
   @Override
   public void init() {
-    mainController = (MainController) Controller.loadController("MainView.fxml");
-    // simulate();
+    try {
+      context = new ApplicationContext();
+      mainController = (MainController) ControllerBase.loadController("MainView.fxml", context);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
   }
 
   @Override

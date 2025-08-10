@@ -1,9 +1,11 @@
 package uninabiogarden.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import uninabiogarden.core.LoginSession.UserType;
+import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.service.ColtivatoreService;
 import uninabiogarden.service.ProprietarioService;
 
@@ -17,12 +19,12 @@ public class HomeController extends ContentController {
 
   @FXML Label usernameLabel;
 
-  Parent activeView;
-  Controller activeController;
   ProprietarioHomeController  propHomeController;
   ColtivatoreHomeController   coltHomeController;
   LottiController             lottiController;
   ProgettiViewController      progettiViewController;
+
+  MainController mainController;
 
   @SuppressWarnings("exports")
   @Override
@@ -36,55 +38,115 @@ public class HomeController extends ContentController {
     return contentRoot;
   }
 
-  @FXML private void logout(){
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  /// 
+  /// 
+  /// Getters per i controller 
+  /// (lo scopo e quello di evitare di non inizializzare) 
+  /// 
+  /// 
+
+  ProprietarioHomeController getProprietarioHomeController() {
+    if (propHomeController == null) {
+      propHomeController = (ProprietarioHomeController) loadContent("ProprietarioHomeView.fxml");
+      propHomeController.homeController = this;
+    }
+    return propHomeController;
+  }
+
+  ColtivatoreHomeController getColtivatoreHomeController() {
+    if (coltHomeController == null) {
+      coltHomeController = (ColtivatoreHomeController) loadContent("ColtivatoreHomeView.fxml");
+      coltHomeController.homeController = this;
+    }
+    return coltHomeController;
+  }
+
+  LottiController getLottiController() {
+    if (lottiController == null) {
+      lottiController = (LottiController) loadContent("LottiView.fxml");
+      lottiController.homeController = this;
+    }
+    return lottiController;
+  }
+
+  ProgettiViewController getProgettiController() {
+    if (progettiViewController == null) {
+      progettiViewController = (ProgettiViewController) loadContent("ProgettiView.fxml");
+      progettiViewController.homeController = this;
+    }
+    return progettiViewController;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  /// 
+  /// 
+  /// Metodi per il logout
+  /// 
+  /// 
+
+  private void clearState() {
+    context.getSession().logout();
+    context.getAppState().clear();
+  }
+
+  private void clearUIContent() {
     usernameLabel.setText("");
-    // controllerManager.logout();
+    getLottiController().clear();
+    getProgettiController().clear();
   }
 
-  String getUsername() {
-    if (propService != null){
-      return propService.getUtente().getUsername();
-    } else {
-      return coltService.getUtente().getUsername();
-    }
+  @FXML private void logout(){
+    clearState();
+    clearUIContent();
+    mainController.openLoginView();
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  /// 
+  /// 
+  /// Metodi fare open di qualche view
+  /// 
+  /// 
+
+  @SuppressWarnings("incomplete-switch")
   void openHomeContent() {
-    System.out.println("openHomeContent");
     if (usernameLabel.getText().equals("") || usernameLabel.getText() == null){
-      usernameLabel.setText(getUsername());
+      usernameLabel.setText(context.getSession().getUsername());
     }
-    if (propService != null) {
-      if (propHomeController == null) {
-        propHomeController = (ProprietarioHomeController) loadContent("ProprietarioHomeView.fxml");
-        propHomeController.propService = propService;
-      }
-      setActiveContent(propHomeController);
-    } else {
-      if (coltHomeController == null) {
-        coltHomeController = (ColtivatoreHomeController) loadContent("ColtivatoreHomeView.fxml");
-        coltHomeController.coltService = coltService;
-      }
-      setActiveContent(coltHomeController);
+
+    switch (context.getSession().getCurrType()) {
+      case UserType.PROPRIETARIO: 
+        setActiveContent(getProprietarioHomeController());
+        break;
+      case UserType.COLTIVATORE: 
+        setActiveContent(getColtivatoreHomeController());
+        break;
     }
   }
 
   void openLottiView() {
-    if (lottiController == null) {
-      lottiController = (LottiController) loadContent("LottiView.fxml");
-      lottiController.propService = propService;
+    try {
+      getLottiController().loadLotti();
+    } catch (ConnectionFailedException e) {
+      e.printStackTrace();
+    } catch (NoDataFoundException e) {
+      e.printStackTrace();
     }
-    lottiController.loadLotti();
-    setActiveContent(lottiController);
+
+    setActiveContent(getLottiController());
   }
 
   void openProgettiView() {
-    if (progettiViewController == null) {
-      progettiViewController = (ProgettiViewController) loadContent("ProgettiView.fxml");
-      progettiViewController.propService = propService;
+    try {
+      getProgettiController().loadProgetti();
+    } catch (ConnectionFailedException e) {
+      e.printStackTrace();
+    } catch (NoDataFoundException e) {
+      e.printStackTrace();
     }
-    progettiViewController.loadProgetti();
-    setActiveContent(progettiViewController);
+    
+    setActiveContent(getProgettiController());
   }
 
 }

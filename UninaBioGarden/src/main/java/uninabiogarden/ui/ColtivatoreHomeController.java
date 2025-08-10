@@ -3,9 +3,11 @@ package uninabiogarden.ui;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-public class ColtivatoreHomeController extends ColtivatoreController {
+public class ColtivatoreHomeController extends ControllerBase {
 
   @FXML VBox root;
+
+  HomeController homeController;
 
   @Override
   VBox getRoot() {
@@ -13,7 +15,6 @@ public class ColtivatoreHomeController extends ColtivatoreController {
   }
 
   @FXML private void logout() {
-    // controllerManager.logout();
   }
   
 }

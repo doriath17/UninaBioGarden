@@ -1,15 +1,59 @@
 package uninabiogarden.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import uninabiogarden.core.ApplicationContext;
+import uninabiogarden.core.Database;
+import uninabiogarden.entities.Lotto;
+import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
+import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.EmptyValueException;
+import uninabiogarden.exceptions.NoDataFoundException;
+import uninabiogarden.exceptions.WrongDataFineException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ProprietarioDao {
+public class ProprietarioDao extends DaoBase {
 
-  public static Proprietario exists(String username, String password) throws WrongUsernameException, WrongPasswordException {
-    return (Proprietario) UtenteDao.exists(username, password, "proprietario");
+  public ProprietarioDao(ApplicationContext context) {
+    super(context);
+  }
+
+  public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+    return (Proprietario) UtenteDao.authenticate(context, username, password, "proprietario");
+  }
+
+  public List<Lotto> findAllLotti(String username) throws ConnectionFailedException, NoDataFoundException {
+    var sql = "SELECT * FROM lotto WHERE username_prop='" + username + "'";
+
+    var list = new ArrayList<Lotto>();
+
+    try (var conn = context.getConnection();
+      var stmt = conn.createStatement()) {
+      var result = stmt.executeQuery(sql);
+
+      while (result.next()) {
+        list.add(new Lotto(
+          result.getInt(1),
+          result.getString(2),
+          result.getInt(3),
+          result.getDouble(4),
+          result.getString(5)
+        ));
+      }
+
+      if (list.isEmpty()) {
+        throw new NoDataFoundException();
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    }
+
+    return list;
   }
 
   public static boolean add(Proprietario proprietario) {
@@ -33,6 +77,59 @@ public class ProprietarioDao {
       return false;
     }
     return true;
+  }
+
+  public List<Progetto> findAllProgetti(String username) throws ConnectionFailedException, NoDataFoundException {
+
+    var sql = "SELECT * " + 
+      "FROM progetto AS prog " + 
+      "JOIN proprietario AS prop ON prog.username_prop=prop.username " +
+      "JOIN lotto ON prog.id_lotto=lotto.id_lotto " +
+      "WHERE prop.username='"+username+"'";
+
+    var progetti = new ArrayList<Progetto>();
+
+    try (var conn = context.getConnection();
+      var stmt = conn.createStatement()) {
+
+      var result = stmt.executeQuery(sql);
+      
+      while (result.next()) {
+        var dataFine = result.getDate(4);
+
+        var lotto = new Lotto(
+          result.getInt(17),
+          result.getString(18),
+          result.getInt(19),
+          result.getDouble(20),
+          result.getString(21)
+        );
+
+        var prog = new Progetto(
+          result.getInt(1),
+          result.getString(2),
+          result.getDate(3).toLocalDate(),
+          (dataFine != null ? dataFine.toLocalDate() : null),
+          result.getString(5),
+          context.getAppState().getLoggedInProprietario(),
+          lotto
+        );
+        
+        progetti.add(prog);
+      }
+
+      if (progetti.isEmpty()) {
+        throw new NoDataFoundException();
+      }
+
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+    } catch (WrongDataFineException | EmptyValueException e) {
+      System.err.println(e.getMessage());
+      System.exit(1); // error in the database
+    }
+
+    return progetti;
   }
 
 //    public boolean checkProprietarioExists(String email, String password) {

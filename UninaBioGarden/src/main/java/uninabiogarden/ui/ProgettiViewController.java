@@ -19,8 +19,11 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.entities.Proprietario;
+import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.NoDataFoundException;
 
-public class ProgettiViewController extends ProprietarioController {
+public class ProgettiViewController extends ControllerBase {
 
   @FXML VBox root;
   
@@ -36,7 +39,7 @@ public class ProgettiViewController extends ProprietarioController {
   @FXML TextField codiceLottoField;
   @FXML TextArea descrizioneField;
 
-  Progetto selectedProgetto;
+  HomeController homeController;
 
   @FXML TableColumn<LocalDate, String> dataFineCol;
 
@@ -99,7 +102,6 @@ public class ProgettiViewController extends ProprietarioController {
   }
 
   void fillForm(Progetto value) {
-    selectedProgetto = value;
     nomeField.setText(value.getNome());
     dataInizioField.setValue(value.getDataInizio());
     dataFineField.setValue(value.getDataFine());
@@ -121,9 +123,14 @@ public class ProgettiViewController extends ProprietarioController {
     ((HomeController)parent).openHomeContent();
   }
 
-  void loadProgetti(){
-    var list = propService.loadProgetti();
-    progettiObsList.setAll(list);
+  void loadProgetti() throws ConnectionFailedException, NoDataFoundException{
+    Proprietario p = context.getAppState().getLoggedInProprietario();
+    if (p.getProgetti() == null) {
+      p.setProgetti(
+        context.getProprietarioService().requestProgettiFor(p.getUsername())
+      );
+    }
+    progettiObsList.setAll(p.getProgetti());
   }
 
   @FXML private void update() {
@@ -132,6 +139,11 @@ public class ProgettiViewController extends ProprietarioController {
 
   @FXML private void add() {
     
+  }
+
+  void clear() {
+    clearForm();
+    progettiObsList.clear();
   }
   
 }

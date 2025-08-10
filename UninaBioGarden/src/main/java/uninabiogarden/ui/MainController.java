@@ -5,9 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import uninabiogarden.service.ColtivatoreService;
-import uninabiogarden.service.ProprietarioService;
-import uninabiogarden.service.UtenteService;
 
 public class MainController extends ContentController {
 
@@ -41,32 +38,49 @@ public class MainController extends ContentController {
     stage.show();
   }
 
-  void openLoginView() {
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  /// 
+  /// 
+  /// Getters per i controller 
+  /// (lo scopo e quello di evitare di non inizializzare) 
+  /// 
+  /// 
+
+  LoginController getLoginController() {
     if (loginController == null){
       loginController = (LoginController) loadContent("LoginView.fxml");
+      loginController.mainController = this;
     }
-    setActiveContent(loginController);
+    return loginController; 
   }
 
-  void openHomeView(UtenteService service) {
+  HomeController getHomeController() {
     if (homeController == null) {
       homeController = (HomeController) loadContent("HomeView.fxml");
+      homeController.mainController = this;
     }
-    if (service instanceof ProprietarioService) {
-      homeController.propService = (ProprietarioService) service;
-    } else {
-      homeController.coltService = (ColtivatoreService) service;
+    return homeController;
+  }
+
+  RegistrationController getRegistrationController() {
+    if (registrationController == null) {
+      registrationController = (RegistrationController)loadContent("RegistrationView.fxml");
     }
-    homeController.openHomeContent();
+    return registrationController;
+  }
+
+  void openLoginView() {
+    setActiveContent(getLoginController());
+  }
+
+  void openHomeView() {
+    getHomeController().openHomeContent();
     setActiveContent(homeController);
+    getLoginController().clear();
   }
 
   void openRegistrationView() {
-    if (registrationController == null) {
-      registrationController = (RegistrationController) ContentController.loadController("RegistrationView.fxml");
-      registrationController.setParent(this);
-    }
-    setActiveContent(registrationController);
+    setActiveContent(getRegistrationController());
   }
 
 }
