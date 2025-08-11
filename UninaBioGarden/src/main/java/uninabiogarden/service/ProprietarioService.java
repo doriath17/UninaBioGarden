@@ -1,5 +1,6 @@
 package uninabiogarden.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import uninabiogarden.dao.ProprietarioDao;
@@ -21,12 +22,13 @@ public class ProprietarioService {
   public Proprietario authenticate(String username, String password) 
     throws ConnectionFailedException,
     WrongUsernameException,
-    WrongPasswordException
+    WrongPasswordException, SQLException
   {
     var p = proprietarioDao.authenticate(username, password);
     try {
       p.setLotti(this.requestLottiFor(p.getUsername()));
       p.setProgetti(this.requestProgettiFor(p));
+      p.setAvailableLotti(this.requestAvailableLottiIdsFor(username));
     } catch (NoDataFoundException e) {
       System.err.println("when trying to authenticate proprietario: " + e.getMessage());
     }
@@ -39,6 +41,10 @@ public class ProprietarioService {
 
   public List<Progetto> requestProgettiFor(Proprietario proprietario) throws ConnectionFailedException, NoDataFoundException {
     return proprietarioDao.findAllProgetti(proprietario);
+  }
+
+  public List<Long> requestAvailableLottiIdsFor(String username) throws SQLException, ConnectionFailedException {
+    return proprietarioDao.findAvailableLottiIds(username);
   }
 
 }

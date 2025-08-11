@@ -119,6 +119,45 @@ public class ProprietarioDao extends DaoBase {
     return progetti;
   }
 
+  public List<Long> findAvailableLottiIds(String username) throws SQLException, ConnectionFailedException {
+    var ids = new ArrayList<Long>();
+
+    var sql = """
+        (
+          SELECT id_lotto
+          FROM lotto AS lotti_utente
+          WHERE username_prop = ?
+        )
+
+        EXCEPT 
+
+        (
+          SELECT lotti_utente.id_lotto
+          FROM (SELECT * FROM progetto WHERE username_prop=? AND data_fine IS NULL) AS progetti_utente
+          JOIN (SELECT * FROM lotto WHERE username_prop=?) AS lotti_utente ON progetti_utente.id_lotto = lotti_utente.id_lotto
+        )
+        """;
+
+    try (var conn = database.getConnection();
+      var stmt = conn.prepareStatement(sql)){
+      stmt.setString(1, username);
+      stmt.setString(2, username);
+      stmt.setString(3, username);
+      var result = stmt.executeQuery();
+
+      while (result.next()) {
+        ids.add(result.getLong(1));
+      }
+
+    }
+
+    for (var id : ids) {
+      System.out.println(id);
+    }
+
+    return ids;
+  }
+
 //    public boolean checkProprietarioExists(String email, String password) {
 //        String query = "SELECT 1 FROM proprietario WHERE email = ? AND password = ?";
 //        Connection conn = null;

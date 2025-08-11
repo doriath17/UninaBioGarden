@@ -1,5 +1,7 @@
 package uninabiogarden.ui;
 
+import java.sql.SQLException;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -53,7 +55,7 @@ public class LoginController extends ControllerBase {
   private void loginProprietario()
     throws ConnectionFailedException,
     WrongUsernameException,
-    WrongPasswordException
+    WrongPasswordException, SQLException
   {
     Proprietario p = context.getProprietarioService().authenticate(usernameField.getText(), passwordField.getText());
     context.getSession().login(p.getUsername(), UserType.PROPRIETARIO);
@@ -87,6 +89,8 @@ public class LoginController extends ControllerBase {
       errorLabel.setText(WrongPasswordException.msg);
     } catch(ConnectionFailedException e) {
       errorLabel.setText(e.getMessage());
+    } catch(SQLException e) {
+      errorLabel.setText("Errore durante il caricamento dati");
     }
   }
 
