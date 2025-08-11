@@ -1,4 +1,4 @@
-package uninabiogarden.entities;
+package uninabiogarden.service;
 
 import java.time.LocalDate;
 

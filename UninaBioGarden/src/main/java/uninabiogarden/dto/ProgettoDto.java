@@ -2,14 +2,14 @@ package uninabiogarden.dto;
 
 import java.time.LocalDate;
 
-import uninabiogarden.entities.Lotto;
-
 public record ProgettoDto (
+  Long id_progetto,
   String nome,
   LocalDate dataInizio,
   LocalDate dataFine, 
   String descrizione, 
-  Lotto lotto
+  Long id_lotto,
+  String username_prop
 ) {}
 
 /// le chiavi esterne non sono dei riferimenti agli attuali 

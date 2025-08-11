@@ -9,6 +9,7 @@ import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.service.ColtivatoreService;
+import uninabiogarden.service.ProgettoService;
 import uninabiogarden.service.ProprietarioService;
 
 /**
@@ -36,6 +37,7 @@ public class ApplicationContext {
   // SERVICES
   private final ProprietarioService proprietarioService;
   private final ColtivatoreService coltivatoreService;
+  private final ProgettoService progettoService;
 
 
   public ApplicationContext() throws ConnectionFailedException {
@@ -58,6 +60,7 @@ public class ApplicationContext {
       // init services
       proprietarioService = new ProprietarioService(proprietarioDao);
       coltivatoreService = new ColtivatoreService(coltivatoreDao);
+      progettoService = new ProgettoService(progettoDao);
     } catch (ConnectionFailedException e) {
       System.err.println(e.getMessage());
       throw e;
@@ -106,6 +109,10 @@ public class ApplicationContext {
 
   public ApplicationState getAppState() {
     return appState;
+  }
+
+  public ProgettoService getProgettoService() {
+    return progettoService;
   }
 
 }

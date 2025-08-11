@@ -1,5 +1,6 @@
 package uninabiogarden.ui;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 
@@ -143,23 +144,54 @@ public class ProgettiViewController extends ControllerBase {
   @FXML void update() {
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
-      System.out.println("update");
-      p.setNome(nomeField.getText());
-      p.setDataInizio(dataInizioField.getValue());
-      p.setDataFine(dataFineField.getValue());
-      p.setDescrizione(descrizioneField.getText());
-      progettiObsList.set(selectedIndex, p);
-      context.getAppState().getPendingChanges().put(p, ChangeType.UPDATE);
+      var dto = new ProgettoDto(
+        p.getId(),
+        nomeField.getText(),
+        dataInizioField.getValue(),
+        dataFineField.getValue(),
+        descrizioneField.getText(),
+        // id_lotto non mi interessa per l'update 
+        // siccome non puo' essere modificato
+        // idem per il proprietario
+        null,
+        null
+      );
+
+      try {
+        context.getProgettoService().update(dto);
+
+        // mantieni lo stato dell'applicazione consistente con il db
+        p.setNome(nomeField.getText());
+        p.setDataInizio(dataInizioField.getValue());
+        p.setDataFine(dataFineField.getValue());
+        p.setDescrizione(descrizioneField.getText());
+        progettiObsList.set(selectedIndex, p);
+      } catch (ConnectionFailedException e) {
+        System.err.println(e.getMessage());
+      } catch (WrongDataFineException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (EmptyValueException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (SQLException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
   }
 
   @FXML void delete() {
-    Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
-    if (p != null) {
-      System.out.println("delete");
-      progettiObsList.remove(selectedIndex);
-      context.getAppState().getPendingChanges().put(p, ChangeType.DELETE);
-    }
+    // Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
+    // if (p != null) {
+    //   try {
+    //     context.getProgettoService().delete(p.getId());
+    //     progettiObsList.remove(selectedIndex);
+    //     context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
+    //   } catch (ConnectionFailedException e) {
+    //     e.printStackTrace();
+    //   }
+    // }
   }
 
   @FXML void newProgetto() {
@@ -171,24 +203,25 @@ public class ProgettiViewController extends ControllerBase {
   }
  
   @FXML void add() {
-    var pDto = new ProgettoDto(
-      nomeField.getText(),
-      dataInizioField.getValue(),
-      dataFineField.getValue(),
-      descrizioneField.getText(),
-      null
-    );
-    Progetto p = null;
-    try {
-      p = Progetto.createFromDto(pDto, null, null);
-      progettiObsList.add(p);
+    // var pDto = new ProgettoDto(
+    //   null,
+    //   nomeField.getText(),
+    //   dataInizioField.getValue(),
+    //   dataFineField.getValue(),
+    //   descrizioneField.getText(),
+    //   null
+    // );
+    // Progetto p = null;
+    // try {
+    //   p = Progetto.createFromDto(pDto, null, null);
+    //   progettiObsList.add(p);
 
-      context.getAppState().getPendingChanges().put(p, ChangeType.INSERT);
-    } catch (WrongDataFineException e) {
-      e.printStackTrace();
-    } catch (EmptyValueException e) {
-      e.printStackTrace();
-    }
+    //   context.getAppState().getPendingChanges().put(p, ChangeType.INSERT);
+    // } catch (WrongDataFineException e) {
+    //   e.printStackTrace();
+    // } catch (EmptyValueException e) {
+    //   e.printStackTrace();
+    // }
   }
 
   void clear() {
