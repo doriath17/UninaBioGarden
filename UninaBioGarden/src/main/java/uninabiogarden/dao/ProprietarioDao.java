@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import uninabiogarden.core.ApplicationContext;
 import uninabiogarden.core.Database;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
@@ -16,12 +15,12 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class ProprietarioDao extends DaoBase {
 
-  public ProprietarioDao(ApplicationContext context) {
-    super(context);
+  public ProprietarioDao(Database database) {
+    super(database);
   }
 
   public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
-    return (Proprietario) UtenteDao.authenticate(context, username, password, "proprietario");
+    return (Proprietario) UtenteDao.authenticate(database, username, password, "proprietario");
   }
 
   public List<Lotto> findAllLotti(String username) throws ConnectionFailedException, NoDataFoundException {
@@ -29,7 +28,7 @@ public class ProprietarioDao extends DaoBase {
 
     var list = new ArrayList<Lotto>();
 
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
       var stmt = conn.createStatement()) {
       var result = stmt.executeQuery(sql);
 
@@ -54,10 +53,10 @@ public class ProprietarioDao extends DaoBase {
     return list;
   }
 
-  public static boolean add(Proprietario proprietario) {
+  public boolean add(Proprietario proprietario) throws ConnectionFailedException {
     var sql = "INSERT INTO Proprietario * " +
               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    try (var conn = Database.connect();
+    try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
       stmt.setString(1, proprietario.getUsername());
       stmt.setString(2, proprietario.getPassword());
@@ -87,7 +86,7 @@ public class ProprietarioDao extends DaoBase {
 
     var progetti = new ArrayList<Progetto>();
 
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
       var stmt = conn.createStatement()) {
 
       var result = stmt.executeQuery(sql);

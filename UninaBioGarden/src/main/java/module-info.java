@@ -6,8 +6,8 @@ module uninabiogarden {
     requires javafx.base;
 
     opens uninabiogarden to javafx.fxml;
+    opens uninabiogarden.core to javafx.fxml;
     opens uninabiogarden.ui to javafx.fxml;
-    opens uninabiogarden.dao to javafx.dao;
     opens uninabiogarden.entities to javafx.base;
     
     exports uninabiogarden;

@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import uninabiogarden.dto.ProgettoDto;
 import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.WrongDataFineException;
-import uninabiogarden.service.Constraint;
 
 public class Progetto {
   Long id;

@@ -25,8 +25,8 @@ import uninabiogarden.service.ProprietarioService;
 
 public class ApplicationContext {
   private final LoginSession session;
-  private Connection connection;
   private ApplicationState appState;
+  Database database;
 
   // DAOs
   private final ProprietarioDao proprietarioDao;
@@ -40,43 +40,26 @@ public class ApplicationContext {
   private final ProgettoService progettoService;
 
 
-  public ApplicationContext() throws ConnectionFailedException {
-    try {
-      // init session
-      session = new LoginSession();
+  public ApplicationContext() {
+    // init session
+    session = new LoginSession();
 
-      // init connection
-      this.getConnection();
+    // init connection
+    database = new Database();
 
-      // init application state
-      this.appState = new ApplicationState();
+    // init application state
+    this.appState = new ApplicationState();
 
-      // init dao classes
-      this.proprietarioDao = new ProprietarioDao(this);
-      this.coltivatoreDao = new ColtivatoreDao(this);
-      this.lottoDao = new LottoDao(this);
-      this.progettoDao = new ProgettoDao(this);
+    // init dao classes
+    this.proprietarioDao = new ProprietarioDao(database);
+    this.coltivatoreDao = new ColtivatoreDao(database);
+    this.lottoDao = new LottoDao(database);
+    this.progettoDao = new ProgettoDao(database);
 
-      // init services
-      proprietarioService = new ProprietarioService(proprietarioDao);
-      coltivatoreService = new ColtivatoreService(coltivatoreDao);
-      progettoService = new ProgettoService(progettoDao);
-    } catch (ConnectionFailedException e) {
-      System.err.println(e.getMessage());
-      throw e;
-    }
-  }
-
-  public Connection getConnection() throws ConnectionFailedException {
-    try {
-      if (connection == null || connection.isClosed()) {
-        connection = Database.connect();
-      }
-    } catch (SQLException e) {
-      System.err.println(e.getMessage());
-      throw new ConnectionFailedException();
-    }
-    return connection;
+    // init services
+    proprietarioService = new ProprietarioService(proprietarioDao);
+    coltivatoreService = new ColtivatoreService(coltivatoreDao);
+    progettoService = new ProgettoService(progettoDao);
   }
 
   public LoginSession getSession() {

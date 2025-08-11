@@ -1,11 +1,11 @@
 package uninabiogarden.dao;
 
-import uninabiogarden.core.ApplicationContext;
+import uninabiogarden.core.Database;
 
 public class LottoDao extends DaoBase {
 
-  public LottoDao(ApplicationContext context) {
-    super(context);
+  public LottoDao(Database database) {
+    super(database);
   }
   
 }

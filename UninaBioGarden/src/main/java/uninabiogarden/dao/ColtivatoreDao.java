@@ -2,7 +2,6 @@ package uninabiogarden.dao;
 
 import java.sql.*;
 
-import uninabiogarden.core.ApplicationContext;
 import uninabiogarden.core.Database;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.exceptions.ConnectionFailedException;
@@ -11,18 +10,18 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class ColtivatoreDao extends DaoBase {
 
-  public ColtivatoreDao(ApplicationContext context) {
-    super(context);
+  public ColtivatoreDao(Database database) {
+    super(database);
   }
 
   public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
-    return (Coltivatore) UtenteDao.authenticate(context, username, password, "coltivatore");
+    return (Coltivatore) UtenteDao.authenticate(database, username, password, "coltivatore");
   }
 
-  public static boolean add(Coltivatore coltivatore) {
+  public boolean add(Coltivatore coltivatore) throws ConnectionFailedException {
     var sql = "INSERT INTO coltivatore * " +
               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    try (var conn = Database.connect();
+    try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
       stmt.setString(1, coltivatore.getUsername());
       stmt.setString(2, coltivatore.getPassword());

@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import uninabiogarden.core.ApplicationContext;
+import uninabiogarden.core.Database;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
@@ -12,8 +12,8 @@ import uninabiogarden.exceptions.NoDataFoundException;
 
 public class ProgettoDao extends DaoBase {
 
-  public ProgettoDao(ApplicationContext context) {
-    super(context);
+  public ProgettoDao(Database db) {
+    super(db);
   }
 
   public Progetto read(Long id_progetto, Proprietario prop) throws SQLException, ConnectionFailedException, NoDataFoundException {
@@ -25,7 +25,7 @@ public class ProgettoDao extends DaoBase {
         WHERE id_progetto = 
         """ + id_progetto;
 
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
          var stmt = conn.createStatement()) {
       var result = stmt.executeQuery(sql);
 
@@ -58,7 +58,7 @@ public class ProgettoDao extends DaoBase {
         id_progetto=?  
       """;
 
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
       stmt.setString(1, nome);
       stmt.setDate(2, Date.valueOf(dataInizio));
@@ -74,7 +74,7 @@ public class ProgettoDao extends DaoBase {
 
   public void delete(Long id_progetto) throws ConnectionFailedException, SQLException {
     var sql = "DELETE FROM progetto WHERE id_progetto="+id_progetto;
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
       var stmt = conn.createStatement()) {
       stmt.executeUpdate(sql);
     }
@@ -85,7 +85,7 @@ public class ProgettoDao extends DaoBase {
       INSERT INTO progetto VALUES 
       (?, ?, ?, ?, ?, ?, ?)
       """;
-    try (var conn = context.getConnection();
+    try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
       stmt.setLong(1, newProgetto.getId());
       stmt.setString(2, newProgetto.getNome());
