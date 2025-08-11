@@ -34,8 +34,8 @@ public class ProgettoService {
     );
   }
 
-  public void delete(Long id_progetto) throws ConnectionFailedException {
-    // progettoDao.delete(id_progetto);
+  public void delete(Long id_progetto) throws ConnectionFailedException, SQLException {
+    progettoDao.delete(id_progetto);
   }
 
 }

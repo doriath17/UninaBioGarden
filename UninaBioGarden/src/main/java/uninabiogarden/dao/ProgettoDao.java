@@ -72,13 +72,11 @@ public class ProgettoDao extends DaoBase {
     }
   }
 
-  public void delete(Long id_progetto) throws ConnectionFailedException {
+  public void delete(Long id_progetto) throws ConnectionFailedException, SQLException {
     var sql = "DELETE FROM progetto WHERE id_progetto="+id_progetto;
     try (var conn = context.getConnection();
       var stmt = conn.createStatement()) {
       stmt.executeUpdate(sql);
-    } catch (SQLException e) {
-      System.err.println(e.getMessage());
     }
   }
 

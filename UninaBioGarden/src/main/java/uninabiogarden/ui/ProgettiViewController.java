@@ -182,16 +182,18 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   @FXML void delete() {
-    // Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
-    // if (p != null) {
-    //   try {
-    //     context.getProgettoService().delete(p.getId());
-    //     progettiObsList.remove(selectedIndex);
-    //     context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
-    //   } catch (ConnectionFailedException e) {
-    //     e.printStackTrace();
-    //   }
-    // }
+    Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
+    if (p != null) {
+      try {
+        context.getProgettoService().delete(p.getId());
+        progettiObsList.remove(selectedIndex);
+        context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
+      } catch (ConnectionFailedException e) {
+        e.printStackTrace();
+      } catch (SQLException e) {
+        System.err.println(e.getMessage());
+      }
+    }
   }
 
   @FXML void newProgetto() {
