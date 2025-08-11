@@ -6,13 +6,9 @@ import uninabiogarden.core.ApplicationContext;
 
 public abstract class ControllerBase {
   protected ApplicationContext context;
-  protected ControllerBase parent;
 
   abstract VBox getRoot();
 
-  public void setParent(ControllerBase parent) {
-    this.parent = parent;
-  }
 
   public static ControllerBase loadController(String fxmlFileName, ApplicationContext context) {
     try {
@@ -29,7 +25,6 @@ public abstract class ControllerBase {
 
   ControllerBase loadContent(String fxmlFileName){
     var c = ControllerBase.loadController(fxmlFileName, context);
-    c.parent = this;
     return c;
   }
 

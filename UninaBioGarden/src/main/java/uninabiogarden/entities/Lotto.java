@@ -4,13 +4,13 @@ import uninabiogarden.dto.LottoDto;
 
 public class Lotto {
   
-  int id;
+  Long id;
   String indirizzo;
   int codice;
   Double estensione;
   String orto;
 
-  private Lotto(int id, String indirizzo, int codice, Double estensione, String orto) {
+  private Lotto(Long id, String indirizzo, int codice, Double estensione, String orto) {
     this.id = id;
     this.indirizzo = indirizzo;
     this.codice = codice;
@@ -18,7 +18,7 @@ public class Lotto {
     this.orto = orto;
   }
 
-  public static Lotto createFromDB(int id, String indirizzo, int codice, Double estensione, String orto) {
+  public static Lotto createFromDB(Long id, String indirizzo, int codice, Double estensione, String orto) {
     return new Lotto(id, indirizzo, codice, estensione, orto);
   }
 
@@ -32,11 +32,11 @@ public class Lotto {
     );
   }
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

@@ -41,7 +41,7 @@ public class RegistrationController extends ControllerBase {
   
 
   @FXML private void returnToLogin() {
-    ((MainController)parent).openLoginView();
+    mainController.openLoginView();
   }
 
   @FXML private void openHomeView() {

@@ -34,7 +34,7 @@ public class ProprietarioDao extends DaoBase {
 
       while (result.next()) {
         list.add(Lotto.createFromDB(
-          result.getInt(1),
+          result.getLong(1),
           result.getString(2),
           result.getInt(3),
           result.getDouble(4),
@@ -149,10 +149,6 @@ public class ProprietarioDao extends DaoBase {
         ids.add(result.getLong(1));
       }
 
-    }
-
-    for (var id : ids) {
-      System.out.println(id);
     }
 
     return ids;

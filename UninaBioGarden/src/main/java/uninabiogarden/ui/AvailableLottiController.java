@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.exceptions.MissingFieldException;
 
 public class AvailableLottiController extends ControllerBase {
 
@@ -29,7 +30,6 @@ public class AvailableLottiController extends ControllerBase {
     return root;
   }
 
-
   @FXML void initialize() {
     tableView.setItems(availableLotti);
     indirizzoCol.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
@@ -46,8 +46,16 @@ public class AvailableLottiController extends ControllerBase {
     });
   }
 
-  void refreshTable() {
-    availableLotti.setAll(context.getAppState().getLoggedInProprietario().getAvailableLotti());
+  void clearSelection() {
+    tableView.getSelectionModel().clearSelection();
+  }
+
+  Lotto getSelectedLotto() throws MissingFieldException {
+    try {
+      return availableLotti.get(tableView.getSelectionModel().getSelectedIndex());
+    } catch (IndexOutOfBoundsException e) {
+      throw new MissingFieldException("Lotto non selezionato");
+    }
   }
   
 }

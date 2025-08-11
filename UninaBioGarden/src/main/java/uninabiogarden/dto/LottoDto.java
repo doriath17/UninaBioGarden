@@ -1,7 +1,7 @@
 package uninabiogarden.dto;
 
 public record LottoDto (  
-  int id,
+  Long id,
   String indirizzo,
   int codice,
   Double estensione,

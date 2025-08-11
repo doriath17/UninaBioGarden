@@ -9,7 +9,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -27,6 +29,7 @@ import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.EmptyValueException;
+import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.exceptions.WrongDataFineException;
 
@@ -55,6 +58,7 @@ public class ProgettiViewController extends ControllerBase {
 
   HomeController homeController;
 
+  @FXML Label errorLabel;
 
   ObservableList<Progetto> progettiObsList = FXCollections.observableArrayList();
 
@@ -116,31 +120,8 @@ public class ProgettiViewController extends ControllerBase {
     textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
   }
 
-  void fillLottoForm(Lotto lotto) {
-    indirizzoLottoField.setText(lotto.getIndirizzo());
-    codiceLottoField.setText(""+lotto.getCodice());
-  }
-
-  void fillForm(Progetto value) {
-    nomeField.setText(value.getNome());
-    dataInizioField.setValue(value.getDataInizio());
-    dataFineField.setValue(value.getDataFine());
-    descrizioneField.setText(value.getDescrizione());
-    indirizzoLottoField.setText(value.getLotto().getIndirizzo());
-    codiceLottoField.setText(""+value.getLotto().getCodice());
-  }
-
-  void clearForm() {
-    nomeField.setText("");
-    dataInizioField.setValue(null);
-    dataFineField.setValue(null);
-    descrizioneField.setText("");
-    indirizzoLottoField.setText("");
-    codiceLottoField.setText("");
-  }
-
   @FXML void back() {
-    ((HomeController)parent).openHomeContent();
+    homeController.openHomeContent();
   }
 
   void loadProgetti() throws ConnectionFailedException, NoDataFoundException{
@@ -212,21 +193,72 @@ public class ProgettiViewController extends ControllerBase {
 
   }
 
-  @FXML void newProgetto() {
-    clearForm();
-    showAvailableLottiTable();
+  @FXML Button newButton;
+
+  void fillLottoForm(Lotto lotto) {
+    indirizzoLottoField.setText(lotto.getIndirizzo());
+    codiceLottoField.setText(""+lotto.getCodice());
   }
 
- 
+  void fillForm(Progetto value) {
+    nomeField.setText(value.getNome());
+    dataInizioField.setValue(value.getDataInizio());
+    dataFineField.setValue(value.getDataFine());
+    descrizioneField.setText(value.getDescrizione());
+    indirizzoLottoField.setText(value.getLotto().getIndirizzo());
+    codiceLottoField.setText(""+value.getLotto().getCodice());
+  }
+
+  void clearForm() {
+    nomeField.setText("");
+    dataInizioField.setValue(null);
+    dataFineField.setValue(null);
+    descrizioneField.setText("");
+    indirizzoLottoField.setText("");
+    codiceLottoField.setText("");
+  }
+
+  void clearSelection() {
+    if ("New".equals(newButton.getText())) {
+      tableView.getSelectionModel().clearSelection();
+    } else {
+      getAvailableLottiController().clearSelection();
+    }
+    clearForm();
+  }
+
+  @FXML void toggleAddProgettoView() {
+    if ("New".equals(newButton.getText())){
+      showAvailableLottiTable();
+      newButton.setText("Seleziona");
+    } else {
+      showProgettiTable();
+      newButton.setText("New");
+    }
+    clearSelection();
+  }
+
+  ProgettoDto getFormData(Long id_lotto) {
+    return new ProgettoDto(
+      null, // the id do not exist yet
+      nomeField.getText(),
+      dataInizioField.getValue(),
+      dataFineField.getValue(),
+      descrizioneField.getText(),
+      id_lotto,
+      context.getSession().getUsername()
+    );
+  }
+
   @FXML void add() {
-    // var pDto = new ProgettoDto(
-    //   null,
-    //   nomeField.getText(),
-    //   dataInizioField.getValue(),
-    //   dataFineField.getValue(),
-    //   descrizioneField.getText(),
-    //   null
-    // );
+
+    try {
+      var lotto = availableLottiController.getSelectedLotto();
+    } catch (MissingFieldException e) {
+      errorLabel.setText(e.getMessage());
+    }
+
+    // var pDto = getFormData(lotto.getId());
     // Progetto p = null;
     // try {
     //   p = Progetto.createFromDto(pDto, null, null);
@@ -239,8 +271,6 @@ public class ProgettiViewController extends ControllerBase {
     //   e.printStackTrace();
     // }
 
-    // se l'add va a buon fine 
-    showProgettiTable();
   }
 
   void clear() {
@@ -252,19 +282,25 @@ public class ProgettiViewController extends ControllerBase {
     if (availableLottiController == null){
       availableLottiController = (AvailableLottiController) loadContent("AvailableLotti.fxml");
       availableLottiController.progettiViewController = this;
+      availableLottiController.availableLotti.setAll(
+        context.getAppState().getLoggedInProprietario().getAvailableLotti()
+      );
     }
     return availableLottiController; 
   }
 
   void showProgettiTable() {
-    tableViewRoot.getChildren().remove(getAvailableLottiController().getRoot());
+    tableViewRoot.getChildren().remove(
+      getAvailableLottiController().getRoot()
+    );
     tableViewRoot.getChildren().add(progettiTableView);
   }
 
   void showAvailableLottiTable() {
-    getAvailableLottiController().refreshTable();
     tableViewRoot.getChildren().remove(progettiTableView);
-    tableViewRoot.getChildren().add(getAvailableLottiController().getRoot());
+    tableViewRoot.getChildren().add(
+      getAvailableLottiController().getRoot()
+    );
   }
 
 }

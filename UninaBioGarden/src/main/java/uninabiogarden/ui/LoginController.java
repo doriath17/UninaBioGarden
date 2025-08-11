@@ -95,7 +95,7 @@ public class LoginController extends ControllerBase {
   }
 
   @FXML private void openRegistrationView() {
-    ((MainController)parent).openRegistrationView();
+    mainController.openRegistrationView();
   }
 
   void clear() {

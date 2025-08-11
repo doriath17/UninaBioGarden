@@ -21,10 +21,10 @@
       <String fx:value="home-content-view" />
    </styleClass>
    <children>
-      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="706.0" prefWidth="1434.0">
+      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="706.0" prefWidth="1380.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="NEVER" maxWidth="891.0" minWidth="10.0" prefWidth="494.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="886.0" minWidth="10.0" prefWidth="886.0" />
+          <ColumnConstraints hgrow="NEVER" maxWidth="-Infinity" minWidth="10.0" prefWidth="500.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="886.0" minWidth="10.0" prefWidth="869.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -32,7 +32,7 @@
          <children>
             <VBox fx:id="tableViewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="table-view">
                <children>
-                  <VBox fx:id="progettiTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <VBox fx:id="progettiTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="705.0" prefWidth="498.0">
                      <children>
                         <Label maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="50.0" styleClass="label-1" text="TabelView Progetti" />
                         <TableView fx:id="tableView" prefHeight="663.0" prefWidth="513.0">
@@ -48,13 +48,13 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                <children>
-                  <VBox alignment="CENTER" prefHeight="108.0" prefWidth="586.0">
+                  <VBox alignment="CENTER" prefHeight="92.0" prefWidth="580.0">
                      <children>
-                        <Label maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="183.0" styleClass="label-1" text="Progetto" />
-                        <Button mnemonicParsing="false" onAction="#newProgetto" prefHeight="19.0" prefWidth="92.0" text="New" />
+                        <Label maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="580.0" styleClass="label-1" text="Progetto" />
+                        <Button fx:id="newButton" mnemonicParsing="false" onAction="#toggleAddProgettoView" prefHeight="30.0" prefWidth="129.0" text="New" />
                      </children>
                   </VBox>
-                  <GridPane prefHeight="617.0" prefWidth="586.0">
+                  <GridPane prefHeight="725.0" prefWidth="580.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -170,14 +170,26 @@
                </GridPane.margin>
             </VBox>
          </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
       </GridPane>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="1380.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" onAction="#back" styleClass="button-43" text="Back" />
+            <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" styleClass="login--label--error" GridPane.columnIndex="1" />
+            <Button mnemonicParsing="false" onAction="#back" styleClass="button-43" text="Back">
+               <GridPane.margin>
+                  <Insets left="30.0" />
+               </GridPane.margin>
+            </Button>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-         </padding>
-      </HBox>
+      </GridPane>
    </children>
 </VBox>
