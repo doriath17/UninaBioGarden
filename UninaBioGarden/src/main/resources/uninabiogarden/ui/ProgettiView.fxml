@@ -23,23 +23,27 @@
    <children>
       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="706.0" prefWidth="1434.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="891.0" minWidth="10.0" prefWidth="494.0" />
+          <ColumnConstraints hgrow="NEVER" maxWidth="891.0" minWidth="10.0" prefWidth="494.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="886.0" minWidth="10.0" prefWidth="886.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="tableViewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="table-view">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" styleClass="label-1" text="TabelView Progetti" />
-                  <TableView fx:id="tableView" prefHeight="663.0" prefWidth="513.0">
-                    <columns>
-                      <TableColumn fx:id="nomeCol" prefWidth="274.0" text="Nome" />
-                      <TableColumn fx:id="dataInizioCol" minWidth="0.0" prefWidth="105.0" text="Data Inizio" />
-                        <TableColumn fx:id="dataFineCol" minWidth="0.0" prefWidth="113.0" text="Data Fine" />
-                    </columns>
-                  </TableView>
+                  <VBox fx:id="progettiTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Label maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="50.0" styleClass="label-1" text="TabelView Progetti" />
+                        <TableView fx:id="tableView" prefHeight="663.0" prefWidth="513.0">
+                          <columns>
+                            <TableColumn fx:id="nomeCol" prefWidth="274.0" text="Nome" />
+                            <TableColumn fx:id="dataInizioCol" minWidth="0.0" prefWidth="105.0" text="Data Inizio" />
+                              <TableColumn fx:id="dataFineCol" minWidth="0.0" prefWidth="113.0" text="Data Fine" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">

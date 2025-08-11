@@ -45,6 +45,11 @@
   -fx-pref-height: 800px;
 }
 
+.table-view {
+  -fx-pref-width: 500px;
+  -fx-pref-height: 700px;
+}
+
 .view {
   -fx-background-color: aliceblue;
   -fx-background-radius: 5;

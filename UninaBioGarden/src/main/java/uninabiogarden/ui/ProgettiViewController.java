@@ -18,9 +18,11 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import uninabiogarden.core.ApplicationState.ChangeType;
 import uninabiogarden.dto.ProgettoDto;
+import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
@@ -32,9 +34,16 @@ public class ProgettiViewController extends ControllerBase {
 
   @FXML VBox root;
   
+  @FXML GridPane grid;
+
+  @FXML VBox tableViewRoot;
+  @FXML VBox progettiTableView;
+  AvailableLottiController availableLottiController;
+  
   @FXML TableView<Progetto> tableView;
   @FXML TableColumn<String, String> nomeCol;
   @FXML TableColumn<LocalDate, String> dataInizioCol;
+  @FXML TableColumn<LocalDate, String> dataFineCol;
 
   // FORM
   @FXML TextField nomeField;
@@ -46,7 +55,6 @@ public class ProgettiViewController extends ControllerBase {
 
   HomeController homeController;
 
-  @FXML TableColumn<LocalDate, String> dataFineCol;
 
   ObservableList<Progetto> progettiObsList = FXCollections.observableArrayList();
 
@@ -91,7 +99,6 @@ public class ProgettiViewController extends ControllerBase {
       return null;
     };
     codiceLottoField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
-
   }
 
   @SuppressWarnings("exports")
@@ -196,13 +203,15 @@ public class ProgettiViewController extends ControllerBase {
     }
   }
 
-  @FXML void newProgetto() {
-    clearForm();
-  }
-
   @FXML void selectLotto() {
 
   }
+
+  @FXML void newProgetto() {
+    clearForm();
+    showAvailableLottiTable();
+  }
+
  
   @FXML void add() {
     // var pDto = new ProgettoDto(
@@ -224,11 +233,32 @@ public class ProgettiViewController extends ControllerBase {
     // } catch (EmptyValueException e) {
     //   e.printStackTrace();
     // }
+
+    // se l'add va a buon fine 
+    showProgettiTable();
   }
 
   void clear() {
     clearForm();
     progettiObsList.clear();
   }
-  
+
+  AvailableLottiController getAvailableLottiController() {
+    if (availableLottiController == null){
+      availableLottiController = (AvailableLottiController) loadContent("AvailableLotti.fxml");
+      availableLottiController.progettiViewController = this;
+    }
+    return availableLottiController; 
+  }
+
+  void showProgettiTable() {
+    tableViewRoot.getChildren().remove(getAvailableLottiController().getRoot());
+    tableViewRoot.getChildren().add(progettiTableView);
+  }
+
+  void showAvailableLottiTable() {
+    tableViewRoot.getChildren().remove(progettiTableView);
+    tableViewRoot.getChildren().add(getAvailableLottiController().getRoot());
+  }
+
 }
