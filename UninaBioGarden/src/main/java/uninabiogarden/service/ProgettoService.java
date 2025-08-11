@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.dto.ProgettoDto;
+import uninabiogarden.entities.Progetto;
+import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.NoDataFoundException;
@@ -36,6 +38,12 @@ public class ProgettoService {
 
   public void delete(Long id_progetto) throws ConnectionFailedException, SQLException {
     progettoDao.delete(id_progetto);
+  }
+
+  public void create(ProgettoDto dto, Proprietario prop) throws WrongDataFineException, EmptyValueException, SQLException, ConnectionFailedException {
+    check(dto);
+    var newProgetto = Progetto.createFromDto(dto, prop);
+    progettoDao.insert(newProgetto, prop);
   }
 
 }

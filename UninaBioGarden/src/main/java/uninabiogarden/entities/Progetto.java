@@ -36,23 +36,19 @@ public class Progetto {
     return p;
   }
 
-  public static Progetto createFromDto(ProgettoDto dto, Proprietario proprietario, Lotto lotto) throws WrongDataFineException, EmptyValueException {
-
-    // validate dto
-    // use dto data to create object
-
-    // Constraint.checkNotEmptyValue(dto.nome());
-    // Constraint.checkNotEmptyValue(dto.dataInizio());
-    // Constraint.checkDataFine(dto.dataInizio(), dto.dataFine());
-    // Constraint.checkNotEmptyValue(proprietario);
-    // Constraint.checkNotEmptyValue(lotto);
+  public static Progetto createFromDto(ProgettoDto dto, Proprietario prop) throws WrongDataFineException, EmptyValueException {
+    var lotto = prop.findLottoById(prop.getLotti(), dto.id_lotto());
+    if (lotto == null) {
+      System.err.println("Problems in findAllLotti of ProprietarioDao class: not all lotti were found");
+      System.exit(1);
+    }
 
     return new Progetto(
       dto.nome(),
       dto.dataInizio(),
       dto.dataFine(),
       dto.descrizione(),
-      proprietario,
+      prop,
       lotto
     );
   }
