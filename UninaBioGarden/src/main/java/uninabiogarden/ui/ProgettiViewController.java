@@ -116,6 +116,11 @@ public class ProgettiViewController extends ControllerBase {
     textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
   }
 
+  void fillLottoForm(Lotto lotto) {
+    indirizzoLottoField.setText(lotto.getIndirizzo());
+    codiceLottoField.setText(""+lotto.getCodice());
+  }
+
   void fillForm(Progetto value) {
     nomeField.setText(value.getNome());
     dataInizioField.setValue(value.getDataInizio());
@@ -257,6 +262,7 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   void showAvailableLottiTable() {
+    getAvailableLottiController().refreshTable();
     tableViewRoot.getChildren().remove(progettiTableView);
     tableViewRoot.getChildren().add(getAvailableLottiController().getRoot());
   }
