@@ -136,13 +136,13 @@
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#delete" text="Delete">
+                              <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
                                  </styleClass>
                               </Button>
-                              <Button layoutX="248.0" layoutY="28.0" mnemonicParsing="false" onAction="#update" text="Update">
+                              <Button fx:id="updateButton" layoutX="248.0" layoutY="28.0" mnemonicParsing="false" onAction="#update" text="Update">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
@@ -151,7 +151,7 @@
                                     <Insets left="40.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button layoutX="323.0" layoutY="28.0" mnemonicParsing="false" onAction="#add" text="Add">
+                              <Button fx:id="addButton" layoutX="323.0" layoutY="28.0" mnemonicParsing="false" onAction="#add" text="Add">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />

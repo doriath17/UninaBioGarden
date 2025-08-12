@@ -137,6 +137,8 @@ public class ProgettiViewController extends ControllerBase {
   /// 
 
   @FXML void update() {
+    errorLabel.setText("");
+
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
       var dto = new ProgettoDto(
@@ -171,6 +173,8 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   @FXML void delete() {
+    errorLabel.setText("");
+
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
       try {
@@ -186,6 +190,7 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   @FXML void add() {
+    errorLabel.setText("");
 
     try {
       var lotto = availableLottiController.getSelectedLotto();
@@ -281,16 +286,24 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   @FXML Button newButton;
+  @FXML Button deleteButton;
+  @FXML Button updateButton;
+  @FXML Button addButton;
 
   @FXML void toggleAddProgettoView() {
+    errorLabel.setText("");
     if ("New".equals(newButton.getText())){
       showAvailableLottiTable();
       newButton.setText("Seleziona");
       dataFineField.setEditable(false);
+      deleteButton.setDisable(true);
+      updateButton.setDisable(true);
     } else {
       showProgettiTable();
       newButton.setText("New");
       dataFineField.setEditable(true);
+      deleteButton.setDisable(false);
+      updateButton.setDisable(false);
     }
     clearSelection();
   }
