@@ -111,6 +111,8 @@ public class ProgettiViewController extends ControllerBase {
       return null;
     };
     codiceLottoField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
+
+    addButton.setDisable(true);
   }
 
   @SuppressWarnings("exports")
@@ -172,6 +174,8 @@ public class ProgettiViewController extends ControllerBase {
         e.printStackTrace();
         showErrorMessage("Errore dal database durante l'aggiornamento");
       }
+    } else {
+      showErrorMessage("Nessun progetto selezionato");
     }
   }
 
@@ -192,6 +196,8 @@ public class ProgettiViewController extends ControllerBase {
         e.printStackTrace();
         showErrorMessage("Errore dal database durante la cancellazione");
       }
+    } else {
+      showErrorMessage("Nessun progetto selezionato");
     }
   }
 
@@ -293,20 +299,30 @@ public class ProgettiViewController extends ControllerBase {
   @FXML Button updateButton;
   @FXML Button addButton;
 
+  void toggleButtons(boolean toggle) {
+    if (toggle){
+      newButton.setText("Seleziona");
+      addButton.setDisable(false);
+      deleteButton.setDisable(true);
+      updateButton.setDisable(true);
+    } else {
+      newButton.setText("New");
+      addButton.setDisable(true);
+      deleteButton.setDisable(false);
+      updateButton.setDisable(false);
+    }
+  }
+
   @FXML void toggleAddProgettoView() {
     errorLabel.setText("");
     if ("New".equals(newButton.getText())){
       showAvailableLottiTable();
-      newButton.setText("Seleziona");
       dataFineField.setEditable(false);
-      deleteButton.setDisable(true);
-      updateButton.setDisable(true);
+      toggleButtons(true);
     } else {
       showProgettiTable();
-      newButton.setText("New");
       dataFineField.setEditable(true);
-      deleteButton.setDisable(false);
-      updateButton.setDisable(false);
+      toggleButtons(false);
     }
     clearSelection();
   }
