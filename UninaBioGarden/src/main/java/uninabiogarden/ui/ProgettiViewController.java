@@ -163,11 +163,14 @@ public class ProgettiViewController extends ControllerBase {
         p.setDataFine(dataFineField.getValue());
         p.setDescrizione(descrizioneField.getText());
         progettiObsList.set(selectedIndex, p);
+
+        showSuccessMessage("Progetto aggiorato!");
       } catch (ConnectionFailedException | WrongDataFineException | MissingFieldException e) {
-        errorLabel.setText(e.getMessage());
+        showErrorMessage(e.getMessage());
       } catch (SQLException e) {
+        System.err.println(e.getMessage());
         e.printStackTrace();
-        errorLabel.setText("Errore durante il commit dell'update nel database");
+        showErrorMessage("Errore dal database durante l'aggiornamento");
       }
     }
   }
@@ -181,10 +184,13 @@ public class ProgettiViewController extends ControllerBase {
         context.getProgettoService().delete(p.getId());
         progettiObsList.remove(selectedIndex);
         context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
+        showSuccessMessage("Progetto cancellato!");
       } catch (ConnectionFailedException e) {
-        errorLabel.setText(e.getMessage());
+        showErrorMessage(e.getMessage());
       } catch (SQLException e) {
         System.err.println(e.getMessage());
+        e.printStackTrace();
+        showErrorMessage("Errore dal database durante la cancellazione");
       }
     }
   }
@@ -208,17 +214,14 @@ public class ProgettiViewController extends ControllerBase {
         
       progettiObsList.add(newProgetto);
       getAvailableLottiController().availableLotti.remove(lotto);
-      
-    } catch (MissingFieldException e) {
-      errorLabel.setText(e.getMessage());
-    }  catch (WrongDataFineException e) {
-      errorLabel.setText(e.getMessage());
+      showSuccessMessage("Nuovo progetto inserito!");
+    } catch (MissingFieldException | WrongDataFineException | ConnectionFailedException e) {
+      showErrorMessage(e.getMessage());
     } catch (SQLException e) {
       System.err.println(e.getMessage());
-      errorLabel.setText("Errore nell'inserimento sul Database");
-    } catch (ConnectionFailedException e) {
-      errorLabel.setText(e.getMessage());
-    }
+      e.printStackTrace();
+      showErrorMessage("Errore dal database durante l'inserimento");
+    } 
   }
 
   ///
@@ -338,10 +341,6 @@ public class ProgettiViewController extends ControllerBase {
     );
   }
 
-  @FXML void selectLotto() {
-
-  }
-
   ///
   /// 
   /// 
@@ -358,6 +357,16 @@ public class ProgettiViewController extends ControllerBase {
       );
     }
     progettiObsList.setAll(p.getProgetti());
+  }
+
+  void showErrorMessage(String message) {
+    errorLabel.setStyle("-fx-text-fill: rgba(136, 0, 0, 1)");
+    errorLabel.setText(message);
+  }
+
+  void showSuccessMessage(String message) {
+    errorLabel.setStyle("-fx-text-fill: rgba(0, 143, 59, 1)");
+    errorLabel.setText(message);
   }
 
 }
