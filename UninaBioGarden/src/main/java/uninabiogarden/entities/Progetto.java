@@ -35,7 +35,7 @@ public class Progetto {
     return p;
   }
 
-  public static Progetto createFromDto(ProgettoDto dto, Proprietario prop) throws WrongDataFineException, EmptyValueException {
+  public static Progetto createFromDto(ProgettoDto dto, Proprietario prop) {
     var lotto = prop.findLottoById(prop.getLotti(), dto.id_lotto());
     if (lotto == null) {
       System.err.println("Problems in findAllLotti of ProprietarioDao class: not all lotti were found");

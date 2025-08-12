@@ -22,7 +22,8 @@ public class AvailableLottiController extends ControllerBase {
 
   ProgettiViewController progettiViewController;
 
-  ObservableList<Lotto> availableLotti = FXCollections.observableArrayList();
+  ObservableList<Lotto> availableLotti = 
+    FXCollections.observableArrayList();
   int selectedIndex;
 
   @Override

@@ -34,6 +34,11 @@ public class Proprietario extends Utente {
     );
   }
 
+  public void addProgetto(Progetto newProgetto) {
+    progetti.add(newProgetto);
+    availableLotti.remove(newProgetto.getLotto());
+  }
+
   /// Questo metodo è necessario per evitare duplicazione di dati.
   /// Se sia il Proprietario e un Progetto mantengono un 
   /// oggetto Lotto che rappresenta lo stesso lotto hai duplicazione

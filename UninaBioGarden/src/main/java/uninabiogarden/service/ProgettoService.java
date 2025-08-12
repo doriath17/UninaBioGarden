@@ -7,8 +7,7 @@ import uninabiogarden.dto.ProgettoDto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
-import uninabiogarden.exceptions.EmptyValueException;
-import uninabiogarden.exceptions.NoDataFoundException;
+import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.WrongDataFineException;
 
 public class ProgettoService {
@@ -18,15 +17,28 @@ public class ProgettoService {
     this.progettoDao = progettoDao;
   }
 
-  private void check(ProgettoDto dto) throws WrongDataFineException, EmptyValueException  {
-    Constraint.checkNotEmptyValue(dto.nome());
-    Constraint.checkNotEmptyValue(dto.dataInizio());
-    Constraint.checkDataFine(dto.dataInizio(), dto.dataFine());
-    return;
+  private void basicCheck(ProgettoDto dto) throws MissingFieldException, WrongDataFineException {
+    if (Constraint.checkNotEmptyValue(dto.nome())) {
+      throw new MissingFieldException("Nome progetto mancante");
+    }
+    if (Constraint.checkNotEmptyValue(dto.dataInizio())) {
+      throw new MissingFieldException("Data inizio del progetto mancante");
+    }
+    if (Constraint.checkDataFine(dto.dataInizio(), dto.dataFine())) {
+      throw new WrongDataFineException(
+        "Data fine posteriore alla data di inizio ("+dto.dataFine()+")");
+    }
   }
 
-  public void update(ProgettoDto dto) throws ConnectionFailedException, WrongDataFineException, EmptyValueException, SQLException {
-    check(dto);
+  private void checkInsert(ProgettoDto dto) throws WrongDataFineException, MissingFieldException {
+    basicCheck(dto);
+    if (Constraint.checkNotEmptyValue(dto.id_lotto())) {
+      throw new MissingFieldException("Lotto del progetto non selezionato");
+    }
+  }
+
+  public void update(ProgettoDto dto) throws ConnectionFailedException, WrongDataFineException, MissingFieldException, SQLException {
+    basicCheck(dto);
     progettoDao.update(
       dto.id_progetto(),
       dto.nome(),
@@ -40,10 +52,11 @@ public class ProgettoService {
     progettoDao.delete(id_progetto);
   }
 
-  public void create(ProgettoDto dto, Proprietario prop) throws WrongDataFineException, EmptyValueException, SQLException, ConnectionFailedException {
-    check(dto);
+  public Progetto create(ProgettoDto dto, Proprietario prop) throws WrongDataFineException, MissingFieldException, SQLException, ConnectionFailedException {
+    checkInsert(dto);
     var newProgetto = Progetto.createFromDto(dto, prop);
-    progettoDao.insert(newProgetto, prop);
+    progettoDao.insert(newProgetto);
+    return newProgetto;
   }
 
 }

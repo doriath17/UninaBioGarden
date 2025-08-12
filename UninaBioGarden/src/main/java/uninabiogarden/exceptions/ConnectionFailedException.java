@@ -1,7 +1,7 @@
 package uninabiogarden.exceptions;
 
 public class ConnectionFailedException extends Exception {
-  public static String msg = "connection failed";
+  public static String msg = "Connessione al database fallita";
 
   public ConnectionFailedException() {
     super(ConnectionFailedException.msg);

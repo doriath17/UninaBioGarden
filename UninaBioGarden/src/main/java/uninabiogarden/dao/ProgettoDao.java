@@ -80,19 +80,22 @@ public class ProgettoDao extends DaoBase {
     }
   }
 
-  public void insert(Progetto newProgetto, Proprietario prop) throws SQLException, ConnectionFailedException {
+  public void insert(Progetto newProgetto) throws SQLException, ConnectionFailedException {
     var sql = """
-      INSERT INTO progetto VALUES 
-      (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO progetto (nome, data_inizio, data_fine, descrizione, username_prop, id_lotto) VALUES 
+      (?, ?, ?, ?, ?, ?)
       """;
     try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
-      stmt.setLong(1, newProgetto.getId());
-      stmt.setString(2, newProgetto.getNome());
-      stmt.setDate(3, Date.valueOf(newProgetto.getDataInizio()));
-      stmt.setDate(4, Date.valueOf(newProgetto.getDataFine()));
-      stmt.setString(5, newProgetto.getDescrizione());
+      stmt.setString(1, newProgetto.getNome());
+      stmt.setDate(2, Date.valueOf(newProgetto.getDataInizio()));
+
+      var dataFine = newProgetto.getDataFine() == null ? null : Date.valueOf(newProgetto.getDataFine());
+      stmt.setDate(3, dataFine);
+      stmt.setString(4, newProgetto.getDescrizione());
+      stmt.setString(5, newProgetto.getProprietario().getUsername());
       stmt.setLong(6, newProgetto.getLotto().getId());
+
 
       stmt.executeUpdate();
     }

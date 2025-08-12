@@ -2,22 +2,18 @@ package uninabiogarden.service;
 
 import java.time.LocalDate;
 
-import uninabiogarden.exceptions.EmptyValueException;
-import uninabiogarden.exceptions.WrongDataFineException;
-
 public class Constraint {
-  public static void checkDataFine(LocalDate dataInizio, LocalDate dataFine) throws WrongDataFineException {
-    if (dataFine != null && dataFine.isBefore(dataFine)) {
-      throw new WrongDataFineException();
+  public static boolean checkDataFine(LocalDate dataInizio, LocalDate dataFine)  {
+    if (dataFine != null && dataFine.isBefore(dataInizio)) {
+      return true;
     }
+    return false;
   }
 
-  public static void checkNotEmptyValue(Object value) throws EmptyValueException {
-    if (value == null) {
-      throw new EmptyValueException();
+  public static boolean checkNotEmptyValue(Object value){
+    if (value == null || (value instanceof String && ((String)value).isEmpty())) {
+      return true;
     }
-    if (value instanceof String && ((String)value).isEmpty()) {
-      throw new EmptyValueException();
-    }
+    return false;
   }
 }

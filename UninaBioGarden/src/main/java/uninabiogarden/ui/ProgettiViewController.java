@@ -73,6 +73,14 @@ public class ProgettiViewController extends ControllerBase {
 
   int selectedIndex;
 
+  ///
+  /// 
+  /// 
+  /// Initialization
+  /// 
+  /// 
+  /// 
+
   @FXML void initialize() {
     tableView.setItems(progettiObsList);
     nomeCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -120,19 +128,13 @@ public class ProgettiViewController extends ControllerBase {
     textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
   }
 
-  @FXML void back() {
-    homeController.openHomeContent();
-  }
-
-  void loadProgetti() throws ConnectionFailedException, NoDataFoundException{
-    Proprietario p = context.getAppState().getLoggedInProprietario();
-    if (p.getProgetti() == null) {
-      p.setProgetti(
-        context.getProprietarioService().requestProgettiFor(p)
-      );
-    }
-    progettiObsList.setAll(p.getProgetti());
-  }
+  ///
+  /// 
+  /// 
+  /// CRUD operations
+  /// 
+  /// 
+  /// 
 
   @FXML void update() {
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
@@ -159,17 +161,11 @@ public class ProgettiViewController extends ControllerBase {
         p.setDataFine(dataFineField.getValue());
         p.setDescrizione(descrizioneField.getText());
         progettiObsList.set(selectedIndex, p);
-      } catch (ConnectionFailedException e) {
-        System.err.println(e.getMessage());
-      } catch (WrongDataFineException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (EmptyValueException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+      } catch (ConnectionFailedException | WrongDataFineException | MissingFieldException e) {
+        errorLabel.setText(e.getMessage());
       } catch (SQLException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
+        errorLabel.setText("Errore durante il commit dell'update nel database");
       }
     }
   }
@@ -182,18 +178,63 @@ public class ProgettiViewController extends ControllerBase {
         progettiObsList.remove(selectedIndex);
         context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
       } catch (ConnectionFailedException e) {
-        e.printStackTrace();
+        errorLabel.setText(e.getMessage());
       } catch (SQLException e) {
         System.err.println(e.getMessage());
       }
     }
   }
 
-  @FXML void selectLotto() {
+  @FXML void add() {
 
+    try {
+      var lotto = availableLottiController.getSelectedLotto();
+      var dto = getFormData(lotto.getId());
+
+      var newProgetto = context.getProgettoService().create(
+        dto,
+        context.getAppState().getLoggedInProprietario()
+      );
+
+      context.
+        getAppState().
+        getLoggedInProprietario().
+        addProgetto(newProgetto);
+        
+      progettiObsList.add(newProgetto);
+      getAvailableLottiController().availableLotti.remove(lotto);
+      
+    } catch (MissingFieldException e) {
+      errorLabel.setText(e.getMessage());
+    }  catch (WrongDataFineException e) {
+      errorLabel.setText(e.getMessage());
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+      errorLabel.setText("Errore nell'inserimento sul Database");
+    } catch (ConnectionFailedException e) {
+      errorLabel.setText(e.getMessage());
+    }
   }
 
-  @FXML Button newButton;
+  ///
+  /// 
+  /// 
+  /// Form utility methods
+  /// 
+  /// 
+  /// 
+  
+  ProgettoDto getFormData(Long id_lotto) {
+    return new ProgettoDto(
+      null, // the id do not exist yet
+      nomeField.getText(),
+      dataInizioField.getValue(),
+      dataFineField.getValue(),
+      descrizioneField.getText(),
+      id_lotto,
+      context.getSession().getUsername()
+    );
+  }
 
   void fillLottoForm(Lotto lotto) {
     indirizzoLottoField.setText(lotto.getIndirizzo());
@@ -227,50 +268,31 @@ public class ProgettiViewController extends ControllerBase {
     clearForm();
   }
 
+  ///
+  /// 
+  /// 
+  /// Handling the transitions
+  /// 
+  /// 
+  /// 
+
+  @FXML void back() {
+    homeController.openHomeContent();
+  }
+
+  @FXML Button newButton;
+
   @FXML void toggleAddProgettoView() {
     if ("New".equals(newButton.getText())){
       showAvailableLottiTable();
       newButton.setText("Seleziona");
+      dataFineField.setEditable(false);
     } else {
       showProgettiTable();
       newButton.setText("New");
+      dataFineField.setEditable(true);
     }
     clearSelection();
-  }
-
-  ProgettoDto getFormData(Long id_lotto) {
-    return new ProgettoDto(
-      null, // the id do not exist yet
-      nomeField.getText(),
-      dataInizioField.getValue(),
-      dataFineField.getValue(),
-      descrizioneField.getText(),
-      id_lotto,
-      context.getSession().getUsername()
-    );
-  }
-
-  @FXML void add() {
-
-    try {
-      var lotto = availableLottiController.getSelectedLotto();
-    } catch (MissingFieldException e) {
-      errorLabel.setText(e.getMessage());
-    }
-
-    // var pDto = getFormData(lotto.getId());
-    // Progetto p = null;
-    // try {
-    //   p = Progetto.createFromDto(pDto, null, null);
-    //   progettiObsList.add(p);
-
-    //   context.getAppState().getPendingChanges().put(p, ChangeType.INSERT);
-    // } catch (WrongDataFineException e) {
-    //   e.printStackTrace();
-    // } catch (EmptyValueException e) {
-    //   e.printStackTrace();
-    // }
-
   }
 
   void clear() {
@@ -301,6 +323,28 @@ public class ProgettiViewController extends ControllerBase {
     tableViewRoot.getChildren().add(
       getAvailableLottiController().getRoot()
     );
+  }
+
+  @FXML void selectLotto() {
+
+  }
+
+  ///
+  /// 
+  /// 
+  /// Utility methods
+  /// 
+  /// 
+  /// 
+
+  void loadProgetti() throws ConnectionFailedException, NoDataFoundException{
+    Proprietario p = context.getAppState().getLoggedInProprietario();
+    if (p.getProgetti() == null) {
+      p.setProgetti(
+        context.getProprietarioService().requestProgettiFor(p)
+      );
+    }
+    progettiObsList.setAll(p.getProgetti());
   }
 
 }
