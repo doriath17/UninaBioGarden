@@ -112,11 +112,21 @@ public class LottiController extends ControllerBase {
       showErrorMessage("Nessun lotto selezionato");
       return;
     }
-    
+    var lottoToDelete = lotti.get(index);
+    try {
+      context.getLottoService().delete(lottoToDelete);
+    } catch (ConnectionFailedException e) {
+      showErrorMessage(e.getMessage());
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+      e.printStackTrace();
+      showErrorMessage("Errore dal database durante la cancellazione");
+    } 
+    showSuccessMessage("Lotto cancellato!");
   }
 
   @FXML public void add() {
-
+    
   }
 
   ///

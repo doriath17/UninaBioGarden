@@ -47,8 +47,8 @@ public class LottoService {
     lottoDao.update(lottoToUpdate);
   }
 
-  public void delete(Lotto lotto) {
-
+  public void delete(Lotto lotto) throws SQLException, ConnectionFailedException {
+    lottoDao.delete(lotto);
   }
 
   public void insert(Lotto lotto) {

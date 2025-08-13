@@ -24,6 +24,14 @@ public class LottoDao extends DaoBase {
       stmt.executeUpdate();
     }
   }
+
+  public void delete(Lotto lotto) throws SQLException, ConnectionFailedException {
+    var sql = "DELETE FROM lotto WHERE id_lotto='"+lotto.getId()+"'";
+    try (var conn = database.getConnection();
+      var stmt = conn.createStatement()) {
+      stmt.executeUpdate(sql);
+    }
+  }
   
   
 }
