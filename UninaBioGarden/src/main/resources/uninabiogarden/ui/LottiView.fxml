@@ -129,7 +129,7 @@
                         </HBox>
                      </children>
                   </GridPane>
-                  <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="462.0" styleClass="label-1" />
+                  <Label fx:id="errorLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="462.0" />
                </children>
                <padding>
                   <Insets left="20.0" right="20.0" />

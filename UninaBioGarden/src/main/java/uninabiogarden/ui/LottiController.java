@@ -1,6 +1,7 @@
 package uninabiogarden.ui;
 
 
+import java.sql.SQLException;
 import java.util.function.UnaryOperator;
 
 import javafx.beans.value.ChangeListener;
@@ -87,11 +88,17 @@ public class LottiController extends ControllerBase {
   @FXML public void update() {
     try {
       var index = tableView.getSelectionModel().getSelectedIndex();
-      var toUpdate = getFormData();
-      context.getLottoService().update(toUpdate);
-      lotti.set(index, toUpdate);
-    } catch (MissingFieldException | FormatException e) {
+      var lottoToUpdate = getFormData();
+      lottoToUpdate.setId(tableView.getSelectionModel().getSelectedItem().getId());
+      context.getLottoService().update(lottoToUpdate);
+      lotti.set(index, lottoToUpdate);
+      showSuccessMessage("Lotto aggiornato!");
+    } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
       showErrorMessage(e.getMessage());
+    } catch (SQLException e) {
+      System.err.println(e.getMessage());
+      e.printStackTrace();
+      showErrorMessage("Errore dal database durante l'aggiornamento");
     }
   }
 
