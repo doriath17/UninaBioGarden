@@ -13,7 +13,7 @@ public class MainController extends ContentController {
     getLoginController().passwordField.setText("pass123");
     getLoginController().propCheckBox.setSelected(true);
     getLoginController().login();
-    getHomeController().openProgettiView();
+    getHomeController().openLottiView();
   }
 
   @FXML VBox root;

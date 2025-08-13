@@ -46,13 +46,13 @@
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Indirizzo" />
-                              <TextField styleClass="text-field-1" />
+                              <TextField fx:id="indirizzoField" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <VBox layoutX="10.0" layoutY="115.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Orto" />
-                              <TextField styleClass="text-field-1" />
+                              <TextField fx:id="ortoField" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <GridPane GridPane.rowIndex="1">
@@ -67,7 +67,7 @@
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Codice" />
-                                    <TextField styleClass="text-field-1" />
+                                    <TextField fx:id="codiceField" styleClass="text-field-1" />
                                  </children>
                                  <padding>
                                     <Insets right="20.0" />
@@ -76,7 +76,7 @@
                               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Estensione" />
-                                    <TextField styleClass="text-field-1" />
+                                    <TextField fx:id="estensioneField" styleClass="text-field-1" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets right="20.0" />

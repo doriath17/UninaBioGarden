@@ -90,37 +90,12 @@ public class ProgettiViewController extends ControllerBase {
       }
     });
 
-    addTextLimiter(nomeField, 50);
-    addTextLimiter(descrizioneField, 200);
-    addTextLimiter(indirizzoLottoField, 80);
-    UnaryOperator<Change> positiveIntegerFilter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.isEmpty()) {
-        return change;
-      }
-      if (newText.matches("0|[1-9][0-9]*")) { 
-        return change;
-      }
-      return null;
-    };
-    codiceLottoField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
+    ControllerUtility.addTextLimiter(nomeField, 50);
+    ControllerUtility.addTextLimiter(descrizioneField, 200);
+    ControllerUtility.addTextLimiter(indirizzoLottoField, 80);
+    ControllerUtility.addPositiveIntegerFilter(codiceLottoField);
 
     addButton.setDisable(true);
-  }
-
-  @SuppressWarnings("exports")
-  public static void addTextLimiter(TextInputControl textInputControl, int maxLength) {
-    UnaryOperator<Change> maxLengthFilter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.isEmpty()) {
-        return change;
-      }
-      if (newText.length() <= maxLength) {
-        return change;
-      }
-      return null;
-    };
-    textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
   }
 
   ///
