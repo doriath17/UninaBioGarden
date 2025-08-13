@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,10 +31,17 @@ public class LottiController extends ControllerBase {
   @FXML VBox root;
   @FXML VBox contentRoot;
 
+  @FXML Label formLabel;
+  @FXML Button newButton;
+
   @FXML TextField indirizzoField;
   @FXML TextField codiceField;
   @FXML TextField estensioneField;
   @FXML TextField ortoField;
+
+  @FXML Button deleteButton;
+  @FXML Button updateButton;
+  @FXML Button addButton;
 
   @FXML Label errorLabel;
 
@@ -48,6 +56,8 @@ public class LottiController extends ControllerBase {
   @FXML TableColumn<String, String> ortoCol;
 
   ObservableList<Lotto> lotti = FXCollections.observableArrayList();
+
+  boolean formForSelection = true;
   
   @SuppressWarnings("exports")
   @Override
@@ -66,10 +76,13 @@ public class LottiController extends ControllerBase {
       @Override
       public void changed(ObservableValue<? extends Lotto> observable, Lotto oldValue, Lotto newValue) {
         if (newValue != null) {
+          if (formForSelection)
           fillForm(newValue);
         }
       }
     });
+
+    addButton.setDisable(true);
 
     ControllerUtility.addTextLimiter(indirizzoField, 80);
     addCodiceLottoFilter(codiceField);
@@ -126,7 +139,7 @@ public class LottiController extends ControllerBase {
   }
 
   @FXML public void add() {
-    
+
   }
 
   ///
@@ -172,6 +185,35 @@ public class LottiController extends ControllerBase {
   @FXML private void back(){
     homeController.openHomeContent();
     clearUIContent();
+  }
+
+  void toggleForm() {
+    clearUIContent();
+    if (formForSelection){
+      formForSelection = false;
+      formLabel.setText("Creazione Nuovo Lotto");
+      newButton.setText("Seleziona");
+      addButton.setDisable(false);
+      deleteButton.setDisable(true);
+      updateButton.setDisable(true);
+    } else {
+      formForSelection = true;
+      formLabel.setText("Lotto Selezionato");
+      newButton.setText("New");
+      addButton.setDisable(true);
+      deleteButton.setDisable(false);
+      updateButton.setDisable(false);
+    }
+  }
+
+  @FXML void toggleAddLottoView() {
+    errorLabel.setText("");
+    if ("New".equals(newButton.getText())){
+      toggleForm();
+    } else {
+      toggleForm();
+    }
+    clearSelection();
   }
 
   ///
