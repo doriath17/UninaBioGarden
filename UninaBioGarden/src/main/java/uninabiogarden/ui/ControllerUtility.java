@@ -9,6 +9,35 @@ import javafx.scene.control.TextInputControl;
 
 public class ControllerUtility {
 
+  public static void addCodiceLottoFilter(TextField textField) {
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.matches("^[0-9]{1,10}$")) { 
+        return change;
+      }
+      return null;
+    };
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+  public static void addEstensioneLottoFilter(TextField textField) {
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.matches("^([1-9][0-9]{0,10})(\\.[0-9]{0,3})?$")) {
+        return change;
+      }
+      return null;
+    };
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+
   public static void addPositiveIntegerFilter(TextField textField) {
     UnaryOperator<Change> filter = change -> {
       String newText = change.getControlNewText();

@@ -93,7 +93,7 @@ public class ProgettiViewController extends ControllerBase {
     ControllerUtility.addTextLimiter(nomeField, 50);
     ControllerUtility.addTextLimiter(descrizioneField, 200);
     ControllerUtility.addTextLimiter(indirizzoLottoField, 80);
-    ControllerUtility.addPositiveIntegerFilter(codiceLottoField);
+    ControllerUtility.addCodiceLottoFilter(codiceLottoField);
 
     addButton.setDisable(true);
   }
@@ -202,7 +202,7 @@ public class ProgettiViewController extends ControllerBase {
 
   void fillLottoForm(Lotto lotto) {
     indirizzoLottoField.setText(lotto.getIndirizzo());
-    codiceLottoField.setText(""+lotto.getCodice());
+    codiceLottoField.setText(lotto.getCodice());
   }
 
   void fillForm(Progetto value) {

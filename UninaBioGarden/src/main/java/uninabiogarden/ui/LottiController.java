@@ -87,8 +87,8 @@ public class LottiController extends ControllerBase {
     addButton.setDisable(true);
 
     ControllerUtility.addTextLimiter(indirizzoField, 80);
-    addCodiceLottoFilter(codiceField);
-    addEstensioneLottoFilter(estensioneField);
+    ControllerUtility.addCodiceLottoFilter(codiceField);
+    ControllerUtility.addEstensioneLottoFilter(estensioneField);
     ControllerUtility.addTextLimiter(ortoField, 80);
   }
 
@@ -257,34 +257,6 @@ public class LottiController extends ControllerBase {
     clearMessage();
     clearForm();
     clearMessage();
-  }
-
-  public static void addCodiceLottoFilter(TextField textField) {
-    UnaryOperator<Change> filter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.isEmpty()) {
-        return change;
-      }
-      if (newText.matches("^[0-9]{1,10}$")) { 
-        return change;
-      }
-      return null;
-    };
-    textField.setTextFormatter(new TextFormatter<>(filter));
-  }
-
-  public static void addEstensioneLottoFilter(TextField textField) {
-    UnaryOperator<Change> filter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.isEmpty()) {
-        return change;
-      }
-      if (newText.matches("^([1-9][0-9]{0,10})(\\.[0-9]{0,3})?$")) {
-        return change;
-      }
-      return null;
-    };
-    textField.setTextFormatter(new TextFormatter<>(filter));
   }
 
   void showErrorMessage(String message) {
