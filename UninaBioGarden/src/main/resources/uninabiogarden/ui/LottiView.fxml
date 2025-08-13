@@ -46,13 +46,13 @@
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Indirizzo" />
-                              <TextField fx:id="indirizzoField" styleClass="text-field-1" />
+                              <TextField fx:id="indirizzoField" promptText="Indirizzo" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <VBox layoutX="10.0" layoutY="115.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                            <children>
                               <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Orto" />
-                              <TextField fx:id="ortoField" styleClass="text-field-1" />
+                              <TextField fx:id="ortoField" promptText="Nome Orto" styleClass="text-field-1" />
                            </children>
                         </VBox>
                         <GridPane GridPane.rowIndex="1">
@@ -67,7 +67,7 @@
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Codice" />
-                                    <TextField fx:id="codiceField" styleClass="text-field-1" />
+                                    <TextField fx:id="codiceField" promptText="Codice" styleClass="text-field-1" />
                                  </children>
                                  <padding>
                                     <Insets right="20.0" />
@@ -76,7 +76,7 @@
                               <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="label-2" text="Estensione" />
-                                    <TextField fx:id="estensioneField" styleClass="text-field-1" />
+                                    <TextField fx:id="estensioneField" promptText="0.0" styleClass="text-field-1" />
                                  </children>
                                  <GridPane.margin>
                                     <Insets right="20.0" />
@@ -100,13 +100,13 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="68.0" prefWidth="462.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Delete">
+                              <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
                                  </styleClass>
                               </Button>
-                              <Button mnemonicParsing="false" text="Update">
+                              <Button fx:id="updateButton" mnemonicParsing="false" onAction="#update" text="Update">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
@@ -119,7 +119,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                            <children>
-                              <Button mnemonicParsing="false" text="Add">
+                              <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add">
                                  <styleClass>
                                     <String fx:value="button-43" />
                                     <String fx:value="btn-lotto" />
@@ -129,6 +129,7 @@
                         </HBox>
                      </children>
                   </GridPane>
+                  <Label fx:id="errorLabel" maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="462.0" styleClass="label-1" />
                </children>
                <padding>
                   <Insets left="20.0" right="20.0" />

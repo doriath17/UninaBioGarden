@@ -4,11 +4,11 @@ public class Lotto {
   
   private Long id;
   private String indirizzo;
-  private int codice;
+  private String codice;
   private Double estensione;
   private String orto;
 
-  public Lotto(Long id, String indirizzo, int codice, Double estensione, String orto) {
+  public Lotto(Long id, String indirizzo, String codice, Double estensione, String orto) {
     this.id = id;
     this.indirizzo = indirizzo;
     this.codice = codice;
@@ -32,11 +32,11 @@ public class Lotto {
     this.indirizzo = indirizzo;
   }
 
-  public int getCodice() {
+  public String getCodice() {
     return codice;
   }
 
-  public void setCodice(int codice) {
+  public void setCodice(String codice) {
     this.codice = codice;
   }
 

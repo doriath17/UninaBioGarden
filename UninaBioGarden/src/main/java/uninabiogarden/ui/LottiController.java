@@ -9,15 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.FormatException;
+import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
 
 public class LottiController extends ControllerBase {
@@ -28,6 +33,8 @@ public class LottiController extends ControllerBase {
   @FXML TextField codiceField;
   @FXML TextField estensioneField;
   @FXML TextField ortoField;
+
+  @FXML Label errorLabel;
 
   HomeController homeController;
 
@@ -64,9 +71,36 @@ public class LottiController extends ControllerBase {
     });
 
     ControllerUtility.addTextLimiter(indirizzoField, 80);
-    ControllerUtility.addPositiveIntegerFilter(codiceField);
-    ControllerUtility.addDoubleFilter(estensioneField);
+    addCodiceLottoFilter(codiceField);
+    addEstensioneLottoFilter(estensioneField);
     ControllerUtility.addTextLimiter(ortoField, 80);
+  }
+
+  ///
+  /// 
+  /// 
+  /// CRUD
+  /// 
+  /// 
+  /// 
+
+  @FXML public void update() {
+    try {
+      var index = tableView.getSelectionModel().getSelectedIndex();
+      var toUpdate = getFormData();
+      context.getLottoService().update(toUpdate);
+      lotti.set(index, toUpdate);
+    } catch (MissingFieldException | FormatException e) {
+      showErrorMessage(e.getMessage());
+    }
+  }
+
+  @FXML public void delete() {
+
+  }
+
+  @FXML public void add() {
+
   }
 
   ///
@@ -89,6 +123,16 @@ public class LottiController extends ControllerBase {
     codiceField.setText("");
     estensioneField.setText("");
     ortoField.setText("");
+  }
+
+  Lotto getFormData() {
+    return new Lotto(
+      null, 
+      indirizzoField.getText(),
+      codiceField.getText(),
+      (estensioneField.getText().isEmpty() ? null : Double.parseDouble(estensioneField.getText())),
+      ortoField.getText()
+    ); 
   }
 
   ///
@@ -123,6 +167,44 @@ public class LottiController extends ControllerBase {
   void clear() {
     clearForm();
     lotti.clear();
+  }
+
+  public static void addCodiceLottoFilter(TextField textField) {
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.matches("^[0-9]{1,10}$")) { 
+        return change;
+      }
+      return null;
+    };
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+  public static void addEstensioneLottoFilter(TextField textField) {
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      if (newText.isEmpty()) {
+        return change;
+      }
+      if (newText.matches("^([1-9][0-9]{0,10})(\\.[0-9]{0,3})?$")) {
+        return change;
+      }
+      return null;
+    };
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
+  void showErrorMessage(String message) {
+    errorLabel.setStyle("-fx-text-fill: rgba(136, 0, 0, 1)");
+    errorLabel.setText(message);
+  }
+
+  void showSuccessMessage(String message) {
+    errorLabel.setStyle("-fx-text-fill: rgba(0, 143, 59, 1)");
+    errorLabel.setText(message);
   }
   
 }

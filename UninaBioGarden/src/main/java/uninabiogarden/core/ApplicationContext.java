@@ -5,8 +5,10 @@ import uninabiogarden.dao.LottoDao;
 import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.service.ColtivatoreService;
+import uninabiogarden.service.LottoService;
 import uninabiogarden.service.ProgettoService;
 import uninabiogarden.service.ProprietarioService;
+import uninabiogarden.ui.LottiController;
 
 /**
  * Lo scopo di questa classe è quello di concentrare 
@@ -34,7 +36,7 @@ public class ApplicationContext {
   private final ProprietarioService proprietarioService;
   private final ColtivatoreService coltivatoreService;
   private final ProgettoService progettoService;
-
+  private final LottoService lottoService;
 
   public ApplicationContext() {
     // init session
@@ -56,6 +58,7 @@ public class ApplicationContext {
     proprietarioService = new ProprietarioService(proprietarioDao);
     coltivatoreService = new ColtivatoreService(coltivatoreDao);
     progettoService = new ProgettoService(progettoDao);
+    lottoService = new LottoService(lottoDao);
   }
 
   public LoginSession getSession() {
@@ -93,5 +96,10 @@ public class ApplicationContext {
   public ProgettoService getProgettoService() {
     return progettoService;
   }
+
+  public LottoService getLottoService() {
+    return lottoService;
+  }
+
 
 }

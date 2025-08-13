@@ -10,35 +10,21 @@ import javafx.scene.control.TextInputControl;
 public class ControllerUtility {
 
   public static void addPositiveIntegerFilter(TextField textField) {
-    UnaryOperator<Change> positiveIntegerFilter = change -> {
+    UnaryOperator<Change> filter = change -> {
       String newText = change.getControlNewText();
       if (newText.isEmpty()) {
         return change;
       }
-      if (newText.matches("0|[1-9][0-9]*")) { 
+      if (newText.matches("^0|[1-9][0-9]$")) { 
         return change;
       }
       return null;
     };
-    textField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
-  }
-
-  public static void addDoubleFilter(TextField textField) {
-    UnaryOperator<Change> positiveIntegerFilter = change -> {
-      String newText = change.getControlNewText();
-      if (newText.isEmpty()) {
-        return change;
-      }
-      if (newText.matches("^0|[1-9]|[1-9][0-9]*|[1-9]|[1-9][0-9]*\\.[0-9]*$")) { 
-        return change;
-      }
-      return null;
-    };
-    textField.setTextFormatter(new TextFormatter<>(positiveIntegerFilter));
+    textField.setTextFormatter(new TextFormatter<>(filter));
   }
 
   public static void addTextLimiter(TextInputControl textInputControl, int maxLength) {
-    UnaryOperator<Change> maxLengthFilter = change -> {
+    UnaryOperator<Change> filter = change -> {
       String newText = change.getControlNewText();
       if (newText.isEmpty()) {
         return change;
@@ -48,6 +34,6 @@ public class ControllerUtility {
       }
       return null;
     };
-    textInputControl.setTextFormatter(new TextFormatter<>(maxLengthFilter));
+    textInputControl.setTextFormatter(new TextFormatter<>(filter));
   }
 }

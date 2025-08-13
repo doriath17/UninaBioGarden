@@ -36,7 +36,7 @@ public class ProprietarioDao extends DaoBase {
         list.add(new Lotto(
           result.getLong(1),
           result.getString(2),
-          result.getInt(3),
+          result.getString(3),
           result.getDouble(4),
           result.getString(5)
         ));
@@ -95,7 +95,7 @@ public class ProprietarioDao extends DaoBase {
         var lotto = new Lotto(
           result.getLong(8),
           result.getString(9),
-          result.getInt(10),
+          result.getString(10),
           result.getDouble(11),
           result.getString(12)
         );
@@ -154,7 +154,7 @@ public class ProprietarioDao extends DaoBase {
         lotti.add(new Lotto(
           result.getLong(1),
           result.getString(2),
-          result.getInt(3),
+          result.getString(3),
           result.getDouble(4),
           result.getString(5)
         ));

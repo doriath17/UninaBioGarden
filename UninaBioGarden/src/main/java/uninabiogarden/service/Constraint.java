@@ -16,4 +16,11 @@ public class Constraint {
     }
     return false;
   }
+
+  public static boolean checkEmptyString(String value) {
+    if (value == null || value.isEmpty()) {
+      return true;
+    }
+    return false;
+  }
 }
