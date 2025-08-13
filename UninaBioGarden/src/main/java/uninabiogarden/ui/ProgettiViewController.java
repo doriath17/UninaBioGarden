@@ -20,15 +20,10 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import uninabiogarden.core.ApplicationState.ChangeType;
-import uninabiogarden.dto.ProgettoDto;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
-import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
-import uninabiogarden.exceptions.EmptyValueException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.exceptions.WrongDataFineException;
@@ -37,8 +32,6 @@ public class ProgettiViewController extends ControllerBase {
 
   @FXML VBox root;
   
-  @FXML GridPane grid;
-
   @FXML VBox tableViewRoot;
   @FXML VBox progettiTableView;
   AvailableLottiController availableLottiController;
@@ -143,30 +136,17 @@ public class ProgettiViewController extends ControllerBase {
 
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
-      var dto = new ProgettoDto(
-        p.getId(),
-        nomeField.getText(),
-        dataInizioField.getValue(),
-        dataFineField.getValue(),
-        descrizioneField.getText(),
-        // id_lotto non mi interessa per l'update 
-        // siccome non puo' essere modificato
-        // idem per il proprietario
-        null,
-        null
-      );
+
+      Progetto progettoToUpdate = new Progetto(p);
+      progettoToUpdate.setNome(nomeField.getText());
+      progettoToUpdate.setDataInizio(dataInizioField.getValue());
+      progettoToUpdate.setDataFine(dataFineField.getValue());
+      progettoToUpdate.setDescrizione(descrizioneField.getText());
 
       try {
-        context.getProgettoService().update(dto);
-
-        // mantieni lo stato dell'applicazione consistente con il db
-        p.setNome(nomeField.getText());
-        p.setDataInizio(dataInizioField.getValue());
-        p.setDataFine(dataFineField.getValue());
-        p.setDescrizione(descrizioneField.getText());
-        progettiObsList.set(selectedIndex, p);
-
-        showSuccessMessage("Progetto aggiorato!");
+        context.getProgettoService().update(progettoToUpdate);
+        progettiObsList.set(selectedIndex, progettoToUpdate);
+        showSuccessMessage("Progetto aggiornato!");
       } catch (ConnectionFailedException | WrongDataFineException | MissingFieldException e) {
         showErrorMessage(e.getMessage());
       } catch (SQLException e) {
@@ -187,7 +167,9 @@ public class ProgettiViewController extends ControllerBase {
       try {
         context.getProgettoService().delete(p.getId());
         progettiObsList.remove(selectedIndex);
-        context.getAppState().getLoggedInProprietario().getProgetti().remove(p);      
+        if (!p.isTerminated()) {
+          getAvailableLottiController().availableLotti.add(p.getLotto());
+        }
         showSuccessMessage("Progetto cancellato!");
       } catch (ConnectionFailedException e) {
         showErrorMessage(e.getMessage());
@@ -206,18 +188,11 @@ public class ProgettiViewController extends ControllerBase {
 
     try {
       var lotto = availableLottiController.getSelectedLotto();
-      var dto = getFormData(lotto.getId());
+      var newProgetto = getFormData();
+      newProgetto.setLotto(lotto);
 
-      var newProgetto = context.getProgettoService().create(
-        dto,
-        context.getAppState().getLoggedInProprietario()
-      );
+      context.getProgettoService().create(newProgetto);
 
-      context.
-        getAppState().
-        getLoggedInProprietario().
-        addProgetto(newProgetto);
-        
       progettiObsList.add(newProgetto);
       getAvailableLottiController().availableLotti.remove(lotto);
       showSuccessMessage("Nuovo progetto inserito!");
@@ -238,15 +213,15 @@ public class ProgettiViewController extends ControllerBase {
   /// 
   /// 
   
-  ProgettoDto getFormData(Long id_lotto) {
-    return new ProgettoDto(
+  Progetto getFormData() {
+    return new Progetto(
       null, // the id do not exist yet
       nomeField.getText(),
       dataInizioField.getValue(),
       dataFineField.getValue(),
       descrizioneField.getText(),
-      id_lotto,
-      context.getSession().getUsername()
+      context.getAppState().getLoggedInProprietario(),
+      null
     );
   }
 
@@ -260,8 +235,7 @@ public class ProgettiViewController extends ControllerBase {
     dataInizioField.setValue(value.getDataInizio());
     dataFineField.setValue(value.getDataFine());
     descrizioneField.setText(value.getDescrizione());
-    indirizzoLottoField.setText(value.getLotto().getIndirizzo());
-    codiceLottoField.setText(""+value.getLotto().getCodice());
+    fillLottoForm(value.getLotto());
   }
 
   void clearForm() {
@@ -291,6 +265,9 @@ public class ProgettiViewController extends ControllerBase {
   /// 
 
   @FXML void back() {
+    if ("Seleziona".equals(newButton.getText())) {
+      toggleAddProgettoView();
+    }
     homeController.openHomeContent();
   }
 
@@ -336,9 +313,6 @@ public class ProgettiViewController extends ControllerBase {
     if (availableLottiController == null){
       availableLottiController = (AvailableLottiController) loadContent("AvailableLotti.fxml");
       availableLottiController.progettiViewController = this;
-      availableLottiController.availableLotti.setAll(
-        context.getAppState().getLoggedInProprietario().getAvailableLotti()
-      );
     }
     return availableLottiController; 
   }
@@ -364,15 +338,14 @@ public class ProgettiViewController extends ControllerBase {
   /// 
   /// 
   /// 
-
-  void loadProgetti() throws ConnectionFailedException, NoDataFoundException{
-    Proprietario p = context.getAppState().getLoggedInProprietario();
-    if (p.getProgetti() == null) {
-      p.setProgetti(
-        context.getProprietarioService().requestProgettiFor(p)
-      );
-    }
-    progettiObsList.setAll(p.getProgetti());
+  /// 
+  
+  void loadProgetti() throws ConnectionFailedException, NoDataFoundException {
+    progettiObsList.setAll(
+      context.getProprietarioService().requestProgettiFor(
+        context.getAppState().getLoggedInProprietario()
+      )
+    );
   }
 
   void showErrorMessage(String message) {

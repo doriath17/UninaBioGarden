@@ -28,7 +28,7 @@ public class LottiController extends ControllerBase {
   @FXML TableColumn<Double, String> estensioneCol;
   @FXML TableColumn<String, String> ortoCol;
 
-  ObservableList<Lotto> lottoObservableList = FXCollections.observableArrayList();
+  ObservableList<Lotto> lotti = FXCollections.observableArrayList();
   
   @SuppressWarnings("exports")
   @Override
@@ -37,7 +37,7 @@ public class LottiController extends ControllerBase {
   }
 
   @FXML private void initialize() {
-    tableView.setItems(lottoObservableList);
+    tableView.setItems(lotti);
     indirizzoCol.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
     codiceCol.setCellValueFactory(new PropertyValueFactory<>("codice"));
     estensioneCol.setCellValueFactory(new PropertyValueFactory<>("estensione"));
@@ -46,13 +46,12 @@ public class LottiController extends ControllerBase {
 
   void loadLotti() 
   throws ConnectionFailedException, NoDataFoundException {
-    Proprietario prop = context.getAppState().getLoggedInProprietario();
-    if (prop.getLotti() == null) {
-      prop.setLotti(
-        context.getProprietarioService().requestLottiFor(prop.getUsername())
-      );
-    }
-    lottoObservableList.setAll(prop.getLotti());
+
+    lotti.setAll(
+      context.getProprietarioService().requestLottiFor(
+        context.getSession().getUsername()
+      )
+    );
   }
 
   @FXML private void back(){
@@ -60,7 +59,7 @@ public class LottiController extends ControllerBase {
   }
 
   void clear() {
-    lottoObservableList.clear();
+    lotti.clear();
   }
   
 }

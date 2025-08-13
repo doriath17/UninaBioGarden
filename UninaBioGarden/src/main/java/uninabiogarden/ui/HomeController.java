@@ -140,6 +140,7 @@ public class HomeController extends ContentController {
   void openProgettiView() {
     try {
       getProgettiController().loadProgetti();
+      getProgettiController().getAvailableLottiController().loadAvailableLotti();
     } catch (ConnectionFailedException e) {
       e.printStackTrace();
     } catch (NoDataFoundException e) {

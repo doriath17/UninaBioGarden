@@ -1,5 +1,7 @@
 package uninabiogarden.ui;
 
+import java.sql.SQLException;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
 
 public class AvailableLottiController extends ControllerBase {
@@ -45,6 +48,17 @@ public class AvailableLottiController extends ControllerBase {
         }
       }
     });
+  }
+
+  void loadAvailableLotti() {
+    try {
+      var list = context.getProprietarioService().requestAvailableLottiFor(context.getSession().getUsername());
+      availableLotti.setAll(list);
+    } catch (SQLException | ConnectionFailedException e) {
+      System.err.println(e.getMessage());
+      e.printStackTrace();
+      progettiViewController.showErrorMessage("Errore dal database durante il caricamento dei lotti disponibili");
+    }
   }
 
   void clearSelection() {

@@ -25,13 +25,13 @@ public class ProprietarioService {
     WrongPasswordException, SQLException
   {
     var p = proprietarioDao.authenticate(username, password);
-    try {
-      p.setLotti(this.requestLottiFor(p.getUsername()));
-      p.setProgetti(this.requestProgettiFor(p));
-      p.setAvailableLotti(this.requestAvailableLottiIdsFor(username));
-    } catch (NoDataFoundException e) {
-      System.err.println("when trying to authenticate proprietario: " + e.getMessage());
-    }
+    // try {
+    //   // p.setLotti(this.requestLottiFor(p.getUsername()));
+    //   // p.setProgetti(this.requestProgettiFor(p));
+    //   // p.setAvailableLotti(this.requestAvailableLottiIdsFor(username));
+    // } catch (NoDataFoundException e) {
+    //   System.err.println("when trying to authenticate proprietario: " + e.getMessage());
+    // }
     return p;
   }
 
@@ -44,7 +44,12 @@ public class ProprietarioService {
   }
 
   public List<Long> requestAvailableLottiIdsFor(String username) throws SQLException, ConnectionFailedException {
-    return proprietarioDao.findAvailableLottiIds(username);
+    // return proprietarioDao.findAvailableLottiIds(username);
+    return null;
+  }
+
+  public List<Lotto> requestAvailableLottiFor(String username) throws SQLException, ConnectionFailedException {
+    return proprietarioDao.findAvailableLotti(username);
   }
 
 }

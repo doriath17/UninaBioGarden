@@ -1,13 +1,9 @@
 package uninabiogarden.core;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import uninabiogarden.dao.ColtivatoreDao;
 import uninabiogarden.dao.LottoDao;
 import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.dao.ProprietarioDao;
-import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.service.ColtivatoreService;
 import uninabiogarden.service.ProgettoService;
 import uninabiogarden.service.ProprietarioService;

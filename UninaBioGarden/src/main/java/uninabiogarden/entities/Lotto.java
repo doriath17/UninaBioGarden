@@ -1,35 +1,19 @@
 package uninabiogarden.entities;
 
-import uninabiogarden.dto.LottoDto;
-
 public class Lotto {
   
-  Long id;
-  String indirizzo;
-  int codice;
-  Double estensione;
-  String orto;
+  private Long id;
+  private String indirizzo;
+  private int codice;
+  private Double estensione;
+  private String orto;
 
-  private Lotto(Long id, String indirizzo, int codice, Double estensione, String orto) {
+  public Lotto(Long id, String indirizzo, int codice, Double estensione, String orto) {
     this.id = id;
     this.indirizzo = indirizzo;
     this.codice = codice;
     this.estensione = estensione;
     this.orto = orto;
-  }
-
-  public static Lotto createFromDB(Long id, String indirizzo, int codice, Double estensione, String orto) {
-    return new Lotto(id, indirizzo, codice, estensione, orto);
-  }
-
-  public static Lotto createFromDto(LottoDto dto) {
-    return new Lotto(
-      dto.id(),
-      dto.indirizzo(),
-      dto.codice(),
-      dto.estensione(),
-      dto.orto()
-    );
   }
 
   public Long getId() {

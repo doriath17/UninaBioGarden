@@ -33,7 +33,7 @@ public class ProprietarioDao extends DaoBase {
       var result = stmt.executeQuery(sql);
 
       while (result.next()) {
-        list.add(Lotto.createFromDB(
+        list.add(new Lotto(
           result.getLong(1),
           result.getString(2),
           result.getInt(3),
@@ -77,12 +77,9 @@ public class ProprietarioDao extends DaoBase {
   }
 
   public List<Progetto> findAllProgetti(Proprietario proprietario) throws ConnectionFailedException, NoDataFoundException {
-
-    var sql = "SELECT * " + 
-      "FROM progetto AS prog " + 
-      "JOIN proprietario AS prop ON prog.username_prop=prop.username " +
-      "JOIN lotto ON prog.id_lotto=lotto.id_lotto " +
-      "WHERE prop.username='"+proprietario.getUsername()+"'";
+    var sql = "SELECT progetti_utente.*, lotto.* " +
+            "FROM (SELECT * FROM progetto WHERE username_prop='"+proprietario.getUsername()+"') AS progetti_utente " +
+            "NATURAL JOIN lotto";
 
     var progetti = new ArrayList<Progetto>();
 
@@ -95,14 +92,22 @@ public class ProprietarioDao extends DaoBase {
         // index of id_lotto is 17
         var dataFine = result.getDate(4);
 
-        var prog = Progetto.createFromDB(
+        var lotto = new Lotto(
+          result.getLong(8),
+          result.getString(9),
+          result.getInt(10),
+          result.getDouble(11),
+          result.getString(12)
+        );
+
+        var prog = new Progetto(
           result.getLong(1),
           result.getString(2),
           result.getDate(3).toLocalDate(),
           (dataFine != null ? dataFine.toLocalDate() : null),
           result.getString(5),
           proprietario,
-          result.getLong("id_lotto")
+          lotto
         );
         
         progetti.add(prog);
@@ -119,12 +124,12 @@ public class ProprietarioDao extends DaoBase {
     return progetti;
   }
 
-  public List<Long> findAvailableLottiIds(String username) throws SQLException, ConnectionFailedException {
-    var ids = new ArrayList<Long>();
+  public List<Lotto> findAvailableLotti(String username) throws SQLException, ConnectionFailedException {
+    var lotti = new ArrayList<Lotto>();
 
     var sql = """
         (
-          SELECT id_lotto
+          SELECT *
           FROM lotto AS lotti_utente
           WHERE username_prop = ?
         )
@@ -132,7 +137,7 @@ public class ProprietarioDao extends DaoBase {
         EXCEPT 
 
         (
-          SELECT lotti_utente.id_lotto
+          SELECT lotti_utente.*
           FROM (SELECT * FROM progetto WHERE username_prop=? AND data_fine IS NULL) AS progetti_utente
           JOIN (SELECT * FROM lotto WHERE username_prop=?) AS lotti_utente ON progetti_utente.id_lotto = lotti_utente.id_lotto
         )
@@ -146,12 +151,18 @@ public class ProprietarioDao extends DaoBase {
       var result = stmt.executeQuery();
 
       while (result.next()) {
-        ids.add(result.getLong(1));
+        lotti.add(new Lotto(
+          result.getLong(1),
+          result.getString(2),
+          result.getInt(3),
+          result.getDouble(4),
+          result.getString(5)
+        ));
       }
 
     }
 
-    return ids;
+    return lotti;
   }
 
 //    public boolean checkProprietarioExists(String email, String password) {

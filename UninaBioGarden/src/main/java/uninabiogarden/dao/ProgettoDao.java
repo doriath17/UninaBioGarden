@@ -32,23 +32,24 @@ public class ProgettoDao extends DaoBase {
       if (result.first()) {
         var dataFine = result.getDate(4);
 
-        return Progetto.createFromDB(
-          id_progetto,
-          result.getString(2),
-          result.getDate(3).toLocalDate(),
-          (dataFine != null ? dataFine.toLocalDate() : null),
-          result.getString(5),
-          prop,
-          result.getLong(7)
-        );
+        return new Progetto();
+
+        // return new Progetto(
+        //   id_progetto,
+        //   result.getString(2),
+        //   result.getDate(3).toLocalDate(),
+        //   (dataFine != null ? dataFine.toLocalDate() : null),
+        //   result.getString(5),
+        //   prop.getUsername(),
+        //   result.getLong(7)
+        // );
       } else {
         throw new NoDataFoundException();
       }
     }
-
   }
 
-  public void update(Long id_progetto, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione) throws ConnectionFailedException {
+  public void update(Progetto toUpdate) throws ConnectionFailedException {
     var sql = """
       UPDATE 
         progetto
@@ -60,11 +61,12 @@ public class ProgettoDao extends DaoBase {
 
     try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql)){
-      stmt.setString(1, nome);
-      stmt.setDate(2, Date.valueOf(dataInizio));
-      stmt.setDate(3, Date.valueOf(dataFine));
-      stmt.setString(4, descrizione);
-      stmt.setLong(5, id_progetto);
+
+      stmt.setString(1, toUpdate.getNome());
+      stmt.setDate(2, Date.valueOf(toUpdate.getDataInizio()));
+      stmt.setDate(3, toSqlDate(toUpdate.getDataFine()));
+      stmt.setString(4, toUpdate.getDescrizione());
+      stmt.setLong(5, toUpdate.getId());
 
       stmt.executeUpdate();
     } catch(SQLException e) {
@@ -90,8 +92,7 @@ public class ProgettoDao extends DaoBase {
       stmt.setString(1, newProgetto.getNome());
       stmt.setDate(2, Date.valueOf(newProgetto.getDataInizio()));
 
-      var dataFine = newProgetto.getDataFine() == null ? null : Date.valueOf(newProgetto.getDataFine());
-      stmt.setDate(3, dataFine);
+      stmt.setDate(3, toSqlDate(newProgetto.getDataFine()));
       stmt.setString(4, newProgetto.getDescrizione());
       stmt.setString(5, newProgetto.getProprietario().getUsername());
       stmt.setLong(6, newProgetto.getLotto().getId());
@@ -101,5 +102,8 @@ public class ProgettoDao extends DaoBase {
     }
   }
 
+  private Date toSqlDate(LocalDate dataFine) {
+    return dataFine != null ? Date.valueOf(dataFine) : null;
+  }
 
 }

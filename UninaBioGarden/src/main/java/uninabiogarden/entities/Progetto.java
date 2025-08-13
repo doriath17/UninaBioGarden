@@ -2,10 +2,6 @@ package uninabiogarden.entities;
 
 import java.time.LocalDate;
 
-import uninabiogarden.dto.ProgettoDto;
-import uninabiogarden.exceptions.EmptyValueException;
-import uninabiogarden.exceptions.WrongDataFineException;
-
 public class Progetto {
   Long id;
   String nome;
@@ -15,7 +11,22 @@ public class Progetto {
   Proprietario proprietario; // considera rimuovere questo campo
   Lotto lotto;
 
-  private Progetto(String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione, Proprietario proprietario, Lotto lotto)  {
+  public Progetto() {
+
+  }
+
+  public Progetto(Progetto source) {
+    this.id = source.id;
+    this.nome = source.nome;
+    this.dataInizio = source.dataInizio;
+    this.dataFine = source.dataFine;
+    this.descrizione = source.descrizione;
+    this.proprietario = source.proprietario;
+    this.lotto = source.lotto;
+  }
+
+  public Progetto(Long id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione, Proprietario proprietario, Lotto lotto)  {
+    this.id = id;
     this.nome = nome;
     this.dataInizio = dataInizio;
     this.dataFine = dataFine;
@@ -24,32 +35,8 @@ public class Progetto {
     this.lotto = lotto;
   }
 
-  public static Progetto createFromDB(Long id, String nome, LocalDate dataInizio, LocalDate dataFine, String descrizione,  Proprietario prop, Long id_lotto) {
-    var lotto = prop.findLottoById(prop.getLotti(), id_lotto);
-    if (lotto == null) {
-      System.err.println("Problems in findAllLotti of ProprietarioDao class: not all lotti were found");
-      System.exit(1);
-    }
-    var p = new Progetto(nome, dataInizio, dataFine, descrizione, prop, lotto);
-    p.setId(id);
-    return p;
-  }
-
-  public static Progetto createFromDto(ProgettoDto dto, Proprietario prop) {
-    var lotto = prop.findLottoById(prop.getLotti(), dto.id_lotto());
-    if (lotto == null) {
-      System.err.println("Problems in findAllLotti of ProprietarioDao class: not all lotti were found");
-      System.exit(1);
-    }
-
-    return new Progetto(
-      dto.nome(),
-      dto.dataInizio(),
-      dto.dataFine(),
-      dto.descrizione(),
-      prop,
-      lotto
-    );
+  public boolean isTerminated() {
+    return dataFine != null;
   }
 
   public Long getId() {
