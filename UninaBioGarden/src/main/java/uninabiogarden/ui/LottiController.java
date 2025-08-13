@@ -86,8 +86,12 @@ public class LottiController extends ControllerBase {
   /// 
 
   @FXML public void update() {
+    var index = tableView.getSelectionModel().getSelectedIndex();
+    if (index == -1) {
+      showErrorMessage("Nessun lotto selezionato");
+      return;
+    }
     try {
-      var index = tableView.getSelectionModel().getSelectedIndex();
       var lottoToUpdate = getFormData();
       lottoToUpdate.setId(tableView.getSelectionModel().getSelectedItem().getId());
       context.getLottoService().update(lottoToUpdate);
@@ -103,7 +107,12 @@ public class LottiController extends ControllerBase {
   }
 
   @FXML public void delete() {
-
+    var index = tableView.getSelectionModel().getSelectedIndex();
+    if (index == -1) {
+      showErrorMessage("Nessun lotto selezionato");
+      return;
+    }
+    
   }
 
   @FXML public void add() {
@@ -152,6 +161,7 @@ public class LottiController extends ControllerBase {
 
   @FXML private void back(){
     homeController.openHomeContent();
+    clearUIContent();
   }
 
   ///
@@ -171,9 +181,10 @@ public class LottiController extends ControllerBase {
     );
   }
 
-  void clear() {
+  void clearUIContent() {
+    clearMessage();
     clearForm();
-    lotti.clear();
+    clearMessage();
   }
 
   public static void addCodiceLottoFilter(TextField textField) {
@@ -213,5 +224,14 @@ public class LottiController extends ControllerBase {
     errorLabel.setStyle("-fx-text-fill: rgba(0, 143, 59, 1)");
     errorLabel.setText(message);
   }
+
+  void clearMessage() {
+    errorLabel.setText("");
+  }
+
+  void clearSelection() {
+    tableView.getSelectionModel().clearSelection();
+  }
+
   
 }

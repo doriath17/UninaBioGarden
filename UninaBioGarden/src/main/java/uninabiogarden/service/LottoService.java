@@ -47,13 +47,12 @@ public class LottoService {
     lottoDao.update(lottoToUpdate);
   }
 
-  public void insert(Lotto lotto) {
-
-  }
-
   public void delete(Lotto lotto) {
 
   }
 
+  public void insert(Lotto lotto) {
+
+  }
 
 }

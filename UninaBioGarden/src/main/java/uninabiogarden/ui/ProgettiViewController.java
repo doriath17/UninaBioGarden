@@ -279,9 +279,10 @@ public class ProgettiViewController extends ControllerBase {
     clearSelection();
   }
 
-  void clear() {
+  void clearUIContent() {
+    clearMessage();
+    clearSelection();
     clearForm();
-    progettiObsList.clear();
   }
 
   AvailableLottiController getAvailableLottiController() {
@@ -331,6 +332,10 @@ public class ProgettiViewController extends ControllerBase {
   void showSuccessMessage(String message) {
     errorLabel.setStyle("-fx-text-fill: rgba(0, 143, 59, 1)");
     errorLabel.setText(message);
+  }
+
+  void clearMessage() {
+    errorLabel.setText("");
   }
 
 }

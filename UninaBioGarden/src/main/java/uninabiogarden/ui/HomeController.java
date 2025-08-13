@@ -92,8 +92,8 @@ public class HomeController extends ContentController {
 
   private void clearUIContent() {
     usernameLabel.setText("");
-    getLottiController().clear();
-    getProgettiController().clear();
+    getLottiController().clearUIContent();
+    getProgettiController().clearUIContent();
   }
 
   @FXML private void logout(){
