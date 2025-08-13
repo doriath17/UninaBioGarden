@@ -7,6 +7,7 @@ public class Lotto {
   private String codice;
   private Double estensione;
   private String orto;
+  private Proprietario proprietario;
 
   public Lotto(Long id, String indirizzo, String codice, Double estensione, String orto) {
     this.id = id;
@@ -54,6 +55,14 @@ public class Lotto {
 
   public void setOrto(String orto) {
     this.orto = orto;
+  }
+
+  public Proprietario getProprietario() {
+    return proprietario;
+  }
+
+  public void setProprietario(Proprietario proprietario) {
+    this.proprietario = proprietario;
   }
 
 }

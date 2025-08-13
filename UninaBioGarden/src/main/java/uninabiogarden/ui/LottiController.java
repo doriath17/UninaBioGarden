@@ -76,8 +76,10 @@ public class LottiController extends ControllerBase {
       @Override
       public void changed(ObservableValue<? extends Lotto> observable, Lotto oldValue, Lotto newValue) {
         if (newValue != null) {
-          if (formForSelection)
-          fillForm(newValue);
+          if (formForSelection){
+            clearMessage();
+            fillForm(newValue);
+          }
         }
       }
     });
@@ -125,21 +127,39 @@ public class LottiController extends ControllerBase {
       showErrorMessage("Nessun lotto selezionato");
       return;
     }
-    var lottoToDelete = lotti.get(index);
     try {
+      var lottoToDelete = lotti.get(index);
       context.getLottoService().delete(lottoToDelete);
+      lotti.remove(index);
+      showSuccessMessage("Lotto cancellato!");
     } catch (ConnectionFailedException e) {
       showErrorMessage(e.getMessage());
     } catch (SQLException e) {
       System.err.println(e.getMessage());
       e.printStackTrace();
       showErrorMessage("Errore dal database durante la cancellazione");
-    } 
-    showSuccessMessage("Lotto cancellato!");
+    }
   }
 
   @FXML public void add() {
-
+    try {
+      var lotto = getFormData();
+      lotto.setProprietario(context.getAppState().getLoggedInProprietario());
+      context.getLottoService().insert(lotto);
+      lotti.add(lotto);
+      showSuccessMessage("Nuovo lotto inserito!");
+    } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
+      showErrorMessage(e.getMessage());
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("23505")) {
+        showErrorMessage("Un lotto con questo indirizzo e codice esiste già");
+      } else {
+        System.err.println(e.getSQLState());
+        System.err.println(e.getMessage());
+        e.printStackTrace();
+        showErrorMessage("Errore dal database durante l'inserimento");
+      }
+    }
   }
 
   ///

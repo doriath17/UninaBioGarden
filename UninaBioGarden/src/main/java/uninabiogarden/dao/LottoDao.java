@@ -33,5 +33,18 @@ public class LottoDao extends DaoBase {
     }
   }
   
+  public void insert(Lotto lottoToInsert) throws SQLException, ConnectionFailedException {
+    var sql = "INSERT INTO lotto (indirizzo, codice_lotto, estensione, nome_orto, username_prop) VALUES (?, ?, ?, ?, ?)";
+
+    try (var conn = database.getConnection();
+      var stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, lottoToInsert.getIndirizzo());
+      stmt.setString(2, lottoToInsert.getCodice());
+      stmt.setDouble(3, lottoToInsert.getEstensione());
+      stmt.setString(4, lottoToInsert.getOrto());
+      stmt.setString(5, lottoToInsert.getProprietario().getUsername());
+      stmt.executeUpdate();
+    }
+  }
   
 }

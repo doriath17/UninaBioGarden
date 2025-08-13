@@ -51,8 +51,9 @@ public class LottoService {
     lottoDao.delete(lotto);
   }
 
-  public void insert(Lotto lotto) {
-
+  public void insert(Lotto lottoToInsert) throws MissingFieldException, FormatException, SQLException, ConnectionFailedException {
+    basicCheck(lottoToInsert);
+    lottoDao.insert(lottoToInsert);
   }
 
 }
