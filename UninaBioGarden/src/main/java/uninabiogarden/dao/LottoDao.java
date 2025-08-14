@@ -2,14 +2,17 @@ package uninabiogarden.dao;
 
 import java.sql.SQLException;
 
-import uninabiogarden.core.Database;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.exceptions.ConnectionFailedException;
 
-public class LottoDao extends DaoBase {
+public class LottoDao {
+  private static final LottoDao instance = new LottoDao();
+  private final Database database = Database.getInstance();
 
-  public LottoDao(Database database) {
-    super(database);
+  private LottoDao() {}
+
+  public static LottoDao getInstance() {
+    return instance;
   }
 
   public void update(Lotto lottoToUpdate) throws SQLException, ConnectionFailedException {

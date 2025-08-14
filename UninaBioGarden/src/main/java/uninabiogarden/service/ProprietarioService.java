@@ -6,50 +6,33 @@ import java.util.List;
 import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
-import uninabiogarden.entities.Proprietario;
-import uninabiogarden.exceptions.WrongUsernameException;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.NoDataFoundException;
-import uninabiogarden.exceptions.WrongPasswordException;
 
 public class ProprietarioService {
-  ProprietarioDao proprietarioDao;
 
-  public ProprietarioService(ProprietarioDao  proprietarioDao) {
-    this.proprietarioDao = proprietarioDao;
+  private static final ProprietarioService instance = new ProprietarioService();
+  private final LoginService loginService = LoginService.getInstance(); 
+  private final ProprietarioDao proprietarioDao = ProprietarioDao.getInstance();
+
+  private ProprietarioService() {}
+
+  public static ProprietarioService getInstance() {
+    return instance;
   }
 
-  public Proprietario authenticate(String username, String password) 
-    throws ConnectionFailedException,
-    WrongUsernameException,
-    WrongPasswordException, SQLException
-  {
-    var p = proprietarioDao.authenticate(username, password);
-    // try {
-    //   // p.setLotti(this.requestLottiFor(p.getUsername()));
-    //   // p.setProgetti(this.requestProgettiFor(p));
-    //   // p.setAvailableLotti(this.requestAvailableLottiIdsFor(username));
-    // } catch (NoDataFoundException e) {
-    //   System.err.println("when trying to authenticate proprietario: " + e.getMessage());
-    // }
-    return p;
+  public List<Lotto> requestLotti() throws ConnectionFailedException, NoDataFoundException {
+    return proprietarioDao.findAllLotti(loginService.getUsername());
   }
 
-  public List<Lotto> requestLottiFor(String username) throws ConnectionFailedException, NoDataFoundException{
-    return proprietarioDao.findAllLotti(username);
+  public List<Progetto> requestProgetti() throws ConnectionFailedException, NoDataFoundException {
+    return proprietarioDao.findAllProgetti(loginService.getLoggedInProprietario());
   }
 
-  public List<Progetto> requestProgettiFor(Proprietario proprietario) throws ConnectionFailedException, NoDataFoundException {
-    return proprietarioDao.findAllProgetti(proprietario);
+  public List<Lotto> requestAvailableLotti() throws SQLException, ConnectionFailedException {
+    return proprietarioDao.findAvailableLotti(loginService.getLoggedInProprietario().getUsername());
   }
 
-  public List<Long> requestAvailableLottiIdsFor(String username) throws SQLException, ConnectionFailedException {
-    // return proprietarioDao.findAvailableLottiIds(username);
-    return null;
-  }
 
-  public List<Lotto> requestAvailableLottiFor(String username) throws SQLException, ConnectionFailedException {
-    return proprietarioDao.findAvailableLotti(username);
-  }
 
 }

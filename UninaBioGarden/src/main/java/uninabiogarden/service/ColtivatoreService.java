@@ -8,12 +8,15 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class ColtivatoreService {
   
-  ColtivatoreDao coltivatoreDao;
+  private static final ColtivatoreService instance = new ColtivatoreService();
+  private final ColtivatoreDao coltivatoreDao = ColtivatoreDao.getInstance();
 
-  public ColtivatoreService(ColtivatoreDao coltivatoreDao) {
-    this.coltivatoreDao = coltivatoreDao;
+  private ColtivatoreService() {}
+
+  public static ColtivatoreService getInstance() {
+    return instance;
   }
-
+ 
   public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
     return (Coltivatore) coltivatoreDao.authenticate(username, password);
   }

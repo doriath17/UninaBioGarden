@@ -10,12 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import uninabiogarden.core.LoginSession.UserType;
-import uninabiogarden.entities.Coltivatore;
-import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
+import uninabiogarden.service.LoginService;
 
 public class LoginController extends ControllerBase {
   @FXML VBox root;
@@ -25,7 +23,9 @@ public class LoginController extends ControllerBase {
   @FXML CheckBox propCheckBox;
   @FXML CheckBox coltCheckBox;
 
+  // dependency
   MainController mainController;
+  LoginService loginService = LoginService.getInstance();
 
   @SuppressWarnings("exports")
   public VBox getRoot() {
@@ -52,32 +52,16 @@ public class LoginController extends ControllerBase {
     });
   }
 
-  private void loginProprietario()
-    throws ConnectionFailedException,
-    WrongUsernameException,
-    WrongPasswordException, SQLException
-  {
-    Proprietario p = context.getProprietarioService().authenticate(usernameField.getText(), passwordField.getText());
-    context.getSession().login(p.getUsername(), UserType.PROPRIETARIO);
-    context.getAppState().setLoggedInProprietario(p);
-  }
-
-  private void loginColtivatore() 
-    throws ConnectionFailedException,
-    WrongUsernameException,
-    WrongPasswordException
-  {
-    Coltivatore c = context.getColtivatoreService().authenticate(usernameField.getText(), passwordField.getText());
-    context.getSession().login(c.getUsername(), UserType.COLTIVATORE);
-    context.getAppState().setLoggedInColtivatore(c);
-  }
-
   @FXML void login() {
     try {
       if (propCheckBox.isSelected()) {
-        loginProprietario();
+        loginService.authenticateProprietario(
+          usernameField.getText(), passwordField.getText()
+        );
       } else if (coltCheckBox.isSelected()) {
-        loginColtivatore();
+        loginService.authenticateColtivatore(
+          usernameField.getText(), passwordField.getText()
+        );
       } else {
         errorLabel.setText("Must select either Proprietario or Coltivatore");
         return;

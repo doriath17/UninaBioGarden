@@ -9,10 +9,15 @@ import uninabiogarden.exceptions.FormatException;
 import uninabiogarden.exceptions.MissingFieldException;
 
 public class LottoService {
-  private final LottoDao lottoDao;
 
-  public LottoService(LottoDao lottoDao) {
-    this.lottoDao = lottoDao;
+  private static final LottoService instance = new LottoService();
+  private final LoginService loginService = LoginService.getInstance();
+  private final LottoDao lottoDao = LottoDao.getInstance();
+
+  private LottoService() {}
+
+  public static LottoService getInstance() {
+    return instance;
   }
 
   private static final int INDIRIZZO_MAX_LENGTH = 80;

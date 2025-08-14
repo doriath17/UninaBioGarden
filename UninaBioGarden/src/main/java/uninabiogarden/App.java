@@ -2,7 +2,6 @@ package uninabiogarden;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import uninabiogarden.core.ApplicationContext;
 import uninabiogarden.ui.ControllerBase;
 import uninabiogarden.ui.MainController;
 
@@ -11,14 +10,12 @@ import uninabiogarden.ui.MainController;
  */
 public class App extends Application {
 
-  private ApplicationContext context;
   private MainController mainController;
 
   @Override
   public void init() {
     try {
-      context = new ApplicationContext();
-      mainController = (MainController) ControllerBase.loadController("MainView.fxml", context);
+      mainController = (MainController) ControllerBase.loadController("MainView.fxml");
     } catch (Exception e) {
       e.printStackTrace();
       System.exit(1);

@@ -27,6 +27,9 @@ import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.exceptions.WrongDataFineException;
+import uninabiogarden.service.LoginService;
+import uninabiogarden.service.ProgettoService;
+import uninabiogarden.service.ProprietarioService;
 
 public class ProgettiViewController extends ControllerBase {
 
@@ -34,13 +37,12 @@ public class ProgettiViewController extends ControllerBase {
   
   @FXML VBox tableViewRoot;
   @FXML VBox progettiTableView;
-  AvailableLottiController availableLottiController;
   
   @FXML TableView<Progetto> tableView;
   @FXML TableColumn<String, String> nomeCol;
   @FXML TableColumn<LocalDate, String> dataInizioCol;
   @FXML TableColumn<LocalDate, String> dataFineCol;
-
+  
   // FORM
   @FXML TextField nomeField;
   @FXML DatePicker dataInizioField;
@@ -48,8 +50,13 @@ public class ProgettiViewController extends ControllerBase {
   @FXML TextField indirizzoLottoField;
   @FXML TextField codiceLottoField;
   @FXML TextArea descrizioneField;
-
+  
+  // dependencies
   HomeController homeController;
+  AvailableLottiController availableLottiController;
+  LoginService loginService = LoginService.getInstance();
+  ProprietarioService proprietarioService = ProprietarioService.getInstance();
+  ProgettoService progettoService = ProgettoService.getInstance();
 
   @FXML Label errorLabel;
 
@@ -119,7 +126,7 @@ public class ProgettiViewController extends ControllerBase {
       progettoToUpdate.setDescrizione(descrizioneField.getText());
 
       try {
-        context.getProgettoService().update(progettoToUpdate);
+        progettoService.update(progettoToUpdate);
         progettiObsList.set(selectedIndex, progettoToUpdate);
         showSuccessMessage("Progetto aggiornato!");
       } catch (ConnectionFailedException | WrongDataFineException | MissingFieldException e) {
@@ -140,7 +147,7 @@ public class ProgettiViewController extends ControllerBase {
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
       try {
-        context.getProgettoService().delete(p.getId());
+        progettoService.delete(p.getId());
         progettiObsList.remove(selectedIndex);
         if (!p.isTerminated()) {
           getAvailableLottiController().availableLotti.add(p.getLotto());
@@ -166,7 +173,7 @@ public class ProgettiViewController extends ControllerBase {
       var newProgetto = getFormData();
       newProgetto.setLotto(lotto);
 
-      context.getProgettoService().create(newProgetto);
+      progettoService.create(newProgetto);
 
       progettiObsList.add(newProgetto);
       getAvailableLottiController().availableLotti.remove(lotto);
@@ -195,7 +202,7 @@ public class ProgettiViewController extends ControllerBase {
       dataInizioField.getValue(),
       dataFineField.getValue(),
       descrizioneField.getText(),
-      context.getAppState().getLoggedInProprietario(),
+      loginService.getLoggedInProprietario(),
       null
     );
   }
@@ -317,11 +324,7 @@ public class ProgettiViewController extends ControllerBase {
   /// 
   
   void loadProgetti() throws ConnectionFailedException, NoDataFoundException {
-    progettiObsList.setAll(
-      context.getProprietarioService().requestProgettiFor(
-        context.getAppState().getLoggedInProprietario()
-      )
-    );
+    progettiObsList.setAll(proprietarioService.requestProgetti());
   }
 
   void showErrorMessage(String message) {

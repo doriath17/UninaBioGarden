@@ -4,16 +4,20 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import uninabiogarden.core.Database;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.NoDataFoundException;
 
-public class ProgettoDao extends DaoBase {
+public class ProgettoDao {
 
-  public ProgettoDao(Database db) {
-    super(db);
+  private static final ProgettoDao instance = new ProgettoDao();
+  private final Database database = Database.getInstance();
+
+  private ProgettoDao() {}
+
+  public static ProgettoDao getInstance() {
+    return instance;
   }
 
   public Progetto read(Long id_progetto, Proprietario prop) throws SQLException, ConnectionFailedException, NoDataFoundException {

@@ -3,10 +3,11 @@ package uninabiogarden.ui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import uninabiogarden.core.LoginSession.UserType;
+import uninabiogarden.service.LoginService.UserType;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.service.ColtivatoreService;
+import uninabiogarden.service.LoginService;
 import uninabiogarden.service.ProprietarioService;
 
 public class HomeController extends ContentController {
@@ -24,7 +25,9 @@ public class HomeController extends ContentController {
   LottiController             lottiController;
   ProgettiViewController      progettiViewController;
 
+  // dependencies
   MainController mainController;
+  LoginService loginService = LoginService.getInstance();
 
   @SuppressWarnings("exports")
   @Override
@@ -86,8 +89,7 @@ public class HomeController extends ContentController {
   /// 
 
   private void clearState() {
-    context.getSession().logout();
-    context.getAppState().clear();
+    loginService.logout();
   }
 
   private void clearUIContent() {
@@ -112,10 +114,10 @@ public class HomeController extends ContentController {
   @SuppressWarnings("incomplete-switch")
   void openHomeContent() {
     if (usernameLabel.getText().equals("") || usernameLabel.getText() == null){
-      usernameLabel.setText(context.getSession().getUsername());
+      usernameLabel.setText(loginService.getUsername());
     }
 
-    switch (context.getSession().getCurrType()) {
+    switch (loginService.getLoggedInType()) {
       case UserType.PROPRIETARIO: 
         setActiveContent(getProprietarioHomeController());
         break;

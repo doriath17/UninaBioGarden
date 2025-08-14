@@ -2,16 +2,20 @@ package uninabiogarden.dao;
 
 import java.sql.*;
 
-import uninabiogarden.core.Database;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ColtivatoreDao extends DaoBase {
+public class ColtivatoreDao {
 
-  public ColtivatoreDao(Database database) {
-    super(database);
+  private static final ColtivatoreDao instance = new ColtivatoreDao();
+  private final Database database = Database.getInstance();
+
+  private ColtivatoreDao() {}
+
+  public static ColtivatoreDao getInstance() {
+    return instance;
   }
 
   public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {

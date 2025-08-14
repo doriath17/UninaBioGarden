@@ -4,17 +4,19 @@ import java.sql.SQLException;
 
 import uninabiogarden.dao.ProgettoDao;
 import uninabiogarden.entities.Progetto;
-import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.WrongDataFineException;
 
 public class ProgettoService {
-  ProgettoDao progettoDao;
 
-  public ProgettoService(ProgettoDao progettoDao) {
-    this.progettoDao = progettoDao;
-  }
+  private static final ProgettoService instance = new ProgettoService();
+  private final LoginService loginService = LoginService.getInstance();
+  private final ProgettoDao progettoDao = ProgettoDao.getInstance();
+
+  private ProgettoService() {}
+
+  public static ProgettoService getInstance() {return instance;}
 
   private void basicCheck(Progetto toCheck) throws MissingFieldException, WrongDataFineException {
     if (Constraint.checkNotEmptyValue(toCheck.getNome())) {

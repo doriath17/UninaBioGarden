@@ -2,7 +2,6 @@ package uninabiogarden.dao;
 
 import java.sql.SQLException;
 
-import uninabiogarden.core.Database;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;

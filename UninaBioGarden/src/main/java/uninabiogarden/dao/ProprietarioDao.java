@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import uninabiogarden.core.Database;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
@@ -13,10 +12,15 @@ import uninabiogarden.exceptions.NoDataFoundException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
-public class ProprietarioDao extends DaoBase {
+public class ProprietarioDao {
 
-  public ProprietarioDao(Database database) {
-    super(database);
+  private static final ProprietarioDao instance = new ProprietarioDao();
+  private final Database database = Database.getInstance();
+
+  private ProprietarioDao() {}
+
+  public static ProprietarioDao getInstance() {
+    return instance;
   }
 
   public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {

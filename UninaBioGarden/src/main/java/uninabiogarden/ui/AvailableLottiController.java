@@ -12,9 +12,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
-import uninabiogarden.entities.Progetto;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
+import uninabiogarden.service.ProprietarioService;
 
 public class AvailableLottiController extends ControllerBase {
 
@@ -23,7 +23,9 @@ public class AvailableLottiController extends ControllerBase {
   @FXML TableColumn<String, String> indirizzoCol;
   @FXML TableColumn<Integer, String> codiceCol;
 
+  // dependencies
   ProgettiViewController progettiViewController;
+  ProprietarioService proprietarioService = ProprietarioService.getInstance();
 
   ObservableList<Lotto> availableLotti = 
     FXCollections.observableArrayList();
@@ -52,8 +54,9 @@ public class AvailableLottiController extends ControllerBase {
 
   void loadAvailableLotti() {
     try {
-      var list = context.getProprietarioService().requestAvailableLottiFor(context.getSession().getUsername());
-      availableLotti.setAll(list);
+      availableLotti.setAll(
+        proprietarioService.requestAvailableLotti()
+      );
     } catch (SQLException | ConnectionFailedException e) {
       System.err.println(e.getMessage());
       e.printStackTrace();

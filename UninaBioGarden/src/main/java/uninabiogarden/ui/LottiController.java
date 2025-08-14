@@ -25,6 +25,9 @@ import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.FormatException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
+import uninabiogarden.service.LoginService;
+import uninabiogarden.service.LottoService;
+import uninabiogarden.service.ProprietarioService;
 
 public class LottiController extends ControllerBase {
   @FXML VBox root;
@@ -44,7 +47,11 @@ public class LottiController extends ControllerBase {
 
   @FXML Label errorLabel;
 
+  // dependencies
   HomeController homeController;
+  LoginService loginService = LoginService.getInstance();
+  ProprietarioService proprietarioService = ProprietarioService.getInstance();
+  LottoService lottoService = LottoService.getInstance();
 
   Parent activeView;
   
@@ -108,7 +115,7 @@ public class LottiController extends ControllerBase {
     try {
       var lottoToUpdate = getFormData();
       lottoToUpdate.setId(tableView.getSelectionModel().getSelectedItem().getId());
-      context.getLottoService().update(lottoToUpdate);
+      lottoService.update(lottoToUpdate);
       lotti.set(index, lottoToUpdate);
       showSuccessMessage("Lotto aggiornato!");
     } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
@@ -128,7 +135,7 @@ public class LottiController extends ControllerBase {
     }
     try {
       var lottoToDelete = lotti.get(index);
-      context.getLottoService().delete(lottoToDelete);
+      lottoService.delete(lottoToDelete);
       lotti.remove(index);
       showSuccessMessage("Lotto cancellato!");
     } catch (ConnectionFailedException e) {
@@ -142,10 +149,10 @@ public class LottiController extends ControllerBase {
 
   @FXML public void add() {
     try {
-      var lotto = getFormData();
-      lotto.setProprietario(context.getAppState().getLoggedInProprietario());
-      context.getLottoService().insert(lotto);
-      lotti.add(lotto);
+      var lottoToInsert = getFormData();
+      lottoToInsert.setProprietario(loginService.getLoggedInProprietario());
+      lottoService.insert(lottoToInsert);
+      lotti.add(lottoToInsert);
       showSuccessMessage("Nuovo lotto inserito!");
     } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
       showErrorMessage(e.getMessage());
@@ -245,11 +252,7 @@ public class LottiController extends ControllerBase {
 
   void loadLotti() 
   throws ConnectionFailedException, NoDataFoundException {
-    lotti.setAll(
-      context.getProprietarioService().requestLottiFor(
-        context.getSession().getUsername()
-      )
-    );
+    lotti.setAll(proprietarioService.requestLotti());
   }
 
   void clearUIContent() {
