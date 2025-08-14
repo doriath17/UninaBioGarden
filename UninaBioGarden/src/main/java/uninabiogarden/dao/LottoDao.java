@@ -1,6 +1,7 @@
 package uninabiogarden.dao;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.exceptions.ConnectionFailedException;
@@ -36,18 +37,28 @@ public class LottoDao {
     }
   }
   
-  public void insert(Lotto lottoToInsert) throws SQLException, ConnectionFailedException {
+  public Long insert(Lotto lottoToInsert) throws SQLException, ConnectionFailedException {
     var sql = "INSERT INTO lotto (indirizzo, codice_lotto, estensione, nome_orto, username_prop) VALUES (?, ?, ?, ?, ?)";
 
     try (var conn = database.getConnection();
-      var stmt = conn.prepareStatement(sql)) {
+      var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
       stmt.setString(1, lottoToInsert.getIndirizzo());
       stmt.setString(2, lottoToInsert.getCodice());
       stmt.setDouble(3, lottoToInsert.getEstensione());
       stmt.setString(4, lottoToInsert.getOrto());
       stmt.setString(5, lottoToInsert.getProprietario().getUsername());
-      stmt.executeUpdate();
+      var rows = stmt.executeUpdate();
+
+      if (rows > 0) {
+        var result = stmt.getGeneratedKeys();
+        result.next();
+        return result.getLong(1);
+      } else {
+        System.err.println("Inserimento fallito");
+        System.exit(1);
+      }
     }
+    return null;
   }
   
 }

@@ -129,6 +129,7 @@ public class HomeController extends ContentController {
 
   void openLottiView() {
     try {
+      getLottiController().clearUIContent();
       getLottiController().loadLotti();
     } catch (ConnectionFailedException e) {
       e.printStackTrace();
@@ -141,6 +142,7 @@ public class HomeController extends ContentController {
 
   void openProgettiView() {
     try {
+      getProgettiController().clearUIContent();
       getProgettiController().loadProgetti();
       getProgettiController().getAvailableLottiController().loadAvailableLotti();
     } catch (ConnectionFailedException e) {

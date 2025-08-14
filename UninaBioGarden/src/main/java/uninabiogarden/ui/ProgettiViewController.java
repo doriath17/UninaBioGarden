@@ -91,6 +91,8 @@ public class ProgettiViewController extends ControllerBase {
       @Override
       public void changed(ObservableValue<? extends Progetto> observable, Progetto oldValue, Progetto newValue) {
         if (newValue != null) {
+          clearMessage();
+          clearForm();
           selectedIndex = tableView.getSelectionModel().getSelectedIndex();
           fillForm(newValue);
         }
@@ -173,7 +175,8 @@ public class ProgettiViewController extends ControllerBase {
       var newProgetto = getFormData();
       newProgetto.setLotto(lotto);
 
-      progettoService.create(newProgetto);
+      var newID = progettoService.create(newProgetto);
+      newProgetto.setId(newID);
 
       progettiObsList.add(newProgetto);
       getAvailableLottiController().availableLotti.remove(lotto);

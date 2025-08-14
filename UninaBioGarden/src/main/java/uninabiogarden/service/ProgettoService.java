@@ -47,9 +47,9 @@ public class ProgettoService {
     progettoDao.delete(id_progetto);
   }
 
-  public void create(Progetto newProgetto) throws WrongDataFineException, MissingFieldException, SQLException, ConnectionFailedException {
+  public Long create(Progetto newProgetto) throws WrongDataFineException, MissingFieldException, SQLException, ConnectionFailedException {
     checkInsert(newProgetto);
-    progettoDao.insert(newProgetto);
+    return progettoDao.insert(newProgetto);
   }
 
 }

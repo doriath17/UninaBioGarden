@@ -2,11 +2,13 @@ package uninabiogarden.dao;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
+import uninabiogarden.exceptions.InsertFailedException;
 import uninabiogarden.exceptions.NoDataFoundException;
 
 public class ProgettoDao {
@@ -86,13 +88,13 @@ public class ProgettoDao {
     }
   }
 
-  public void insert(Progetto newProgetto) throws SQLException, ConnectionFailedException {
+  public Long insert(Progetto newProgetto) throws SQLException, ConnectionFailedException {
     var sql = """
       INSERT INTO progetto (nome, data_inizio, data_fine, descrizione, username_prop, id_lotto) VALUES 
       (?, ?, ?, ?, ?, ?)
       """;
     try (var conn = database.getConnection();
-      var stmt = conn.prepareStatement(sql)){
+      var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
       stmt.setString(1, newProgetto.getNome());
       stmt.setDate(2, Date.valueOf(newProgetto.getDataInizio()));
 
@@ -101,9 +103,18 @@ public class ProgettoDao {
       stmt.setString(5, newProgetto.getProprietario().getUsername());
       stmt.setLong(6, newProgetto.getLotto().getId());
 
+      var rows = stmt.executeUpdate();
 
-      stmt.executeUpdate();
+      if (rows > 0) {
+        var result = stmt.getGeneratedKeys();
+        result.next();
+        return result.getLong(1);
+      } else {
+        System.err.println("Inserimento fallito");
+        System.exit(1);
+      }
     }
+    return null;
   }
 
   private Date toSqlDate(LocalDate dataFine) {

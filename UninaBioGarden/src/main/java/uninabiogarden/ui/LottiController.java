@@ -151,7 +151,10 @@ public class LottiController extends ControllerBase {
     try {
       var lottoToInsert = getFormData();
       lottoToInsert.setProprietario(loginService.getLoggedInProprietario());
-      lottoService.insert(lottoToInsert);
+
+      var newID = lottoService.insert(lottoToInsert);
+      lottoToInsert.setId(newID);
+
       lotti.add(lottoToInsert);
       showSuccessMessage("Nuovo lotto inserito!");
     } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
