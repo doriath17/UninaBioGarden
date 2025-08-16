@@ -1,32 +1,79 @@
 package uninabiogarden.ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import uninabiogarden.entities.Coltivatore;
+import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;
-import java.time.LocalDate;
+import uninabiogarden.exceptions.InvalidUtenteFieldException;
+import uninabiogarden.exceptions.InvalidUtenteFieldException.InvalidUtenteField;
+import uninabiogarden.service.ProprietarioService;
+import uninabiogarden.service.RegistrationService;
 
 public class RegistrationController extends ControllerBase {
 
   @FXML VBox root;
-  // @FXML private DatePicker birthField;
-  // @FXML private TextField capField;
-  // @FXML private TextField numPhoneField;
-  // @FXML private TextField emailField;
-  // @FXML private TextField nameField;
-  // @FXML private ChoiceBox<String> nationalityField;
-  // @FXML private TextField passwordField;
-  // @FXML private TextField residenceField;
-  // @FXML private TextField surnameField;
-  // @FXML private TextField usernameField;
 
+  @FXML CheckBox proprietarioCheckBox;
+  @FXML CheckBox coltivatoreCheckBox;
+
+  @FXML TextField usernameField;
+  @FXML TextField passwordField;
+  @FXML TextField emailField;
+  @FXML TextField nomeField;
+  @FXML TextField cognomeField;
+  @FXML TextField numTelField;
+  @FXML TextField residenceField;
+
+  @FXML DatePicker bdayPicker;
+  @FXML ChoiceBox nationalityChoiceBox;
+
+  @FXML Label usernameErrorLabel;
+  @FXML Label passwordErrorLabel;
+  @FXML Label emailErrorLabel;
+  @FXML Label nomeErrorLabel;
+  @FXML Label cognomeErrorLabel;
+  @FXML Label numTelErrorLabel;
+  @FXML Label residenceErrorLabel;
+
+  @FXML Label usernameInfoLabel;
+  @FXML Label passwordInfoLabel;
+
+ 
+  // dependencies
   MainController mainController;
+  RegistrationService registrationService = RegistrationService.getInstance();
 
+
+  private static final String[] fieldRules = {
+    """
+    Regole username:
+    - lettere permesse: [a-z] e [A-Z]
+    - deve iniziare e finire con una lettera
+    - caratteri speciali: - _
+    - può contenere numeri [0-9]
+    - lunghezza minima di 6 caratteri
+    - lunghezza massima di 30 caratteri
+    """,
+    """
+    Regole password:
+    - lettere permesse: [a-z] e [A-Z]
+    - può contenere numeri [0-9]
+    - caratteri speciali: ! @ # $ % ^ & * _ - + = ?
+    - lunghezza minima di 8 caratteri
+    - lunghezza massima di 60 caratteri
+    """,
+  };
 
   @SuppressWarnings("exports")
   @Override
@@ -35,75 +82,149 @@ public class RegistrationController extends ControllerBase {
   }
 
   @FXML private void initialize() {
-    fillNationalityField();
-    // nationalityField.setValue("Italian");
+    proprietarioCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        if (newValue && coltivatoreCheckBox.isSelected()) {
+          coltivatoreCheckBox.setSelected(false);
+        }
+      }
+    });
+    coltivatoreCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        if (newValue && proprietarioCheckBox.isSelected()) {
+          proprietarioCheckBox.setSelected(false);
+        }
+      }
+    });
+
+    setTooltip(usernameInfoLabel, fieldRules[0]);
+    setTooltip(passwordInfoLabel, fieldRules[1]);
+
   }
   
+  ///
+  /// 
+  /// 
+  /// Transitions
+  /// 
+  /// 
+  /// 
 
   @FXML private void returnToLogin() {
+    clearErrorMessages();
     mainController.openLoginView();
   }
 
-  @FXML private void openHomeView() {
+  @FXML private void register() {
+    clearErrorMessages();
 
-      // var utenteBuilder = new Utente.Builder(
-      //   usernameField.getText(),
-      //   passwordField.getText(),
-      //   nameField.getText(),
-      //   surnameField.getText(),
-      //   birthField.getValue(),
-      //   nationalityField.getValue(),
-      //   emailField.getText()
-      // );
-      // utenteBuilder
-      //     .numTel(numPhoneField.getText())
-      //     .residenza(residenceField.getText());
+    try {
+      var newUtente = getFormData();
+      if (proprietarioCheckBox.isSelected()) {
+        registerProprietario((Proprietario) newUtente);
+      } else {
+        registerColtivatore((Coltivatore) newUtente);
+      }
+    } catch (InvalidUtenteFieldException e) {
+      showErrorMessage(e);
+    }
 
-      // controllerManager.controllerDAO.addProprietario(utenteBuilder);
-
-      // controllerManager.openProprietarioHomeView();
-
-  //        if (checkFields()){
-  //            sanitizeFields();
-  //            if(DatabaseManager.proprietarioDAO.addProprietario(usernameField.getText(), emailField.getText(), passwordField.getText(), nameField.getText(), surnameField.getText(), java.sql.Date.valueOf(birthField.getValue()), residenceField.getText(), nationalityField.getValue(), numPhoneField.getText())) {
-  //            } else {
-  //                Alert alert = new Alert(AlertType.ERROR);
-  //                alert.setTitle("Registration Error");
-  //                alert.setHeaderText("Registration Failed");
-  //                alert.setContentText("An error occurred while registering. Please try again.");
-  //                alert.showAndWait();
-  //            }
-  //        }
   }
 
-  private void sanitizeFields() {
-      // usernameField.setText(usernameField.getText().trim());
-      // emailField.setText(emailField.getText().trim());
-      // passwordField.setText(passwordField.getText().trim());
-      // nameField.setText(nameField.getText().trim());
-      // surnameField.setText(surnameField.getText().trim());
-      // residenceField.setText(residenceField.getText().trim());
-      // capField.setText(capField.getText().trim());
-      // numPhoneField.setText(numPhoneField.getText().trim());
-      // // birthField
+  private void registerProprietario(Proprietario newProprietario) throws InvalidUtenteFieldException {
+    registrationService.checkBasic(newProprietario);
   }
 
-  // private boolean checkFields() {
-      // if (usernameField.getText().isEmpty() || emailField.getText().isEmpty() || passwordField.getText().isEmpty() || nameField.getText().isEmpty() || surnameField.getText().isEmpty() || birthField.getValue() == null || capField.getText().isEmpty() || nationalityField.getValue() == null) {
-      //     Alert alert = new Alert(AlertType.WARNING);
-      //     alert.setTitle("Registration Error");
-      //     alert.setHeaderText("Missing Credentials");
-      //     alert.setContentText("One of the field you entered is empty.");
-      //     alert.showAndWait();
-      //     return false;
-      // } else{
-      //     return true;
-      // }
-  // }
+  private void registerColtivatore(Coltivatore newColtivatore) throws InvalidUtenteFieldException {
+    registrationService.checkBasic(newColtivatore);
+  }
 
-  void fillNationalityField() {
-      String[] nationalities = {"Italian", "American", "French", "Spanish", "German", "Chinese", "Japanese", "Indian", "Brazilian", "Russian", "Other"};
-      // nationalityField.getItems().addAll(nationalities);
+  @SuppressWarnings("incomplete-switch")
+  private void showErrorMessage(InvalidUtenteFieldException e) {
+    switch (e.getInv()) {
+      case InvalidUtenteField.USERNAME:
+        usernameErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.PASSWORD:
+        passwordErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.EMAIL:
+        emailErrorLabel.setText(e.getMessage());
+      case InvalidUtenteField.NOME:
+        nomeErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.COGNOME:
+        cognomeErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.NUMTEL:
+        numTelErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.RESIDENZA:
+        residenceErrorLabel.setText(e.getMessage());
+        break;
+    }
+  }
+
+  ///
+  /// 
+  /// 
+  /// Form
+  /// 
+  /// 
+  /// 
+  
+  Utente getFormData() {
+    if (proprietarioCheckBox.isSelected()) {
+      return new Proprietario(
+        usernameField.getText(),
+        passwordField.getText(),
+        emailField.getText(),
+        nomeField.getText(),
+        cognomeField.getText(),
+        bdayPicker.getValue(),
+        (String) nationalityChoiceBox.getValue(),
+        numTelField.getText(),
+        residenceField.getText()
+      );
+    } else {
+      return new Coltivatore(
+        usernameField.getText(),
+        passwordField.getText(),
+        emailField.getText(),
+        nomeField.getText(),
+        cognomeField.getText(),
+        bdayPicker.getValue(),
+        (String) nationalityChoiceBox.getValue(),
+        numTelField.getText(),
+        residenceField.getText()
+      );
+    }
+  }
+
+  ///
+  /// 
+  /// 
+  /// Utility
+  /// 
+  /// 
+  /// 
+  
+  void clearErrorMessages() {
+    usernameErrorLabel.setText("");;
+    passwordErrorLabel.setText("");;
+    emailErrorLabel.setText("");;
+    nomeErrorLabel.setText("");;
+    cognomeErrorLabel.setText("");;
+    numTelErrorLabel.setText("");;
+    residenceErrorLabel.setText("");;
+  }
+
+  void setTooltip(Label label, String fieldRule) {
+    Tooltip t = new Tooltip(fieldRule);
+    t.setShowDelay(Duration.millis(500));
+    label.setTooltip(t);
   }
 
 }

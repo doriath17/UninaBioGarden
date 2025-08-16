@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 public class MainController extends ContentController {
 
   public void simulate() {
-    getLoginController().usernameField.setText("proprietario1");
-    getLoginController().passwordField.setText("pass123");
-    getLoginController().propCheckBox.setSelected(true);
+    openRegistrationView();
+
+    // getLoginController().usernameField.setText("proprietario1");
+    // getLoginController().passwordField.setText("pass123");
+    // getLoginController().propCheckBox.setSelected(true);
     // getLoginController().login();
     // getHomeController().openLottiView();
   }
@@ -73,6 +75,7 @@ public class MainController extends ContentController {
   RegistrationController getRegistrationController() {
     if (registrationController == null) {
       registrationController = (RegistrationController)loadContent("RegistrationView.fxml");
+      registrationController.mainController = this;
     }
     return registrationController;
   }

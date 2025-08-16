@@ -1,5 +1,6 @@
 package uninabiogarden.dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import uninabiogarden.entities.Coltivatore;
@@ -26,27 +27,27 @@ public class UtenteDao {
       } else {
         if (table.equals("proprietario")) {
           return new Proprietario(
-            result.getString(1),
-            result.getString(2),
-            result.getString(3),
-            result.getString(4),
-            result.getDate(5).toLocalDate(),
-            result.getString(6),
-            result.getString(7),
-            result.getString(8),
-            result.getString(9)
+            result.getString("username"),
+            result.getString("password"),
+            result.getString("email"),
+            result.getString("nome"),
+            result.getString("cognome"),
+            result.getDate("bday").toLocalDate(),
+            result.getString("nazionalita"),
+            result.getString("num_tel"),
+            result.getString("residenza")
           );
         } else {
           return new Coltivatore(
-            result.getString(1),
-            result.getString(2),
-            result.getString(3),
-            result.getString(4),
-            result.getDate(5).toLocalDate(),
-            result.getString(6),
-            result.getString(7),
-            result.getString(8),
-            result.getString(9)
+            result.getString("username"),
+            result.getString("password"),
+            result.getString("email"),
+            result.getString("nome"),
+            result.getString("cognome"),
+            result.getDate("bday").toLocalDate(),
+            result.getString("nazionalita"),
+            result.getString("num_tel"),
+            result.getString("residenza")
           );
         }
       }

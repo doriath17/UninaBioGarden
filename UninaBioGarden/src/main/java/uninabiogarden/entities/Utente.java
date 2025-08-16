@@ -6,22 +6,22 @@ public abstract class Utente {
 
   private String username;
   private String password;
+  private String email;
   private String nome;
   private String cognome;
   private LocalDate bday;
   private String nationality;
-  private String email;
   private String numTel;
   private String residenza;
 
-  protected Utente(String username, String password, String nome, String cognome, LocalDate bday, String nationality, String email, String numTel, String residenza) {
+  protected Utente(String username, String password, String email, String nome, String cognome, LocalDate bday, String nationality,  String numTel, String residenza) {
     this.username = username;
     this.password = password;
+    this.email = email;
     this.nome = nome;
     this.cognome = cognome;
     this.bday = bday;
     this.nationality = nationality;
-    this.email = email;
     this.numTel = numTel;
     this.residenza = residenza;
   }

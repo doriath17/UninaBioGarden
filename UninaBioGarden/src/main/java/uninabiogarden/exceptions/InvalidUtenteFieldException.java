@@ -7,9 +7,9 @@ public class InvalidUtenteFieldException extends Exception {
   public enum InvalidUtenteField {
     USERNAME,
     PASSWORD,
+    EMAIL,
     NOME,
     COGNOME,
-    EMAIL,
     BDAY,
     NATIONALITY,
     NUMTEL,

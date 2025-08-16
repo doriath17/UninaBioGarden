@@ -129,6 +129,17 @@
   -fx-text-fill: rgba(136, 0, 0, 1);
 }
 
+.label-info {
+  -fx-alignment: center;
+  -fx-background-color: aliceblue;
+  -fx-border-radius: 100px;
+  -fx-background-radius: 100px;
+  -fx-border-style: solid;
+  -fx-border-size: 2px;
+  -fx-border-color: rgb(156, 156, 156);
+  -fx-font-size: 16px;
+}
+
 /**********************************************/
 
 /* login view */
