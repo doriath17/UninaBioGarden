@@ -12,8 +12,8 @@ public class MainController extends ContentController {
     getLoginController().usernameField.setText("proprietario1");
     getLoginController().passwordField.setText("pass123");
     getLoginController().propCheckBox.setSelected(true);
-    getLoginController().login();
-    getHomeController().openLottiView();
+    // getLoginController().login();
+    // getHomeController().openLottiView();
   }
 
   @FXML VBox root;

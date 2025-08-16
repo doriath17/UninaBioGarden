@@ -45,6 +45,11 @@
   -fx-pref-height: 800px;
 }
 
+.registration-view {
+  -fx-pref-width: 780px;
+  -fx-pref-height: 800px;
+}
+
 .table-view {
   -fx-pref-width: 500px;
   -fx-pref-height: 700px;
@@ -78,12 +83,23 @@
   -fx-background-color: #5b81ff;
 }
 
+.button-info {
+  -fx-background-color: aliceblue;
+  -fx-border-radius: 100px;
+  -fx-background-radius: 100px;
+  -fx-border-style: solid;
+  -fx-border-size: 2px;
+  -fx-border-color: rgb(156, 156, 156);
+  -fx-font-size: 16px;
+}
+
 .text-field {
   -fx-border-color: -fx-text-box-border, rgb(192, 192, 192);
   -fx-border-width: 2px;
   -fx-border-radius: 10px;
   -fx-background-radius: 10px;
   -fx-font-family: monospace;
+  -fx-pref-height: 30px;
 }
 .text-field:focused {
   -fx-background-color: -fx-text-box-border, -fx-focus-color, -fx-background;
@@ -104,6 +120,13 @@
   -fx-alignment: center-left;
   -fx-padding: 10px 20px;
   -fx-font-size: 16px;
+}
+
+.label-error {
+  -fx-alignment: center-right;
+  -fx-padding: 10px 20px;
+  -fx-font-size: 16px;
+  -fx-text-fill: rgba(136, 0, 0, 1);
 }
 
 /**********************************************/
