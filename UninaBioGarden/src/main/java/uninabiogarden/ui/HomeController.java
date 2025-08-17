@@ -116,7 +116,6 @@ public class HomeController extends ContentController {
     if (usernameLabel.getText().equals("") || usernameLabel.getText() == null){
       usernameLabel.setText(loginService.getUsername());
     }
-
     switch (loginService.getLoggedInType()) {
       case UserType.PROPRIETARIO: 
         setActiveContent(getProprietarioHomeController());

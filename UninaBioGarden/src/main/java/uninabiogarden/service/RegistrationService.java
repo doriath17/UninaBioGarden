@@ -59,7 +59,7 @@ public class RegistrationService {
         "Nome mancante", InvalidUtenteField.USERNAME
       );
     }
-    if (!Character.isAlphabetic(username.charAt(0)) || !Character.isAlphabetic(username.charAt(username.length()-1))) {
+    if (!Character.isAlphabetic(username.charAt(0))) {
       throw new InvalidUtenteFieldException("Username deve iniziare e finire con una lettera", InvalidUtenteField.USERNAME);
     }
     if (username.length() < 6) {
@@ -68,7 +68,7 @@ public class RegistrationService {
     if (username.length() > 30) {
       throw new InvalidUtenteFieldException("Username troppo lungo", InvalidUtenteField.USERNAME);
     }
-    if (!username.matches("^[a-zA-Z][a-zA-Z0-9_-]{4,28}[a-zA-Z]$")){
+    if (!username.matches("^[a-zA-Z][a-zA-Z0-9_-]{4,29}$")){
       throw new InvalidUtenteFieldException(
         "Username non valido", InvalidUtenteField.USERNAME
       );  
@@ -133,6 +133,10 @@ public class RegistrationService {
   }
 
   private void checkNumTel(String numTel) throws InvalidUtenteFieldException {
+    if (numTel != null && numTel.isEmpty()) {
+      System.err.println("An empty Utente.numTel should be set to null");
+      throw new InvalidUtenteFieldException("Inserire un numero telefonico", InvalidUtenteField.NUMTEL);
+    }
     if (numTel != null && !numTel.matches("^[0-9]{10}$")){
       throw new InvalidUtenteFieldException("Numero telefonico non valido", InvalidUtenteField.NUMTEL);
     }

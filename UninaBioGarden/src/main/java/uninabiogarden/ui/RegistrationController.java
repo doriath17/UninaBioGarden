@@ -24,6 +24,9 @@ import uninabiogarden.entities.Utente;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.InvalidUtenteFieldException;
 import uninabiogarden.exceptions.InvalidUtenteFieldException.InvalidUtenteField;
+import uninabiogarden.exceptions.WrongPasswordException;
+import uninabiogarden.exceptions.WrongUsernameException;
+import uninabiogarden.service.LoginService;
 import uninabiogarden.service.RegistrationService;
 
 public class RegistrationController extends ControllerBase {
@@ -61,12 +64,13 @@ public class RegistrationController extends ControllerBase {
   // dependencies
   MainController mainController;
   RegistrationService registrationService = RegistrationService.getInstance();
+  LoginService loginService = LoginService.getInstance();
 
   private static final String[] fieldRules = {
     """
     Regole username:
     - lettere permesse: [a-z] e [A-Z]
-    - deve iniziare e finire con una lettera
+    - deve iniziare con una lettera
     - caratteri speciali: - _
     - può contenere numeri [0-9]
     - lunghezza minima di 6 caratteri
@@ -161,11 +165,12 @@ public class RegistrationController extends ControllerBase {
       var newUtente = getFormData();
       if (proprietarioCheckBox.isSelected()) {
         registrationService.registerProprietario((Proprietario) newUtente);
+        loginService.authenticateProprietario(newUtente.getUsername(), newUtente.getPassword());
       } else {
         registrationService.registerColtivatore((Coltivatore) newUtente);
+        loginService.authenticateColtivatore(newUtente.getUsername(), newUtente.getPassword());
       }
-      clearUIContent();
-      showSuccessMessage("Utente registrato!");
+      mainController.openHomeView();      
     } catch (InvalidUtenteFieldException e) {
       showErrorMessage(e);
     } catch (ConnectionFailedException e) {
@@ -179,18 +184,12 @@ public class RegistrationController extends ControllerBase {
         e.printStackTrace();
         errorLabel.setText("Errore dal database durante la registrazione");
       }
-    }
+    } catch (WrongUsernameException | WrongPasswordException e) {
+      errorLabel.setText("Impossibile fare il login");
+      System.err.println(e.getMessage());
+      e.printStackTrace();
+    } 
   }
-
-  ///
-  /// 
-  /// 
-  /// Utilities
-  /// 
-  /// 
-  /// 
-
-
 
   ///
   /// 
@@ -201,6 +200,9 @@ public class RegistrationController extends ControllerBase {
   /// 
   
   Utente getFormData() {
+    var numTel = numTelField.getText().isEmpty() ? null : numTelField.getText();
+    var residence = residenceField.getText().isEmpty() ? null : residenceField.getText();
+
     if (proprietarioCheckBox.isSelected()) {
       return new Proprietario(
         usernameField.getText(),
@@ -210,8 +212,8 @@ public class RegistrationController extends ControllerBase {
         cognomeField.getText(),
         bdayPicker.getValue(),
         (String) nationalityChoiceBox.getValue(),
-        numTelField.getText(),
-        residenceField.getText()
+        numTel,
+        residence
       );
     } else {
       return new Coltivatore(
@@ -222,8 +224,8 @@ public class RegistrationController extends ControllerBase {
         cognomeField.getText(),
         bdayPicker.getValue(),
         (String) nationalityChoiceBox.getValue(),
-        numTelField.getText(),
-        residenceField.getText()
+        numTel,
+        residence
       );
     }
   }
@@ -231,7 +233,7 @@ public class RegistrationController extends ControllerBase {
   ///
   /// 
   /// 
-  /// Utility
+  /// Utilities
   /// 
   /// 
   /// 
