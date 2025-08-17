@@ -311,6 +311,7 @@ public class ProgettiViewController extends ControllerBase {
   }
 
   void showAvailableLottiTable() {
+    getAvailableLottiController().loadAvailableLotti();
     tableViewRoot.getChildren().remove(progettiTableView);
     tableViewRoot.getChildren().add(
       getAvailableLottiController().getRoot()

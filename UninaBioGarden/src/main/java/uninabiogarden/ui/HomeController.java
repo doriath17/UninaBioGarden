@@ -143,7 +143,6 @@ public class HomeController extends ContentController {
     try {
       getProgettiController().clearUIContent();
       getProgettiController().loadProgetti();
-      getProgettiController().getAvailableLottiController().loadAvailableLotti();
     } catch (ConnectionFailedException e) {
       getProgettiController().showErrorMessage(e.getMessage());
     } catch (NoDataFoundException e) {
