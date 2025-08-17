@@ -29,7 +29,7 @@ public class ProprietarioService {
     return proprietarioDao.findAllProgetti(loginService.getLoggedInProprietario());
   }
 
-  public List<Lotto> requestAvailableLotti() throws SQLException, ConnectionFailedException {
+  public List<Lotto> requestAvailableLotti() throws SQLException, ConnectionFailedException, NoDataFoundException {
     return proprietarioDao.findAvailableLotti(loginService.getLoggedInProprietario().getUsername());
   }
 

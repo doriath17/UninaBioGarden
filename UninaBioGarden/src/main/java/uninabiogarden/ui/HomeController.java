@@ -132,11 +132,10 @@ public class HomeController extends ContentController {
       getLottiController().clearUIContent();
       getLottiController().loadLotti();
     } catch (ConnectionFailedException e) {
-      e.printStackTrace();
+      getLottiController().showErrorMessage(e.getMessage());
     } catch (NoDataFoundException e) {
-      e.printStackTrace();
+      getLottiController().showErrorMessage(e.getMessage());
     }
-
     setActiveContent(getLottiController());
   }
 
@@ -146,11 +145,10 @@ public class HomeController extends ContentController {
       getProgettiController().loadProgetti();
       getProgettiController().getAvailableLottiController().loadAvailableLotti();
     } catch (ConnectionFailedException e) {
-      e.printStackTrace();
+      getProgettiController().showErrorMessage(e.getMessage());
     } catch (NoDataFoundException e) {
-      e.printStackTrace();
+      getProgettiController().showErrorMessage(e.getMessage());
     }
-    
     setActiveContent(getProgettiController());
   }
 

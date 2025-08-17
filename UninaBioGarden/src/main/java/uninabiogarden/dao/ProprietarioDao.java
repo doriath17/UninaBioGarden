@@ -132,8 +132,8 @@ public class ProprietarioDao {
     return progetti;
   }
 
-  public List<Lotto> findAvailableLotti(String username) throws SQLException, ConnectionFailedException {
-    var lotti = new ArrayList<Lotto>();
+  public List<Lotto> findAvailableLotti(String username) throws SQLException, ConnectionFailedException, NoDataFoundException {
+    List<Lotto> lotti = null;
 
     var sql = """
         (
@@ -158,6 +158,11 @@ public class ProprietarioDao {
       stmt.setString(3, username);
       var result = stmt.executeQuery();
 
+      if (!result.first()) {
+        throw new NoDataFoundException();
+      }
+
+      lotti = new ArrayList<>();
       while (result.next()) {
         lotti.add(new Lotto(
           result.getLong(1),
