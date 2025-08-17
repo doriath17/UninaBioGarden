@@ -10,6 +10,7 @@ public class MainController extends ContentController {
 
   public void simulate() {
     openRegistrationView();
+    getRegistrationController().simulate();
 
     // getLoginController().usernameField.setText("proprietario1");
     // getLoginController().passwordField.setText("pass123");
@@ -91,6 +92,7 @@ public class MainController extends ContentController {
   }
 
   void openRegistrationView() {
+    getRegistrationController().clearUIContent();
     setActiveContent(getRegistrationController());
   }
 

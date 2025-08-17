@@ -45,4 +45,8 @@ public class ColtivatoreDao {
     return true;
   }
 
+  public String insert(Coltivatore newColtivatore) throws SQLException, ConnectionFailedException {
+    return UtenteDao.insert(database, newColtivatore, "coltivatore");
+  }
+
 }

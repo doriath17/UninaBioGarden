@@ -1,9 +1,15 @@
 package uninabiogarden.ui;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -15,9 +21,9 @@ import javafx.util.Duration;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Proprietario;
 import uninabiogarden.entities.Utente;
+import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.InvalidUtenteFieldException;
 import uninabiogarden.exceptions.InvalidUtenteFieldException.InvalidUtenteField;
-import uninabiogarden.service.ProprietarioService;
 import uninabiogarden.service.RegistrationService;
 
 public class RegistrationController extends ControllerBase {
@@ -36,24 +42,25 @@ public class RegistrationController extends ControllerBase {
   @FXML TextField residenceField;
 
   @FXML DatePicker bdayPicker;
-  @FXML ChoiceBox nationalityChoiceBox;
+  @FXML ChoiceBox<String> nationalityChoiceBox;
 
   @FXML Label usernameErrorLabel;
   @FXML Label passwordErrorLabel;
   @FXML Label emailErrorLabel;
   @FXML Label nomeErrorLabel;
   @FXML Label cognomeErrorLabel;
+  @FXML Label bdayErrorLabel;
+  @FXML Label nationalityErrorLabel;
   @FXML Label numTelErrorLabel;
   @FXML Label residenceErrorLabel;
+  @FXML Label errorLabel;
 
   @FXML Label usernameInfoLabel;
   @FXML Label passwordInfoLabel;
-
  
   // dependencies
   MainController mainController;
   RegistrationService registrationService = RegistrationService.getInstance();
-
 
   private static final String[] fieldRules = {
     """
@@ -74,6 +81,25 @@ public class RegistrationController extends ControllerBase {
     - lunghezza massima di 60 caratteri
     """,
   };
+
+  private final List<String> nationalities = Arrays.asList(
+    "Italiana",
+    "Americana",
+    "Cinese",
+    "Tedesca",
+    "Francese",
+    "Spagnola",
+    "Inglese",
+    "Russa",
+    "Giapponese",
+    "Brasiliana",
+    "Indiana",
+    "Messicana",
+    "Canadese",
+    "Australiana"
+  );
+  
+  private final ObservableList<String> nationalitiesObsList = FXCollections.observableArrayList(nationalities);
 
   @SuppressWarnings("exports")
   @Override
@@ -102,6 +128,12 @@ public class RegistrationController extends ControllerBase {
     setTooltip(usernameInfoLabel, fieldRules[0]);
     setTooltip(passwordInfoLabel, fieldRules[1]);
 
+    ControllerUtility.addDigitsFilter(numTelField);
+
+    nationalityChoiceBox.setItems(nationalitiesObsList);
+    nationalityChoiceBox.setValue(nationalitiesObsList.get(0));
+
+    bdayPicker.setValue(LocalDate.now().minusYears(20));
   }
   
   ///
@@ -120,52 +152,45 @@ public class RegistrationController extends ControllerBase {
   @FXML private void register() {
     clearErrorMessages();
 
+    if (!proprietarioCheckBox.isSelected() && !coltivatoreCheckBox.isSelected()) {
+      errorLabel.setText("Selezionare Proprietario o Coltivatore");
+      return;
+    }
+
     try {
       var newUtente = getFormData();
       if (proprietarioCheckBox.isSelected()) {
-        registerProprietario((Proprietario) newUtente);
+        registrationService.registerProprietario((Proprietario) newUtente);
       } else {
-        registerColtivatore((Coltivatore) newUtente);
+        registrationService.registerColtivatore((Coltivatore) newUtente);
       }
+      clearUIContent();
+      showSuccessMessage("Utente registrato!");
     } catch (InvalidUtenteFieldException e) {
       showErrorMessage(e);
-    }
-
-  }
-
-  private void registerProprietario(Proprietario newProprietario) throws InvalidUtenteFieldException {
-    registrationService.checkBasic(newProprietario);
-  }
-
-  private void registerColtivatore(Coltivatore newColtivatore) throws InvalidUtenteFieldException {
-    registrationService.checkBasic(newColtivatore);
-  }
-
-  @SuppressWarnings("incomplete-switch")
-  private void showErrorMessage(InvalidUtenteFieldException e) {
-    switch (e.getInv()) {
-      case InvalidUtenteField.USERNAME:
-        usernameErrorLabel.setText(e.getMessage());
-        break;
-      case InvalidUtenteField.PASSWORD:
-        passwordErrorLabel.setText(e.getMessage());
-        break;
-      case InvalidUtenteField.EMAIL:
-        emailErrorLabel.setText(e.getMessage());
-      case InvalidUtenteField.NOME:
-        nomeErrorLabel.setText(e.getMessage());
-        break;
-      case InvalidUtenteField.COGNOME:
-        cognomeErrorLabel.setText(e.getMessage());
-        break;
-      case InvalidUtenteField.NUMTEL:
-        numTelErrorLabel.setText(e.getMessage());
-        break;
-      case InvalidUtenteField.RESIDENZA:
-        residenceErrorLabel.setText(e.getMessage());
-        break;
+    } catch (ConnectionFailedException e) {
+      errorLabel.setText(e.getMessage());
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("23505")) {
+        errorLabel.setText("Utente già esistente");
+      } else {
+        System.err.println(e.getSQLState());
+        System.err.println(e.getMessage());
+        e.printStackTrace();
+        errorLabel.setText("Errore dal database durante la registrazione");
+      }
     }
   }
+
+  ///
+  /// 
+  /// 
+  /// Utilities
+  /// 
+  /// 
+  /// 
+
+
 
   ///
   /// 
@@ -211,6 +236,55 @@ public class RegistrationController extends ControllerBase {
   /// 
   /// 
   
+  @SuppressWarnings("incomplete-switch")
+  private void showErrorMessage(InvalidUtenteFieldException e) {
+    switch (e.getInv()) {
+      case InvalidUtenteField.USERNAME:
+        usernameErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.PASSWORD:
+        passwordErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.EMAIL:
+        emailErrorLabel.setText(e.getMessage());
+      case InvalidUtenteField.NOME:
+        nomeErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.COGNOME:
+        cognomeErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.BDAY: 
+        bdayErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.NATIONALITY:
+        nationalityErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.NUMTEL:
+        numTelErrorLabel.setText(e.getMessage());
+        break;
+      case InvalidUtenteField.RESIDENZA:
+        residenceErrorLabel.setText(e.getMessage());
+        break;
+    }
+  }
+
+  void clearUIContent() {
+    clearErrorMessages();
+    clearFields();
+  }
+
+  void clearFields() {
+    usernameField.setText("");
+    passwordField.setText("");
+    emailField.setText("");
+    nomeField.setText("");
+    cognomeField.setText("");
+    bdayPicker.setValue(LocalDate.now().minusYears(20));
+    nationalityChoiceBox.setValue(nationalitiesObsList.get(0));
+    numTelField.setText("");
+    residenceField.setText("");
+  }
+
   void clearErrorMessages() {
     usernameErrorLabel.setText("");;
     passwordErrorLabel.setText("");;
@@ -218,13 +292,30 @@ public class RegistrationController extends ControllerBase {
     nomeErrorLabel.setText("");;
     cognomeErrorLabel.setText("");;
     numTelErrorLabel.setText("");;
-    residenceErrorLabel.setText("");;
+    residenceErrorLabel.setText("");
+    errorLabel.setText("");
   }
 
   void setTooltip(Label label, String fieldRule) {
     Tooltip t = new Tooltip(fieldRule);
     t.setShowDelay(Duration.millis(500));
     label.setTooltip(t);
+  }
+
+  void simulate() {
+    usernameField.setText("aleeeeeeeee");
+    passwordField.setText("oleeeeeeeee");
+    emailField.setText("alexthegreat17@example.com");
+    nomeField.setText("Alessandro");
+    cognomeField.setText("The Great");
+    bdayPicker.setValue(LocalDate.now().minusYears(20));
+    numTelField.setText("1234567890");
+    residenceField.setText("The world is the residence i conquered.");
+  }
+
+  void showSuccessMessage(String message) {
+    errorLabel.setStyle("-fx-text-fill: rgba(0, 143, 59, 1)");
+    errorLabel.setText(message);
   }
 
 }

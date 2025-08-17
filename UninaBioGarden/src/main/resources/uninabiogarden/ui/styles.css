@@ -8,7 +8,7 @@
 
 .root {
   /* -fx-background-color: rgb(45, 150, 45); */
-  -fx-background-color: linear-gradient(to top left, #1a9107, #24cc1f);
+  -fx-background-color: linear-gradient(to top left, #0a4601, #2d5c2c);
   /* -fx-font-family: sans-serif; */
   -fx-font-family: monospace;
   -fx-font-size: 14px;
@@ -47,7 +47,7 @@
 
 .registration-view {
   -fx-pref-width: 780px;
-  -fx-pref-height: 800px;
+  -fx-pref-height: 900px;
 }
 
 .table-view {

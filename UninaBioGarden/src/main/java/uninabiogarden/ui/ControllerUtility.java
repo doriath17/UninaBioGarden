@@ -9,6 +9,20 @@ import javafx.scene.control.TextInputControl;
 
 public class ControllerUtility {
 
+  public static void addDigitsFilter(TextField textField) {
+    UnaryOperator<Change> filter = change -> {
+      String newText = change.getControlNewText();
+      // if (newText.isEmpty()) {
+      //   return change;
+      // }
+      if (newText.matches("^[0-9]*$")) { 
+        return change;
+      }
+      return null;
+    };
+    textField.setTextFormatter(new TextFormatter<>(filter));
+  }
+
   public static void addCodiceLottoFilter(TextField textField) {
     UnaryOperator<Change> filter = change -> {
       String newText = change.getControlNewText();

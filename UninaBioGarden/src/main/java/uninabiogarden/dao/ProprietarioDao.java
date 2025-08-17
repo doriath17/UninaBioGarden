@@ -27,6 +27,10 @@ public class ProprietarioDao {
     return (Proprietario) UtenteDao.authenticate(database, username, password, "proprietario");
   }
 
+  public String insert(Proprietario newProprietario) throws SQLException, ConnectionFailedException {
+    return UtenteDao.insert(database, newProprietario, "proprietario");
+  }
+
   public List<Lotto> findAllLotti(String username) throws ConnectionFailedException, NoDataFoundException {
     var sql = "SELECT * FROM lotto WHERE username_prop='" + username + "'";
 

@@ -1,7 +1,9 @@
 package uninabiogarden.dao;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Proprietario;
@@ -54,5 +56,35 @@ public class UtenteDao {
     } catch (SQLException e) {
       throw new WrongUsernameException();
     }
+  }
+
+  static String insert(Database database, Utente newUtente, String table) throws SQLException, ConnectionFailedException {
+    var sql = 
+      "INSERT INTO "+table+" (username, password, email, nome, cognome, bday, nazionalita, num_tel, residenza) VALUES " +
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    try (var conn = database.getConnection();
+      var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+      stmt.setString(1, newUtente.getUsername());
+      stmt.setString(2, newUtente.getPassword());
+      stmt.setString(3, newUtente.getEmail());
+      stmt.setString(4, newUtente.getNome());
+      stmt.setString(5, newUtente.getCognome());
+      stmt.setDate(6, Date.valueOf(newUtente.getBday()));
+      stmt.setString(7, newUtente.getNationality());
+      stmt.setString(8, newUtente.getNumTel());
+      stmt.setString(9, newUtente.getResidenza());
+      var rows = stmt.executeUpdate();
+      if (rows > 0) {
+        var result = stmt.getGeneratedKeys();
+        result.next();
+        return result.getString(1);
+      } else {
+        System.err.println("Inserimento fallito");
+        System.exit(1);
+      }
+    }
+
+    return null;
   }
 }
