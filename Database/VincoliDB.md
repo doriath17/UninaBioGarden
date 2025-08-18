@@ -8,6 +8,7 @@
 - email unique e not null
 - nazionalità' not null
 - num_tel e residenza nullable
+- non può esistere un coltivatore che è anche un proprietario (e viceversa)
 
 **Lotto**
 
