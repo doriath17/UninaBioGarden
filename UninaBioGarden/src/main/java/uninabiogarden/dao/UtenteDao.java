@@ -14,8 +14,8 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class UtenteDao {
 
-  static Utente authenticate(Database database, String username, String password, String table) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
-    var sql = "SELECT * FROM "+table+" WHERE username='"+username+"'";
+  static Utente authenticate(Database database, String username, String password, String utenteType) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+    var sql = "SELECT * FROM utente WHERE username='"+username+"'";
 
     try (var conn = database.getConnection();
       var stmt = conn.createStatement()){
@@ -27,8 +27,10 @@ public class UtenteDao {
       } else if (!result.getString(2).equals(password)) {
         throw new WrongPasswordException();
       } else {
-        if (table.equals("proprietario")) {
-          return new Proprietario(
+        Utente utente = null; 
+
+        if (utenteType.equals("proprietario")) {
+          utente = new Proprietario(
             result.getString("username"),
             result.getString("password"),
             result.getString("email"),
@@ -40,7 +42,7 @@ public class UtenteDao {
             result.getString("residenza")
           );
         } else {
-          return new Coltivatore(
+          utente = new Coltivatore(
             result.getString("username"),
             result.getString("password"),
             result.getString("email"),
@@ -52,16 +54,19 @@ public class UtenteDao {
             result.getString("residenza")
           );
         }
+
+        utente.setId(result.getLong("id_utente"));
+        return utente;
       }
     } catch (SQLException e) {
       throw new WrongUsernameException();
     }
   }
 
-  static String insert(Database database, Utente newUtente, String table) throws SQLException, ConnectionFailedException {
+  static String insert(Database database, Utente newUtente, String utenteType) throws SQLException, ConnectionFailedException {
     var sql = 
-      "INSERT INTO "+table+" (username, password, email, nome, cognome, bday, nazionalita, num_tel, residenza) VALUES " +
-      "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO utente (username, password, email, nome, cognome, bday, nazionalita, num_tel, residenza, u_type) VALUES " +
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -74,6 +79,7 @@ public class UtenteDao {
       stmt.setString(7, newUtente.getNationality());
       stmt.setString(8, newUtente.getNumTel());
       stmt.setString(9, newUtente.getResidenza());
+      stmt.setString(10, utenteType);
       var rows = stmt.executeUpdate();
       if (rows > 0) {
         var result = stmt.getGeneratedKeys();

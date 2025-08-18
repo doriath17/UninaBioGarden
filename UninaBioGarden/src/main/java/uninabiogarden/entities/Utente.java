@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public abstract class Utente {
 
+  private Long id;
   private String username;
   private String password;
   private String email;
@@ -24,6 +25,14 @@ public abstract class Utente {
     this.nationality = nationality;
     this.numTel = numTel;
     this.residenza = residenza;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getUsername() {
