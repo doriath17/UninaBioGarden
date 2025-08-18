@@ -63,7 +63,7 @@ public class UtenteDao {
     }
   }
 
-  static String insert(Database database, Utente newUtente, String utenteType) throws SQLException, ConnectionFailedException {
+  static Long insert(Database database, Utente newUtente, String utenteType) throws SQLException, ConnectionFailedException {
     var sql = 
       "INSERT INTO utente (username, password, email, nome, cognome, bday, nazionalita, num_tel, residenza, u_type) VALUES " +
       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -84,7 +84,7 @@ public class UtenteDao {
       if (rows > 0) {
         var result = stmt.getGeneratedKeys();
         result.next();
-        return result.getString(1);
+        return result.getLong("id_utente");
       } else {
         System.err.println("Inserimento fallito");
         System.exit(1);

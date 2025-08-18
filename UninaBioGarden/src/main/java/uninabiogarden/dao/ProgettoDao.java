@@ -22,38 +22,38 @@ public class ProgettoDao {
     return instance;
   }
 
-  public Progetto read(Long id_progetto, Proprietario prop) throws SQLException, ConnectionFailedException, NoDataFoundException {
-    var sql = """
-        SELECT *
-        FROM progetto AS prog
-        JOIN lotto ON prog.id_lotto = lotto.id_lotto
-        JOIN proprietario AS prop ON prog.username_prop = prop.username
-        WHERE id_progetto = 
-        """ + id_progetto;
+  // public Progetto read(Long id_progetto, Proprietario prop) throws SQLException, ConnectionFailedException, NoDataFoundException {
+  //   var sql = """
+  //       SELECT *
+  //       FROM progetto AS prog
+  //       JOIN lotto ON prog.id_lotto = lotto.id_lotto
+  //       JOIN proprietario AS prop ON prog.username_prop = prop.username
+  //       WHERE id_progetto = 
+  //       """ + id_progetto;
 
-    try (var conn = database.getConnection();
-         var stmt = conn.createStatement()) {
-      var result = stmt.executeQuery(sql);
+  //   try (var conn = database.getConnection();
+  //        var stmt = conn.createStatement()) {
+  //     var result = stmt.executeQuery(sql);
 
-      if (result.first()) {
-        var dataFine = result.getDate(4);
+  //     if (result.first()) {
+  //       var dataFine = result.getDate(4);
 
-        return new Progetto();
+  //       return new Progetto();
 
-        // return new Progetto(
-        //   id_progetto,
-        //   result.getString(2),
-        //   result.getDate(3).toLocalDate(),
-        //   (dataFine != null ? dataFine.toLocalDate() : null),
-        //   result.getString(5),
-        //   prop.getUsername(),
-        //   result.getLong(7)
-        // );
-      } else {
-        throw new NoDataFoundException();
-      }
-    }
-  }
+  //       // return new Progetto(
+  //       //   id_progetto,
+  //       //   result.getString(2),
+  //       //   result.getDate(3).toLocalDate(),
+  //       //   (dataFine != null ? dataFine.toLocalDate() : null),
+  //       //   result.getString(5),
+  //       //   prop.getUsername(),
+  //       //   result.getLong(7)
+  //       // );
+  //     } else {
+  //       throw new NoDataFoundException();
+  //     }
+  //   }
+  // }
 
   public void update(Progetto toUpdate) throws ConnectionFailedException {
     var sql = """
@@ -90,7 +90,7 @@ public class ProgettoDao {
 
   public Long insert(Progetto newProgetto) throws SQLException, ConnectionFailedException {
     var sql = """
-      INSERT INTO progetto (nome, data_inizio, data_fine, descrizione, username_prop, id_lotto) VALUES 
+      INSERT INTO progetto (nome, data_inizio, data_fine, descrizione, id_prop, id_lotto) VALUES 
       (?, ?, ?, ?, ?, ?)
       """;
     try (var conn = database.getConnection();
@@ -100,7 +100,7 @@ public class ProgettoDao {
 
       stmt.setDate(3, toSqlDate(newProgetto.getDataFine()));
       stmt.setString(4, newProgetto.getDescrizione());
-      stmt.setString(5, newProgetto.getProprietario().getUsername());
+      stmt.setLong(5, newProgetto.getProprietario().getId());
       stmt.setLong(6, newProgetto.getLotto().getId());
 
       var rows = stmt.executeUpdate();

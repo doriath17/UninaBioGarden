@@ -38,7 +38,7 @@ public class LottoDao {
   }
   
   public Long insert(Lotto lottoToInsert) throws SQLException, ConnectionFailedException {
-    var sql = "INSERT INTO lotto (indirizzo, codice_lotto, estensione, nome_orto, username_prop) VALUES (?, ?, ?, ?, ?)";
+    var sql = "INSERT INTO lotto (indirizzo, codice_lotto, estensione, nome_orto, id_prop) VALUES (?, ?, ?, ?, ?)";
 
     try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -46,7 +46,7 @@ public class LottoDao {
       stmt.setString(2, lottoToInsert.getCodice());
       stmt.setDouble(3, lottoToInsert.getEstensione());
       stmt.setString(4, lottoToInsert.getOrto());
-      stmt.setString(5, lottoToInsert.getProprietario().getUsername());
+      stmt.setLong(5, lottoToInsert.getProprietario().getId());
       var rows = stmt.executeUpdate();
 
       if (rows > 0) {
