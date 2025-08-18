@@ -35,12 +35,12 @@ public class RegistrationService {
     checkResidenza(utenteToCheck.getResidenza());
   }
 
-  public String registerProprietario(Proprietario newProprietario) throws InvalidUtenteFieldException, SQLException, ConnectionFailedException {
+  public Long registerProprietario(Proprietario newProprietario) throws InvalidUtenteFieldException, SQLException, ConnectionFailedException {
     checkBasic(newProprietario);
     return proprietarioDao.insert(newProprietario);
   }
 
-  public String registerColtivatore(Coltivatore newColtivatore) throws InvalidUtenteFieldException, SQLException, ConnectionFailedException {
+  public Long registerColtivatore(Coltivatore newColtivatore) throws InvalidUtenteFieldException, SQLException, ConnectionFailedException {
     checkBasic(newColtivatore);
     return coltivatoreDao.insert(newColtivatore);
   }

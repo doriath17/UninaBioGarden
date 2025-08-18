@@ -1,55 +1,9 @@
 
-CREATE OR REPLACE FUNCTION check_coltivatore_validity()
-RETURN TRIGGER AS $$
-BEGIN
-  IF EXISTS (
-    SELECT 1
-    FROM proprietario
-    WHERE username = NEW.username;
-  ) THEN 
-    RAISE EXCEPTION 'Username già utilizzato';
-  END IF;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-/***********************************************************************/
-
-CREATE OR REPLACE TRIGGER before_insert_update_coltivatore
-BEFORE INSERT OR UPDATE ON coltivatore
-FOR EACH ROW
-EXECUTE FUNCTION check_coltivatore_validity();
-
-CREATE OR REPLACE FUNCTION check_proprietario_validity()
-RETURN TRIGGER AS $$
-BEGIN
-
-  -- non può esistere un coltivatore che è anche un proprietario (e viceversa)
-  IF EXISTS (
-    SELECT 1
-    FROM coltivatore
-    WHERE username = NEW.username
-  ) THEN 
-    RAISE EXCEPTION 'Username già utilizzato';
-  END IF;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE TRIGGER before_insert_update_proprietario 
-BEFORE INSERT OR UPDATE ON proprietario
-FOR EACH ROW
-EXECUTE FUNCTION check_proprietario_validity();
-
-/***********************************************************************/
 
 CREATE OR REPLACE FUNCTION check_progetto_insert_validity()
 RETURNS TRIGGER AS $$
 DECLARE 
-  v_lotto_username_prop VARCHAR;
+  v_lotto_id_prop INT;
 BEGIN 
   IF OLD IS NULL THEN -- solo per inserimento
     IF NEW.data_fine IS NOT NULL THEN
@@ -83,11 +37,11 @@ BEGIN
 
   -- il lotto referenziato deve appartenere allo stesso proprietario del progetto
 
-  SELECT username_prop INTO v_lotto_username_prop
+  SELECT id_prop INTO v_lotto_id_prop
   FROM lotto 
   WHERE lotto.id_lotto = NEW.id_lotto;
 
-  IF v_lotto_username_prop <> NEW.username_prop THEN 
+  IF v_lotto_id_prop <> NEW.id_prop THEN 
     RAISE EXCEPTION 'Il lotto selezionato non appartiene al proprietario del progetto';
   END IF;
 

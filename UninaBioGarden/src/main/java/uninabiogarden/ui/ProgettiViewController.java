@@ -264,11 +264,13 @@ public class ProgettiViewController extends ControllerBase {
   void toggleButtons(boolean toggle) {
     if (toggle){
       newButton.setText("Seleziona");
+      dataFineField.setDisable(true);
       addButton.setDisable(false);
       deleteButton.setDisable(true);
       updateButton.setDisable(true);
     } else {
       newButton.setText("New");
+      dataFineField.setDisable(false);
       addButton.setDisable(true);
       deleteButton.setDisable(false);
       updateButton.setDisable(false);

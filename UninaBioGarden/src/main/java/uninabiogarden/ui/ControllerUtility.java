@@ -43,7 +43,7 @@ public class ControllerUtility {
       if (newText.isEmpty()) {
         return change;
       }
-      if (newText.matches("^([1-9][0-9]{0,10})(\\.[0-9]{0,3})?$")) {
+      if (newText.matches("^(0|([1-9][0-9]{0,9}))(\\.[0-9]{0,2})?|(.[0-9]{0,2})|([1-9][0-9]{0,9}.)$")) {
         return change;
       }
       return null;

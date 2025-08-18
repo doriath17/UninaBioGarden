@@ -163,11 +163,14 @@ public class RegistrationController extends ControllerBase {
 
     try {
       var newUtente = getFormData();
+      Long newId = null;
       if (proprietarioCheckBox.isSelected()) {
-        registrationService.registerProprietario((Proprietario) newUtente);
+        newId = registrationService.registerProprietario((Proprietario) newUtente);
+        newUtente.setId(newId);
         loginService.authenticateProprietario(newUtente.getUsername(), newUtente.getPassword());
       } else {
-        registrationService.registerColtivatore((Coltivatore) newUtente);
+        newId = registrationService.registerColtivatore((Coltivatore) newUtente);
+        newUtente.setId(newId);
         loginService.authenticateColtivatore(newUtente.getUsername(), newUtente.getPassword());
       }
       mainController.openHomeView();      

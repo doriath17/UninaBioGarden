@@ -1,7 +1,6 @@
 package uninabiogarden.dao;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -22,9 +21,9 @@ public class UtenteDao {
 
       var result = stmt.executeQuery(sql);
       result.next();
-      if (result.getString(1) == null) {
+      if (result.getString("id_utente") == null) {
         throw new WrongUsernameException();
-      } else if (!result.getString(2).equals(password)) {
+      } else if (!result.getString("password").equals(password)) {
         throw new WrongPasswordException();
       } else {
         Utente utente = null; 
@@ -66,7 +65,7 @@ public class UtenteDao {
   static Long insert(Database database, Utente newUtente, String utenteType) throws SQLException, ConnectionFailedException {
     var sql = 
       "INSERT INTO utente (username, password, email, nome, cognome, bday, nazionalita, num_tel, residenza, u_type) VALUES " +
-      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?::utente_type)";
 
     try (var conn = database.getConnection();
       var stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

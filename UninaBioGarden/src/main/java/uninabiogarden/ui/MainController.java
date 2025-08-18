@@ -10,12 +10,12 @@ public class MainController extends ContentController {
 
   public void simulate() {
     openRegistrationView();
-    getRegistrationController().simulate();
+    // getRegistrationController().simulate();
 
-    // getLoginController().usernameField.setText("ale172002x");
-    // getLoginController().passwordField.setText("mypassisok");
-    // getLoginController().propCheckBox.setSelected(true);
-    // getLoginController().login();
+    getLoginController().usernameField.setText("alefus");
+    getLoginController().passwordField.setText("alefus17");
+    getLoginController().propCheckBox.setSelected(true);
+    getLoginController().login();
     // getHomeController().openLottiView();
   }
 

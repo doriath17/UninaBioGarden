@@ -81,6 +81,16 @@ public class LoginService {
     return null;
   }
 
+  public Long getId() {
+    switch (loggedInType) {
+      case UserType.PROPRIETARIO:
+        return loggedInProprietario.getId();        
+      case UserType.COLTIVATORE:
+        loggedInColtivatre.getId();
+    }
+    return null;
+  }
+
   public boolean isProprietarioSession() {
     return this.loggedInType == UserType.PROPRIETARIO;
   }

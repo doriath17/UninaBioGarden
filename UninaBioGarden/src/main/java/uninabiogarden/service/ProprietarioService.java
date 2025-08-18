@@ -22,7 +22,7 @@ public class ProprietarioService {
   }
 
   public List<Lotto> requestLotti() throws ConnectionFailedException, NoDataFoundException {
-    return proprietarioDao.findAllLotti(loginService.getUsername());
+    return proprietarioDao.findAllLotti(loginService.getId());
   }
 
   public List<Progetto> requestProgetti() throws ConnectionFailedException, NoDataFoundException {
@@ -30,7 +30,7 @@ public class ProprietarioService {
   }
 
   public List<Lotto> requestAvailableLotti() throws SQLException, ConnectionFailedException, NoDataFoundException {
-    return proprietarioDao.findAvailableLotti(loginService.getLoggedInProprietario().getUsername());
+    return proprietarioDao.findAvailableLotti(loginService.getId());
   }
 
 
