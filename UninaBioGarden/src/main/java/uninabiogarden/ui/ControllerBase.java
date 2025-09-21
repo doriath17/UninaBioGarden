@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 
 public abstract class ControllerBase {
+  MainController mainController;
   abstract VBox getRoot();
 
   public static ControllerBase loadController(String fxmlFileName) {

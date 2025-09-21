@@ -16,11 +16,11 @@ public class ProprietarioHomeController extends ControllerBase {
   }
 
   @FXML private void openLottiView() {
-    homeController.openLottiView();
+    mainController.openLottiView();
   }
 
   @FXML private void openProgettiView() {
-    homeController.openProgettiView();
+    mainController.openProgettiView();
   }
 
 }

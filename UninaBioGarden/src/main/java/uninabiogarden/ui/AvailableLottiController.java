@@ -15,20 +15,15 @@ import uninabiogarden.entities.Lotto;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
-import uninabiogarden.service.ProprietarioService;
 
 public class AvailableLottiController extends ControllerBase {
 
   @FXML VBox root;
-  @FXML TableView<Lotto> tableView;
+  @FXML TableView<Lotto> availableLottiTableView;
   @FXML TableColumn<String, String> indirizzoCol;
   @FXML TableColumn<Integer, String> codiceCol;
 
-  // dependencies
-  ProgettiViewController progettiViewController;
-  ProprietarioService proprietarioService = ProprietarioService.getInstance();
-
-  ObservableList<Lotto> availableLotti = 
+  ObservableList<Lotto> availableLottiObsList = 
     FXCollections.observableArrayList();
   int selectedIndex;
 
@@ -38,42 +33,47 @@ public class AvailableLottiController extends ControllerBase {
   }
 
   @FXML void initialize() {
-    tableView.setItems(availableLotti);
+    availableLottiTableView.setItems(availableLottiObsList);
     indirizzoCol.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
     codiceCol.setCellValueFactory(new PropertyValueFactory<>("codice"));
 
-    tableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Lotto>() {
+    availableLottiTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Lotto>() {
       @Override
       public void changed(ObservableValue<? extends Lotto> observable, Lotto oldValue, Lotto newValue) {
         if (newValue != null) {
-          selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-          progettiViewController.fillLottoForm(newValue);
+          selectedIndex = availableLottiTableView.getSelectionModel().getSelectedIndex();
+          mainController.fillLottoForm(newValue);
         }
       }
     });
   }
 
+  void init() {
+    clearSelection();
+    loadAvailableLotti();
+  }
+
   void loadAvailableLotti() {
     try {
-      availableLotti.setAll(
-        proprietarioService.requestAvailableLotti()
+      availableLottiObsList.setAll(
+        mainController.requestAvailableLotti()
       );
     } catch (SQLException e) {
       System.err.println(e.getMessage());
       e.printStackTrace();
-      progettiViewController.showErrorMessage("Errore dal database durante il caricamento dei lotti disponibili");
+      mainController.showErrorMessageProgetto("Errore dal database durante il caricamento dei lotti disponibili");
     } catch (NoDataFoundException | ConnectionFailedException e) {
-      progettiViewController.showErrorMessage(e.getMessage());
+      mainController.showErrorMessageProgetto(e.getMessage());
     }
   }
 
   void clearSelection() {
-    tableView.getSelectionModel().clearSelection();
+    availableLottiTableView.getSelectionModel().clearSelection();
   }
 
   Lotto getSelectedLotto() throws MissingFieldException {
     try {
-      return availableLotti.get(tableView.getSelectionModel().getSelectedIndex());
+      return availableLottiObsList.get(availableLottiTableView.getSelectionModel().getSelectedIndex());
     } catch (IndexOutOfBoundsException e) {
       throw new MissingFieldException("Lotto non selezionato");
     }

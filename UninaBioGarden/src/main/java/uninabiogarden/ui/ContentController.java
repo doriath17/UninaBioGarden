@@ -13,6 +13,4 @@ public abstract class ContentController extends ControllerBase {
     getContentRoot().getChildren().clear();
     getContentRoot().getChildren().add(controller.getRoot());
   }
-
-
 }

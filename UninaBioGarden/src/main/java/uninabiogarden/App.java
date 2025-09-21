@@ -14,12 +14,7 @@ public class App extends Application {
 
   @Override
   public void init() {
-    try {
-      mainController = (MainController) ControllerBase.loadController("MainView.fxml");
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
+    mainController = (MainController) ControllerBase.loadController("MainView.fxml");
   }
 
   @Override

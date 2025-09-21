@@ -98,6 +98,17 @@ public class LottiController extends ControllerBase {
     ControllerUtility.addTextLimiter(ortoField, 80);
   }
 
+  void init() {
+    try {
+      clearUIContent();
+      loadLotti();
+    } catch (ConnectionFailedException e) {
+      showErrorMessage(e.getMessage());
+    } catch (NoDataFoundException e) {
+      showErrorMessage(e.getMessage());
+    }
+  }
+
   ///
   /// 
   /// 
@@ -115,7 +126,7 @@ public class LottiController extends ControllerBase {
     try {
       var lottoToUpdate = getFormData();
       lottoToUpdate.setId(tableView.getSelectionModel().getSelectedItem().getId());
-      lottoService.update(lottoToUpdate);
+      mainController.updateLotto(lottoToUpdate);
       lotti.set(index, lottoToUpdate);
       showSuccessMessage("Lotto aggiornato!");
     } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
@@ -135,7 +146,7 @@ public class LottiController extends ControllerBase {
     }
     try {
       var lottoToDelete = lotti.get(index);
-      lottoService.delete(lottoToDelete);
+      mainController.deleteLotto(lottoToDelete);
       lotti.remove(index);
       showSuccessMessage("Lotto cancellato!");
     } catch (ConnectionFailedException e) {
@@ -149,13 +160,10 @@ public class LottiController extends ControllerBase {
 
   @FXML public void add() {
     try {
-      var lottoToInsert = getFormData();
-      lottoToInsert.setProprietario(loginService.getLoggedInProprietario());
-
-      var newID = lottoService.insert(lottoToInsert);
-      lottoToInsert.setId(newID);
-
-      lotti.add(lottoToInsert);
+      var lottoToAdd = getFormData();
+      var newId = mainController.addLotto(lottoToAdd);
+      lottoToAdd.setId(newId);
+      lotti.add(lottoToAdd);
       showSuccessMessage("Nuovo lotto inserito!");
     } catch (MissingFieldException | FormatException | ConnectionFailedException e) {
       showErrorMessage(e.getMessage());
@@ -212,8 +220,9 @@ public class LottiController extends ControllerBase {
   /// 
 
   @FXML private void back(){
-    homeController.openHomeContent();
-    clearUIContent();
+    mainController.openHomeView();
+    // clearUIContent();
+    // homeController.openHomeContent();
   }
 
   void toggleForm() {
@@ -255,7 +264,7 @@ public class LottiController extends ControllerBase {
 
   void loadLotti() 
   throws ConnectionFailedException, NoDataFoundException {
-    lotti.setAll(proprietarioService.requestLotti());
+    lotti.setAll(mainController.requestLotti());
   }
 
   void clearUIContent() {
@@ -282,5 +291,4 @@ public class LottiController extends ControllerBase {
     tableView.getSelectionModel().clearSelection();
   }
 
-  
 }

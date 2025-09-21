@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
-import uninabiogarden.service.LoginService;
 
 public class LoginController extends ControllerBase {
   @FXML VBox root;
@@ -22,10 +21,6 @@ public class LoginController extends ControllerBase {
   @FXML Label errorLabel;
   @FXML CheckBox propCheckBox;
   @FXML CheckBox coltCheckBox;
-
-  // dependency
-  MainController mainController;
-  LoginService loginService = LoginService.getInstance();
 
   @SuppressWarnings("exports")
   public VBox getRoot() {
@@ -54,19 +49,17 @@ public class LoginController extends ControllerBase {
 
   @FXML void login() {
     try {
+      var username = usernameField.getText();
+      var password = passwordField.getText();
       if (propCheckBox.isSelected()) {
-        loginService.authenticateProprietario(
-          usernameField.getText(), passwordField.getText()
-        );
+        mainController.loginProprietario(username, password);
+        clear();
       } else if (coltCheckBox.isSelected()) {
-        loginService.authenticateColtivatore(
-          usernameField.getText(), passwordField.getText()
-        );
+        mainController.loginColtivatore(username, password);
+        clear();
       } else {
-        errorLabel.setText("Must select either Proprietario or Coltivatore");
-        return;
+        errorLabel.setText("Seleziona Proprietario o Coltivatore");
       }
-      mainController.openHomeView();
     } catch(WrongUsernameException e) {
       errorLabel.setText(WrongUsernameException.msg);
     } catch(WrongPasswordException e) {

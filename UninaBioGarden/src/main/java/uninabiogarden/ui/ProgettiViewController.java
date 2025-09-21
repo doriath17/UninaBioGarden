@@ -2,7 +2,6 @@ package uninabiogarden.ui;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.function.UnaryOperator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,9 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
@@ -51,13 +47,6 @@ public class ProgettiViewController extends ControllerBase {
   @FXML TextField codiceLottoField;
   @FXML TextArea descrizioneField;
   
-  // dependencies
-  HomeController homeController;
-  AvailableLottiController availableLottiController;
-  LoginService loginService = LoginService.getInstance();
-  ProprietarioService proprietarioService = ProprietarioService.getInstance();
-  ProgettoService progettoService = ProgettoService.getInstance();
-
   @FXML Label errorLabel;
 
   ObservableList<Progetto> progettiObsList = FXCollections.observableArrayList();
@@ -107,6 +96,17 @@ public class ProgettiViewController extends ControllerBase {
     addButton.setDisable(true);
   }
 
+  void init() {
+    try {
+      clearUIContent();
+      loadProgetti();
+    } catch (ConnectionFailedException e) {
+      showErrorMessage(e.getMessage());
+    } catch (NoDataFoundException e) {
+      showErrorMessage(e.getMessage());
+    }
+  }
+
   ///
   /// 
   /// 
@@ -128,7 +128,7 @@ public class ProgettiViewController extends ControllerBase {
       progettoToUpdate.setDescrizione(descrizioneField.getText());
 
       try {
-        progettoService.update(progettoToUpdate);
+        mainController.updateProgetto(progettoToUpdate);
         progettiObsList.set(selectedIndex, progettoToUpdate);
         showSuccessMessage("Progetto aggiornato!");
       } catch (ConnectionFailedException | WrongDataFineException | MissingFieldException e) {
@@ -149,11 +149,8 @@ public class ProgettiViewController extends ControllerBase {
     Progetto p = tableView.getSelectionModel().selectedItemProperty().get();
     if (p != null) {
       try {
-        progettoService.delete(p.getId());
+        mainController.deleteProgetto(p);
         progettiObsList.remove(selectedIndex);
-        if (!p.isTerminated()) {
-          getAvailableLottiController().availableLotti.add(p.getLotto());
-        }
         showSuccessMessage("Progetto cancellato!");
       } catch (ConnectionFailedException e) {
         showErrorMessage(e.getMessage());
@@ -171,15 +168,14 @@ public class ProgettiViewController extends ControllerBase {
     errorLabel.setText("");
 
     try {
-      var lotto = availableLottiController.getSelectedLotto();
+      var lotto = mainController.getSelectedLotto();
       var newProgetto = getFormData();
       newProgetto.setLotto(lotto);
 
-      var newID = progettoService.create(newProgetto);
+      var newID = mainController.addProgetto(newProgetto);
       newProgetto.setId(newID);
 
       progettiObsList.add(newProgetto);
-      getAvailableLottiController().availableLotti.remove(lotto);
       showSuccessMessage("Nuovo progetto inserito!");
     } catch (MissingFieldException | WrongDataFineException | ConnectionFailedException e) {
       showErrorMessage(e.getMessage());
@@ -205,7 +201,7 @@ public class ProgettiViewController extends ControllerBase {
       dataInizioField.getValue(),
       dataFineField.getValue(),
       descrizioneField.getText(),
-      loginService.getLoggedInProprietario(),
+      mainController.getLoggedInProprietario(),
       null
     );
   }
@@ -236,7 +232,7 @@ public class ProgettiViewController extends ControllerBase {
     if ("New".equals(newButton.getText())) {
       tableView.getSelectionModel().clearSelection();
     } else {
-      getAvailableLottiController().clearSelection();
+      mainController.getAvailableLottiController().clearSelection();
     }
     clearForm();
   }
@@ -253,7 +249,7 @@ public class ProgettiViewController extends ControllerBase {
     if ("Seleziona".equals(newButton.getText())) {
       toggleAddProgettoView();
     }
-    homeController.openHomeContent();
+    mainController.openHomeView();;
   }
 
   @FXML Button newButton;
@@ -280,11 +276,11 @@ public class ProgettiViewController extends ControllerBase {
   @FXML void toggleAddProgettoView() {
     errorLabel.setText("");
     if ("New".equals(newButton.getText())){
-      showAvailableLottiTable();
+      mainController.showAvailableLottiTable();
       dataFineField.setEditable(false);
       toggleButtons(true);
     } else {
-      showProgettiTable();
+      mainController.showProgettiTable();
       dataFineField.setEditable(true);
       toggleButtons(false);
     }
@@ -297,28 +293,28 @@ public class ProgettiViewController extends ControllerBase {
     clearForm();
   }
 
-  AvailableLottiController getAvailableLottiController() {
-    if (availableLottiController == null){
-      availableLottiController = (AvailableLottiController) loadContent("AvailableLotti.fxml");
-      availableLottiController.progettiViewController = this;
-    }
-    return availableLottiController; 
-  }
+  // AvailableLottiController getAvailableLottiController() {
+  //   if (availableLottiController == null){
+  //     availableLottiController = (AvailableLottiController) loadContent("AvailableLotti.fxml");
+  //     availableLottiController.progettiViewController = this;
+  //   }
+  //   return availableLottiController; 
+  // }
 
-  void showProgettiTable() {
-    tableViewRoot.getChildren().remove(
-      getAvailableLottiController().getRoot()
-    );
-    tableViewRoot.getChildren().add(progettiTableView);
-  }
+  // void showProgettiTable() {
+  //   tableViewRoot.getChildren().remove(
+  //     getAvailableLottiController().getRoot()
+  //   );
+  //   tableViewRoot.getChildren().add(progettiTableView);
+  // }
 
-  void showAvailableLottiTable() {
-    getAvailableLottiController().loadAvailableLotti();
-    tableViewRoot.getChildren().remove(progettiTableView);
-    tableViewRoot.getChildren().add(
-      getAvailableLottiController().getRoot()
-    );
-  }
+  // void showAvailableLottiTable() {
+  //   getAvailableLottiController().loadAvailableLotti();
+  //   tableViewRoot.getChildren().remove(progettiTableView);
+  //   tableViewRoot.getChildren().add(
+  //     getAvailableLottiController().getRoot()
+  //   );
+  // }
 
   ///
   /// 
@@ -330,7 +326,7 @@ public class ProgettiViewController extends ControllerBase {
   /// 
   
   void loadProgetti() throws ConnectionFailedException, NoDataFoundException {
-    progettiObsList.setAll(proprietarioService.requestProgetti());
+    progettiObsList.setAll(mainController.requestProgetti());
   }
 
   void showErrorMessage(String message) {

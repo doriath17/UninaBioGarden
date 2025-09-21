@@ -163,17 +163,11 @@ public class RegistrationController extends ControllerBase {
 
     try {
       var newUtente = getFormData();
-      Long newId = null;
       if (proprietarioCheckBox.isSelected()) {
-        newId = registrationService.registerProprietario((Proprietario) newUtente);
-        newUtente.setId(newId);
-        loginService.authenticateProprietario(newUtente.getUsername(), newUtente.getPassword());
+        mainController.registerProprietario((Proprietario) newUtente);
       } else {
-        newId = registrationService.registerColtivatore((Coltivatore) newUtente);
-        newUtente.setId(newId);
-        loginService.authenticateColtivatore(newUtente.getUsername(), newUtente.getPassword());
+        mainController.registerColtivatore((Coltivatore) newUtente);
       }
-      mainController.openHomeView();      
     } catch (InvalidUtenteFieldException e) {
       showErrorMessage(e);
     } catch (ConnectionFailedException e) {
