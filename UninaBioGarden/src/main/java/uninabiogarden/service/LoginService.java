@@ -15,20 +15,8 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class LoginService {
   private static final LoginService instance = new LoginService();
-  // private final ProprietarioDao proprietarioDao = ProprietarioDao.getInstance();
-  // private final ColtivatoreDao coltivatoreDao = ColtivatoreDao.getInstance();
-
-
+  
   private Utente utente;
-  // private Proprietario loggedInProprietario;
-  // private Coltivatore loggedInColtivatre;
-  // private UserType loggedInType = UserType.NONE;
-
-  // public enum UserType {
-  //   PROPRIETARIO,
-  //   COLTIVATORE,
-  //   NONE
-  // };
 
   private LoginService() {}
 
@@ -41,44 +29,9 @@ public class LoginService {
     return utente;
   }
 
-  // public Proprietario authenticateProprietario(String username, String password) 
-  //   throws ConnectionFailedException,
-  //   WrongUsernameException,
-  //   WrongPasswordException, SQLException
-  // {
-  //   loggedInProprietario = proprietarioDao.authenticate(username, password);
-  //   loggedInType = UserType.PROPRIETARIO;
-  //   return loggedInProprietario;
-  // }
-
-  // public Coltivatore authenticateColtivatore(String username, String password) 
-  //   throws ConnectionFailedException,
-  //   WrongUsernameException,
-  //   WrongPasswordException, SQLException
-  // {
-  //   loggedInColtivatre = coltivatoreDao.authenticate(username, password);
-  //   loggedInType = UserType.COLTIVATORE;
-  //   return loggedInColtivatre;
-  // }
-
   public void logout() {
     utente = null;
-    // loggedInColtivatre = null;
-    // loggedInProprietario = null;
-    // loggedInType = UserType.NONE;
   }
-
-  // public Proprietario getLoggedInProprietario() {
-  //   return loggedInProprietario;
-  // }
-
-  // public Coltivatore getLoggedInColtivatre() {
-  //   return loggedInColtivatre;
-  // }
-
-  // public UserType getLoggedInType() {
-  //   return loggedInType;
-  // }
 
   public Utente getLoggedUtente() {
     return utente;

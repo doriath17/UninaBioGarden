@@ -122,24 +122,6 @@ public class MainController extends ContentController {
     return LoginService.getInstance().getLoggedUtente();
   }
 
-  // void loginProprietario(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
-  //   LoginService.getInstance().authenticateProprietario(username, password);
-  //   openHomeView();
-  // }
-
-  // void loginColtivatore(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
-  //   LoginService.getInstance().authenticateColtivatore(username, password);
-  //   openHomeView();
-  // }
-
-  // Proprietario getLoggedInProprietario() {
-  //   return LoginService.getInstance().getLoggedInProprietario();
-  // }
-
-  // Coltivatore getLoggedInColtivatore() {
-  //   return LoginService.getInstance().getLoggedInColtivatre();
-  // }
-
   ///
   /// 
   /// 
@@ -192,14 +174,6 @@ public class MainController extends ContentController {
     } else {
       homeContent = getColtivatoreHomeController();
     }
-    // switch (LoginService.getInstance().getLoggedInType()) {
-    //   case UserType.PROPRIETARIO: 
-    //     homeContent = getProprietarioHomeController();
-    //     break;
-    //   case UserType.COLTIVATORE: 
-    //     homeContent = getColtivatoreHomeController();
-    //     break;
-    // }
     return homeContent;
   }
 
