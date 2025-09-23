@@ -19,8 +19,8 @@ public class LoginController extends ControllerBase {
   @FXML TextField usernameField;
   @FXML PasswordField passwordField;
   @FXML Label errorLabel;
-  @FXML CheckBox propCheckBox;
-  @FXML CheckBox coltCheckBox;
+  // @FXML CheckBox propCheckBox;
+  // @FXML CheckBox coltCheckBox;
 
   @SuppressWarnings("exports")
   public VBox getRoot() {
@@ -29,46 +29,50 @@ public class LoginController extends ControllerBase {
 
   @FXML private void initialize() {
     // mutua esclusione dei checkbox
-    propCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-      @Override
-      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-        if (newValue && coltCheckBox.isSelected()) {
-          coltCheckBox.setSelected(false);
-        }
-      }
-    });
-    coltCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-      @Override
-      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-        if (newValue && propCheckBox.isSelected()) {
-          propCheckBox.setSelected(false);
-        }
-      }
-    });
+    // propCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+    //   @Override
+    //   public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+    //     if (newValue && coltCheckBox.isSelected()) {
+    //       coltCheckBox.setSelected(false);
+    //     }
+    //   }
+    // });
+    // coltCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+    //   @Override
+    //   public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+    //     if (newValue && propCheckBox.isSelected()) {
+    //       propCheckBox.setSelected(false);
+    //     }
+    //   }
+    // });
   }
 
   @FXML void login() {
     try {
       var username = usernameField.getText();
       var password = passwordField.getText();
-      if (propCheckBox.isSelected()) {
-        mainController.loginProprietario(username, password);
-        clear();
-      } else if (coltCheckBox.isSelected()) {
-        mainController.loginColtivatore(username, password);
-        clear();
-      } else {
-        errorLabel.setText("Seleziona Proprietario o Coltivatore");
-      }
+
+      mainController.login(username, password);
+
+      // if (propCheckBox.isSelected()) {
+      //   mainController.loginProprietario(username, password);
+      //   clear();
+      // } else if (coltCheckBox.isSelected()) {
+      //   mainController.loginColtivatore(username, password);
+      //   clear();
+      // } else {
+      //   errorLabel.setText("Seleziona Proprietario o Coltivatore");
+      // }
     } catch(WrongUsernameException e) {
       errorLabel.setText(WrongUsernameException.msg);
     } catch(WrongPasswordException e) {
       errorLabel.setText(WrongPasswordException.msg);
     } catch(ConnectionFailedException e) {
       errorLabel.setText(e.getMessage());
-    } catch(SQLException e) {
-      errorLabel.setText("Errore durante il caricamento dati");
     }
+    // catch(SQLException e) {
+    //   errorLabel.setText("Errore durante il caricamento dati");
+    // }
   }
 
   @FXML private void openRegistrationView() {
@@ -78,8 +82,8 @@ public class LoginController extends ControllerBase {
   void clear() {
     usernameField.setText("");
     passwordField.setText("");
-    propCheckBox.setSelected(false);
-    coltCheckBox.setSelected(false);
+    // propCheckBox.setSelected(false);
+    // coltCheckBox.setSelected(false);
     errorLabel.setText("");
   }
 

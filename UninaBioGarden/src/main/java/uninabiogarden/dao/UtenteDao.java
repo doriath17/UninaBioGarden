@@ -13,10 +13,10 @@ import uninabiogarden.exceptions.WrongUsernameException;
 
 public class UtenteDao {
 
-  static Utente authenticate(Database database, String username, String password, String utenteType) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+  public static Utente authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
     var sql = "SELECT * FROM utente WHERE username='"+username+"'";
 
-    try (var conn = database.getConnection();
+    try (var conn = Database.getInstance().getConnection();
       var stmt = conn.createStatement()){
 
       var result = stmt.executeQuery(sql);
@@ -28,7 +28,7 @@ public class UtenteDao {
       } else {
         Utente utente = null; 
 
-        if (utenteType.equals("proprietario")) {
+        if (result.getString("u_type").equals("proprietario")) {
           utente = new Proprietario(
             result.getString("username"),
             result.getString("password"),

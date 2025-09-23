@@ -23,9 +23,9 @@ public class ProprietarioDao {
     return instance;
   }
 
-  public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
-    return (Proprietario) UtenteDao.authenticate(database, username, password, "proprietario");
-  }
+  // public Proprietario authenticate(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+  //   return (Proprietario) UtenteDao.authenticate(database, username, password, "proprietario");
+  // }
 
   public Long insert(Proprietario newProprietario) throws SQLException, ConnectionFailedException {
     return UtenteDao.insert(database, newProprietario, "proprietario");

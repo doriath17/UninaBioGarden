@@ -5,27 +5,30 @@ import java.sql.SQLException;
 
 import uninabiogarden.dao.ColtivatoreDao;
 import uninabiogarden.dao.ProprietarioDao;
+import uninabiogarden.dao.UtenteDao;
 import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Proprietario;
+import uninabiogarden.entities.Utente;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 
 public class LoginService {
   private static final LoginService instance = new LoginService();
-  private final ProprietarioDao proprietarioDao = ProprietarioDao.getInstance();
-  private final ColtivatoreDao coltivatoreDao = ColtivatoreDao.getInstance();
+  // private final ProprietarioDao proprietarioDao = ProprietarioDao.getInstance();
+  // private final ColtivatoreDao coltivatoreDao = ColtivatoreDao.getInstance();
 
 
-  private Proprietario loggedInProprietario = null;
-  private Coltivatore loggedInColtivatre = null;
-  private UserType loggedInType = UserType.NONE;
+  private Utente utente;
+  // private Proprietario loggedInProprietario;
+  // private Coltivatore loggedInColtivatre;
+  // private UserType loggedInType = UserType.NONE;
 
-  public enum UserType {
-    PROPRIETARIO,
-    COLTIVATORE,
-    NONE
-  };
+  // public enum UserType {
+  //   PROPRIETARIO,
+  //   COLTIVATORE,
+  //   NONE
+  // };
 
   private LoginService() {}
 
@@ -33,70 +36,71 @@ public class LoginService {
     return instance;
   }
 
-  public Proprietario authenticateProprietario(String username, String password) 
-    throws ConnectionFailedException,
-    WrongUsernameException,
-    WrongPasswordException, SQLException
-  {
-    loggedInProprietario = proprietarioDao.authenticate(username, password);
-    loggedInType = UserType.PROPRIETARIO;
-    return loggedInProprietario;
+  public Utente login(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+    this.utente = UtenteDao.authenticate(username, password);
+    return utente;
   }
 
-  public Coltivatore authenticateColtivatore(String username, String password) 
-    throws ConnectionFailedException,
-    WrongUsernameException,
-    WrongPasswordException, SQLException
-  {
-    loggedInColtivatre = coltivatoreDao.authenticate(username, password);
-    loggedInType = UserType.COLTIVATORE;
-    return loggedInColtivatre;
-  }
+  // public Proprietario authenticateProprietario(String username, String password) 
+  //   throws ConnectionFailedException,
+  //   WrongUsernameException,
+  //   WrongPasswordException, SQLException
+  // {
+  //   loggedInProprietario = proprietarioDao.authenticate(username, password);
+  //   loggedInType = UserType.PROPRIETARIO;
+  //   return loggedInProprietario;
+  // }
+
+  // public Coltivatore authenticateColtivatore(String username, String password) 
+  //   throws ConnectionFailedException,
+  //   WrongUsernameException,
+  //   WrongPasswordException, SQLException
+  // {
+  //   loggedInColtivatre = coltivatoreDao.authenticate(username, password);
+  //   loggedInType = UserType.COLTIVATORE;
+  //   return loggedInColtivatre;
+  // }
 
   public void logout() {
-    loggedInColtivatre = null;
-    loggedInProprietario = null;
-    loggedInType = UserType.NONE;
+    utente = null;
+    // loggedInColtivatre = null;
+    // loggedInProprietario = null;
+    // loggedInType = UserType.NONE;
   }
 
-  public Proprietario getLoggedInProprietario() {
-    return loggedInProprietario;
-  }
+  // public Proprietario getLoggedInProprietario() {
+  //   return loggedInProprietario;
+  // }
 
-  public Coltivatore getLoggedInColtivatre() {
-    return loggedInColtivatre;
-  }
+  // public Coltivatore getLoggedInColtivatre() {
+  //   return loggedInColtivatre;
+  // }
 
-  public UserType getLoggedInType() {
-    return loggedInType;
+  // public UserType getLoggedInType() {
+  //   return loggedInType;
+  // }
+
+  public Utente getLoggedUtente() {
+    return utente;
   }
 
   public String getUsername() {
-    switch (loggedInType) {
-      case UserType.PROPRIETARIO:
-        return loggedInProprietario.getUsername();        
-      case UserType.COLTIVATORE:
-        loggedInColtivatre.getUsername();
-    }
-    return null;
+    return utente.getUsername();
   }
 
   public Long getId() {
-    switch (loggedInType) {
-      case UserType.PROPRIETARIO:
-        return loggedInProprietario.getId();        
-      case UserType.COLTIVATORE:
-        loggedInColtivatre.getId();
-    }
-    return null;
+    return utente.getId();
   }
 
   public boolean isProprietarioSession() {
-    return this.loggedInType == UserType.PROPRIETARIO;
+    if (utente instanceof Proprietario) {
+      return true;
+    }
+    return false;
   }
 
   public boolean isColotivatoreSession() {
-    return this.loggedInType == UserType.COLTIVATORE;
+    return !isProprietarioSession();
   }
 
 }

@@ -18,9 +18,9 @@ public class ColtivatoreDao {
     return instance;
   }
 
-  public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
-    return (Coltivatore) UtenteDao.authenticate(database, username, password, "coltivatore");
-  }
+  // public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
+  //   return (Coltivatore) UtenteDao.authenticate(database, username, password, "coltivatore");
+  // }
 
   public boolean add(Coltivatore coltivatore) throws ConnectionFailedException {
     var sql = "INSERT INTO coltivatore * " +

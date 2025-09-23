@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.MissingFieldException;
 import uninabiogarden.exceptions.NoDataFoundException;
@@ -195,13 +196,14 @@ public class ProgettiViewController extends ControllerBase {
   /// 
   
   Progetto getFormData() {
+    var prop = (Proprietario) mainController.getLoggedUtente();
     return new Progetto(
       null, // the id do not exist yet
       nomeField.getText(),
       dataInizioField.getValue(),
       dataFineField.getValue(),
       descrizioneField.getText(),
-      mainController.getLoggedInProprietario(),
+      prop,
       null
     );
   }

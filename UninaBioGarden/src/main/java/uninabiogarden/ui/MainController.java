@@ -12,6 +12,7 @@ import uninabiogarden.entities.Coltivatore;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
 import uninabiogarden.entities.Proprietario;
+import uninabiogarden.entities.Utente;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.FormatException;
 import uninabiogarden.exceptions.InvalidUtenteFieldException;
@@ -21,7 +22,6 @@ import uninabiogarden.exceptions.WrongDataFineException;
 import uninabiogarden.exceptions.WrongPasswordException;
 import uninabiogarden.exceptions.WrongUsernameException;
 import uninabiogarden.service.LoginService;
-import uninabiogarden.service.LoginService.UserType;
 import uninabiogarden.service.LottoService;
 import uninabiogarden.service.ProgettoService;
 import uninabiogarden.service.ProprietarioService;
@@ -58,10 +58,10 @@ public class MainController extends ContentController {
 
   public void simulate() {
     try {
-      loginProprietario("alessandro", "alessandro");
+      login("alessandro", "alessandro");
       openProgettiView();
       progettiViewController.toggleAddProgettoView();
-    } catch (ConnectionFailedException | WrongUsernameException | WrongPasswordException | SQLException e) {
+    } catch (ConnectionFailedException | WrongUsernameException | WrongPasswordException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
@@ -113,23 +113,32 @@ public class MainController extends ContentController {
     setActiveContent(getLoginController());
   }
 
-  void loginProprietario(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
-    LoginService.getInstance().authenticateProprietario(username, password);
+  void login(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException {
+    LoginService.getInstance().login(username, password);
     openHomeView();
   }
 
-  void loginColtivatore(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
-    LoginService.getInstance().authenticateColtivatore(username, password);
-    openHomeView();
+  Utente getLoggedUtente() {
+    return LoginService.getInstance().getLoggedUtente();
   }
 
-  Proprietario getLoggedInProprietario() {
-    return LoginService.getInstance().getLoggedInProprietario();
-  }
+  // void loginProprietario(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
+  //   LoginService.getInstance().authenticateProprietario(username, password);
+  //   openHomeView();
+  // }
 
-  Coltivatore getLoggedInColtivatore() {
-    return LoginService.getInstance().getLoggedInColtivatre();
-  }
+  // void loginColtivatore(String username, String password) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException {
+  //   LoginService.getInstance().authenticateColtivatore(username, password);
+  //   openHomeView();
+  // }
+
+  // Proprietario getLoggedInProprietario() {
+  //   return LoginService.getInstance().getLoggedInProprietario();
+  // }
+
+  // Coltivatore getLoggedInColtivatore() {
+  //   return LoginService.getInstance().getLoggedInColtivatre();
+  // }
 
   ///
   /// 
@@ -147,14 +156,14 @@ public class MainController extends ContentController {
   void registerProprietario(Proprietario newUtente) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException, InvalidUtenteFieldException {
     var newId = RegistrationService.getInstance().registerProprietario(newUtente);
     newUtente.setId(newId);
-    LoginService.getInstance().authenticateProprietario(newUtente.getUsername(), newUtente.getPassword());
+    LoginService.getInstance().login(newUtente.getUsername(), newUtente.getPassword());
     openHomeView();
   }
 
   void registerColtivatore(Coltivatore newUtente) throws ConnectionFailedException, WrongUsernameException, WrongPasswordException, SQLException, InvalidUtenteFieldException {
     var newId = RegistrationService.getInstance().registerColtivatore(newUtente);
     newUtente.setId(newId);
-    LoginService.getInstance().authenticateColtivatore(newUtente.getUsername(), newUtente.getPassword());
+    LoginService.getInstance().login(newUtente.getUsername(), newUtente.getPassword());
     openHomeView();
   }
 
@@ -178,14 +187,19 @@ public class MainController extends ContentController {
   @SuppressWarnings("incomplete-switch")
   ControllerBase getHomeContent() {
     ControllerBase homeContent = null;
-    switch (LoginService.getInstance().getLoggedInType()) {
-      case UserType.PROPRIETARIO: 
-        homeContent = getProprietarioHomeController();
-        break;
-      case UserType.COLTIVATORE: 
-        homeContent = getColtivatoreHomeController();
-        break;
+    if (LoginService.getInstance().isProprietarioSession()) {
+      homeContent = getProprietarioHomeController();
+    } else {
+      homeContent = getColtivatoreHomeController();
     }
+    // switch (LoginService.getInstance().getLoggedInType()) {
+    //   case UserType.PROPRIETARIO: 
+    //     homeContent = getProprietarioHomeController();
+    //     break;
+    //   case UserType.COLTIVATORE: 
+    //     homeContent = getColtivatoreHomeController();
+    //     break;
+    // }
     return homeContent;
   }
 
@@ -260,7 +274,7 @@ public class MainController extends ContentController {
   }
 
   Long addLotto(Lotto lottoToAdd) throws MissingFieldException, FormatException, SQLException, ConnectionFailedException {
-    lottoToAdd.setProprietario(LoginService.getInstance().getLoggedInProprietario());
+    lottoToAdd.setProprietario((Proprietario) LoginService.getInstance().getLoggedUtente());
     return LottoService.getInstance().insert(lottoToAdd);
   }
 
@@ -333,7 +347,6 @@ public class MainController extends ContentController {
   /// 
   /// 
   /// AVAILABLE LOTTI
-  /// 
   /// 
   /// 
   /// 

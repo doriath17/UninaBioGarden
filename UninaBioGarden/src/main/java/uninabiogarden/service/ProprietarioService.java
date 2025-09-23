@@ -6,6 +6,7 @@ import java.util.List;
 import uninabiogarden.dao.ProprietarioDao;
 import uninabiogarden.entities.Lotto;
 import uninabiogarden.entities.Progetto;
+import uninabiogarden.entities.Proprietario;
 import uninabiogarden.exceptions.ConnectionFailedException;
 import uninabiogarden.exceptions.NoDataFoundException;
 
@@ -26,7 +27,7 @@ public class ProprietarioService {
   }
 
   public List<Progetto> requestProgetti() throws ConnectionFailedException, NoDataFoundException {
-    return proprietarioDao.findAllProgetti(loginService.getLoggedInProprietario());
+    return proprietarioDao.findAllProgetti((Proprietario) loginService.getLoggedUtente());
   }
 
   public List<Lotto> requestAvailableLotti() throws SQLException, ConnectionFailedException, NoDataFoundException {

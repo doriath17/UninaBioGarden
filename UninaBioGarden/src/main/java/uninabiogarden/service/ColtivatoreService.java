@@ -17,9 +17,9 @@ public class ColtivatoreService {
     return instance;
   }
  
-  public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
-    return (Coltivatore) coltivatoreDao.authenticate(username, password);
-  }
+  // public Coltivatore authenticate(String username, String password) throws WrongUsernameException, WrongPasswordException, ConnectionFailedException {
+  //   return (Coltivatore) coltivatoreDao.authenticate(username, password);
+  // }
 
 
 }
