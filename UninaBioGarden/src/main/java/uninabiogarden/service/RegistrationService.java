@@ -27,6 +27,7 @@ public class RegistrationService {
   public void checkBasic(Utente utenteToCheck) throws InvalidUtenteFieldException {
     checkUsername(utenteToCheck.getUsername());
     checkPassword(utenteToCheck.getPassword());
+    checkEmail(utenteToCheck.getEmail());
     checkNome(utenteToCheck.getNome());
     checkCognome(utenteToCheck.getCognome());
     checkBday(utenteToCheck.getBday());
@@ -56,7 +57,7 @@ public class RegistrationService {
   private void checkUsername(String username) throws InvalidUtenteFieldException {
     if (username == null || username.isEmpty()) {
       throw new InvalidUtenteFieldException(
-        "Nome mancante", InvalidUtenteField.USERNAME
+        "Inserire Username", InvalidUtenteField.USERNAME
       );
     }
     if (!Character.isAlphabetic(username.charAt(0))) {
@@ -66,9 +67,9 @@ public class RegistrationService {
       throw new InvalidUtenteFieldException("Username deve essere almeno 6 caratteri", InvalidUtenteField.USERNAME);
     }
     if (username.length() > 30) {
-      throw new InvalidUtenteFieldException("Username troppo lungo", InvalidUtenteField.USERNAME);
+      throw new InvalidUtenteFieldException("Username troppo lungo (" + username.length() +  " caratteri)", InvalidUtenteField.USERNAME);
     }
-    if (!username.matches("^[a-zA-Z][a-zA-Z0-9_-]{4,29}$")){
+    if (!username.matches("^[a-zA-Z][a-zA-Z0-9_-]{5,29}$")){
       throw new InvalidUtenteFieldException(
         "Username non valido", InvalidUtenteField.USERNAME
       );  
@@ -88,11 +89,17 @@ public class RegistrationService {
     if (password.length() > 60) {
       throw new InvalidUtenteFieldException("Password troppo lunga", InvalidUtenteField.PASSWORD);
     }
-    if (!password.matches("^[a-zA-Z0-9_!@#$%^&*+=\\?-]{1,60}$")){
+    if (!password.matches("^[a-zA-Z0-9_!@#$%^&*+=\\?-]{8,60}$")){
       throw new InvalidUtenteFieldException(
         "Password non valida",
         InvalidUtenteFieldException.InvalidUtenteField.PASSWORD
       );  
+    }
+  }
+
+  private void checkEmail(String email) throws InvalidUtenteFieldException {
+    if (email == null || email.isEmpty()) {
+      throw new InvalidUtenteFieldException("Email mancante", InvalidUtenteField.EMAIL);
     }
   }
 
@@ -134,7 +141,6 @@ public class RegistrationService {
 
   private void checkNumTel(String numTel) throws InvalidUtenteFieldException {
     if (numTel != null && numTel.isEmpty()) {
-      System.err.println("An empty Utente.numTel should be set to null");
       throw new InvalidUtenteFieldException("Inserire un numero telefonico", InvalidUtenteField.NUMTEL);
     }
     if (numTel != null && !numTel.matches("^[0-9]{10}$")){

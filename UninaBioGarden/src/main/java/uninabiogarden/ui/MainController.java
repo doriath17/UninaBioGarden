@@ -57,14 +57,10 @@ public class MainController extends ContentController {
   AvailableLottiController    availableLottiController;
 
   public void simulate() {
-    try {
-      login("alessandro", "alessandro");
-      openProgettiView();
-      progettiViewController.toggleAddProgettoView();
-    } catch (ConnectionFailedException | WrongUsernameException | WrongPasswordException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    openRegistrationView();
+    getRegistrationController().proprietarioCheckBox.selectedProperty().set(true);
+    getRegistrationController().usernameField.setText("ales17");
+    getRegistrationController().passwordField.setText("ales17fusc");
   }
 
   public void show(Stage stage) {

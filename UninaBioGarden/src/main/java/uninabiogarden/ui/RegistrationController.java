@@ -133,6 +133,8 @@ public class RegistrationController extends ControllerBase {
     setTooltip(passwordInfoLabel, fieldRules[1]);
 
     ControllerUtility.addDigitsFilter(numTelField);
+    ControllerUtility.addTextLimiter(usernameField, 80);
+    ControllerUtility.addTextLimiter(passwordField, 60);
 
     nationalityChoiceBox.setItems(nationalitiesObsList);
     nationalityChoiceBox.setValue(nationalitiesObsList.get(0));
@@ -246,6 +248,7 @@ public class RegistrationController extends ControllerBase {
         break;
       case InvalidUtenteField.EMAIL:
         emailErrorLabel.setText(e.getMessage());
+        break;
       case InvalidUtenteField.NOME:
         nomeErrorLabel.setText(e.getMessage());
         break;
